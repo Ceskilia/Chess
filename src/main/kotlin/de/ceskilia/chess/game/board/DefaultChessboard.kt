@@ -1,8 +1,8 @@
 package de.ceskilia.chess.game.board
 
-import de.ceskilia.chess.game.ChessPiece
+import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.Position
-import de.ceskilia.chess.game.impl.Pawn
+import de.ceskilia.chess.game.piece.Pawn
 
 class DefaultChessboard : Chessboard() {
 

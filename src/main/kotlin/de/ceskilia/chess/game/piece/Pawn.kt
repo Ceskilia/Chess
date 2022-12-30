@@ -1,6 +1,5 @@
-package de.ceskilia.chess.game.impl
+package de.ceskilia.chess.game.piece
 
-import de.ceskilia.chess.game.ChessPiece
 import de.ceskilia.chess.game.Position
 import de.ceskilia.chess.game.board.Chessboard
 import kotlin.math.abs

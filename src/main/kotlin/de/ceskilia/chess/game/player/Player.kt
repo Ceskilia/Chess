@@ -1,6 +1,6 @@
 package de.ceskilia.chess.game.player
 
-import de.ceskilia.chess.game.ChessPiece
+import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Player(
     val name: String,
