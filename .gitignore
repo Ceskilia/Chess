@@ -1,0 +1,14 @@
+*.log
+*.xml
+!logback.xml
+
+#idea
+/.idea
+
+#gradle
+/.gradle
+
+#build
+/build
+
+
