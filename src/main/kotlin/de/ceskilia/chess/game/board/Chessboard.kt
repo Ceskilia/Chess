@@ -82,6 +82,15 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         return getPieceAt(x, y) != null
     }
 
+    fun isOwnPieceAt(x: Int, y: Int, color: ChessPiece.Color): Boolean {
+        return getPieceAt(x, y)?.color == color
+    }
+
+    fun isEnemyPieceAt(x: Int, y: Int, color: ChessPiece.Color): Boolean {
+        val piece = getPieceAt(x, y) ?: return false
+        return piece.isEnemy(color)
+    }
+
     fun isBlank(x: Int, y: Int): Boolean {
         return !isPieceAt(x, y)
     }

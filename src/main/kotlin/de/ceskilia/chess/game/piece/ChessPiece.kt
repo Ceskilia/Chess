@@ -1,5 +1,6 @@
-package de.ceskilia.chess.game
+package de.ceskilia.chess.game.piece
 
+import de.ceskilia.chess.game.Position
 import de.ceskilia.chess.game.board.Chessboard
 
 abstract class ChessPiece(
@@ -15,6 +16,14 @@ abstract class ChessPiece(
 
     fun canMoveTo(position: Position): Boolean {
         return calculateMoves().contains(position)
+    }
+
+    fun hasMoves(): Boolean {
+        return calculateMoves().isNotEmpty()
+    }
+
+    fun isEnemy(color: Color): Boolean {
+        return this.color != color
     }
 
     abstract fun calculateMoves(): List<Position>
