@@ -2,9 +2,10 @@
 
 package de.ceskilia.chess.game.board
 
-import de.ceskilia.chess.game.ChessPiece
+import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.Move
 import de.ceskilia.chess.game.Position
+import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
@@ -12,6 +13,10 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
         const val DEFAULT_SIZE = 8
 
+    }
+
+    init {
+        notNegative(size) { "Size may not be negative: size=$size" }
     }
 
     val moves = mutableListOf<Move>()
@@ -32,31 +37,41 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             return Move.Type.INVALID_END_POSITION
         }
 
+        val startPosition = piece.position
+        piece.position = endPosition
+
         var moveType = Move.Type.NORMAL
         val endPiece = board[endPosition.x][endPosition.y]
         val capture = endPiece != null
-        val check = false // check if it is checking
+        val check = piece.canMoveTo(getPieces()
+            .filter { it.color != piece.color }
+            .first { it.type == ChessPiece.Type.KING }
+            .position
+        )
 
-        if(capture) {
+        if (capture) {
             capturedPieces.add(endPiece!!)
             moveType = Move.Type.CAPTURE
         }
 
-        if(check) {
-            moveType = if(moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
+        if (check) {
+            moveType = if (moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
         }
 
+        removePieceAt(startPosition)
         board[endPosition.x][endPosition.y] = piece
-        board[piece.position.x][piece.position.y] = null
+        moves.add(Move(piece, startPosition, endPosition, moveType))
 
-        moves.add(Move(piece, endPosition, moveType))
-        piece.position = endPosition
         return moveType
     }
 
     fun move(startPosition: Position, endPosition: Position): Move.Type {
         val piece = getPieceAt(startPosition)
-        return if(piece != null) move(piece, endPosition) else Move.Type.NO_PIECE_AT_POSITION
+        return if (piece != null) move(piece, endPosition) else Move.Type.NO_PIECE_AT_POSITION
+    }
+
+    fun getPieces(): List<ChessPiece> {
+        return board.flatten().filterNotNull()
     }
 
     fun getPieceAt(x: Int, y: Int): ChessPiece? {
@@ -64,7 +79,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     }
 
     fun isPieceAt(x: Int, y: Int): Boolean {
-        return board[x][y] != null
+        return getPieceAt(x, y) != null
     }
 
     fun isBlank(x: Int, y: Int): Boolean {
