@@ -22,7 +22,7 @@ abstract class ChessPiece(
         return calculateMoves().isNotEmpty()
     }
 
-    fun isEnemy(color: Color): Boolean {
+    fun isOpponent(color: Color): Boolean {
         return this.color != color
     }
 

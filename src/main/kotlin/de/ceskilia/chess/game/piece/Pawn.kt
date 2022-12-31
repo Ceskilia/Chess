@@ -32,12 +32,12 @@ class Pawn(
         val left = position.y - 1
 
         // check if right can be captured
-        if (board.isVerticalInBoard(right) && board.isEnemyPieceAt(front, right, color)) {
+        if (board.isVerticalInBoard(right) && board.isOpponentAt(front, right, color)) {
             moves.add(position.copy(x = front, y = right))
         }
 
         // check if left can be captured
-        if (board.isVerticalInBoard(left) && board.isEnemyPieceAt(front, left, color)) {
+        if (board.isVerticalInBoard(left) && board.isOpponentAt(front, left, color)) {
             moves.add(position.copy(x = front, y = left))
         }
 

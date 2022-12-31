@@ -30,7 +30,7 @@ class Bishop(
 
             if(piece != null) {
 
-                if(piece.isEnemy(color)) {
+                if(piece.isOpponent(color)) {
                     set.add(Position.of(x, y))
                 }
 
