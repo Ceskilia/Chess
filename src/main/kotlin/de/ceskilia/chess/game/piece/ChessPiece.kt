@@ -26,7 +26,7 @@ abstract class ChessPiece(
         return this.color != color
     }
 
-    abstract fun calculateMoves(): List<Position>
+    abstract fun calculateMoves(): Set<Position>
 
     enum class Color {
 

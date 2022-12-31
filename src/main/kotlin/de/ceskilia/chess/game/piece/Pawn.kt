@@ -12,8 +12,8 @@ class Pawn(
 
     private val startPosition = position
 
-    override fun calculateMoves(): List<Position> {
-        val moves = mutableListOf<Position>()
+    override fun calculateMoves(): Set<Position> {
+        val moves = mutableSetOf<Position>()
         val front = position.x + board.directionOf(color)
 
         // check for normal moves
@@ -32,17 +32,22 @@ class Pawn(
         val left = position.y - 1
 
         // check if right can be captured
-        if (isInBoard(right) && board.isPieceAt(front, right)) {
+        if (board.isVerticalInBoard(right) && board.isEnemyPieceAt(front, right, color)) {
             moves.add(position.copy(x = front, y = right))
         }
 
         // check if left can be captured
-        if (isInBoard(left) && board.isPieceAt(front, left)) {
+        if (board.isVerticalInBoard(left) && board.isEnemyPieceAt(front, left, color)) {
             moves.add(position.copy(x = front, y = left))
         }
 
         val lastMove = board.lastMove() ?: return moves
         val lastPosition = lastMove.newPosition
+
+        // if the last move somehow was done by the same color -> don't check for en passant
+        if(lastMove.chessPiece.color == color) {
+            return moves
+        }
 
         // check for en passant
         if (lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x) {
@@ -62,9 +67,5 @@ class Pawn(
     }
 
     private fun moved(): Boolean = position != startPosition
-
-    private fun isInBoard(y: Int): Boolean {
-        return y in 0..board.size
-    }
 
 }

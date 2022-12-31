@@ -11,8 +11,8 @@ class King(
 
     var check: Boolean = false
 
-    override fun calculateMoves(): List<Position> {
-        return emptyList()
+    override fun calculateMoves(): Set<Position> {
+        return emptySet()
     }
 
 }
