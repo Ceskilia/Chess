@@ -31,13 +31,13 @@ class Bishop(
             if(piece != null) {
 
                 if(piece.isEnemy(color)) {
-                    set.add(Position(x, y))
+                    set.add(Position.of(x, y))
                 }
 
                 break
             }
 
-            set.add(Position(x, y))
+            set.add(Position.of(x, y))
         }
 
     }

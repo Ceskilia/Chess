@@ -114,7 +114,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
                     continue
                 }
 
-                piece.position = Position(x, y)
+                piece.position = Position.of(x, y)
             }
         }
     }

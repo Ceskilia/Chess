@@ -3,25 +3,36 @@ package de.ceskilia.chess.game
 import de.ceskilia.chess.util.isEven
 import de.ceskilia.chess.util.notNegative
 
-data class Position(val x: Int, val y: Int) {
+class Position private constructor(val x: Int, val y: Int) {
 
     companion object {
+
+        // see https://youtrack.jetbrains.com/issue/KT-11914/Confusing-data-class-copy-with-private-constructor
+
+        /**
+         * A cache for positions. Positions are immutable and only holding values, so it's safe to save them.
+         */
+        private val CACHED_POSITIONS = mutableSetOf<Position>()
 
         /**
          * The index where lowercase letters in the ASCII-table start.
          */
         private const val LETTER_START_POINT = 97
 
-        // todo: add static factory method with caching (x=1, y=2 -> cache it and return if same args are provided)
+        fun of(x: Int, y: Int): Position {
+            notNegative(x, y) { "Coordinates may be not negative: x=$x, y=$y" }
+            return CACHED_POSITIONS.firstOrNull { it.x == x && it.y == y } ?: cachePosition(Position(x, y))
+        }
 
         fun letterToCoordinate(number: Int): Char {
             return (number + LETTER_START_POINT).toChar()
         }
 
-    }
+        private fun cachePosition(position: Position): Position {
+            CACHED_POSITIONS.add(position)
+            return position
+        }
 
-    init {
-        notNegative(x, y) { "Coordinates may be not negative: x=$x, y=$y" }
     }
 
     // use interface
@@ -32,6 +43,26 @@ data class Position(val x: Int, val y: Int) {
     fun color(): Color {
         // the difference between x and y is always even
         return if ((x - y).isEven()) Color.WHITE else Color.BLACK
+    }
+
+    fun copy(x: Int = this.x, y: Int = this.y): Position = of(x, y)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Position
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = x
+        result = 31 * result + y
+        return result
     }
 
     override fun toString(): String {
