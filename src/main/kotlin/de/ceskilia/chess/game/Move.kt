@@ -1,7 +1,10 @@
 package de.ceskilia.chess.game
 
+import de.ceskilia.chess.game.piece.ChessPiece
+
 data class Move(
     val chessPiece: ChessPiece,
+    val startPosition: Position,
     val newPosition: Position,
     val type: Type
 ) {
@@ -26,10 +29,9 @@ data class Move(
         NO_PIECE_AT_POSITION,
         INVALID_END_POSITION,
         NORMAL,
+        CHECK,
         CAPTURE,
-        CAPTURE_CHECK,
-        CHECK;
-
+        CAPTURE_CHECK;
 
         // TODO: IS THIS DESIGN GOOD?
         fun isCapture(): Boolean {
