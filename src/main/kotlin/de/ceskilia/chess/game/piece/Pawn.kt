@@ -14,16 +14,16 @@ class Pawn(
 
     override fun calculateMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
-        val front = position.x + board.directionOf(color)
+        val oneStep = position.x + board.directionOf(color)
 
         // check for normal moves
-        if (board.isBlank(front, position.y)) {
-            moves.add(position.copy(x = front))
+        if (board.isBlank(oneStep, position.y)) {
+            moves.add(position.copy(x = oneStep))
 
-            val further = front + board.directionOf(color)
+            val twoSteps = oneStep + board.directionOf(color)
 
-            if (!moved() && board.isBlank(front, position.y)) {
-                moves.add(position.copy(x = further))
+            if (!moved() && board.isBlank(oneStep, position.y)) {
+                moves.add(position.copy(x = twoSteps))
             }
 
         }
@@ -32,20 +32,20 @@ class Pawn(
         val left = position.y - 1
 
         // check if right can be captured
-        if (board.isVerticalInBoard(right) && board.isOpponentAt(front, right, color)) {
-            moves.add(position.copy(x = front, y = right))
+        if (board.isVerticalInBoard(right) && board.isOpponentAt(oneStep, right, color)) {
+            moves.add(Position.of(oneStep, right))
         }
 
         // check if left can be captured
-        if (board.isVerticalInBoard(left) && board.isOpponentAt(front, left, color)) {
-            moves.add(position.copy(x = front, y = left))
+        if (board.isVerticalInBoard(left) && board.isOpponentAt(oneStep, left, color)) {
+            moves.add(Position.of(oneStep, left))
         }
 
         val lastMove = board.lastMove() ?: return moves
         val lastPosition = lastMove.newPosition
 
         // if the last move somehow was done by the same color -> don't check for en passant
-        if(lastMove.chessPiece.color == color) {
+        if (lastMove.chessPiece.color == color) {
             return moves
         }
 
@@ -60,7 +60,7 @@ class Pawn(
             }
 
             board.removePieceAt(lastPosition)
-            moves.add(position.copy(x = front, y = position.y + yDifference))
+            moves.add(Position.of(oneStep, position.y + yDifference))
         }
 
         return moves
