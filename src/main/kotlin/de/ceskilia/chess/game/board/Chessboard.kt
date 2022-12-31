@@ -103,6 +103,30 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         board[position.x][position.y] = null
     }
 
+    fun syncPieces() {
+        // sync: board is right
+        for (x in board.indices) {
+            for (y in board[x].indices) {
+                val piece = board[x][y] ?: continue
+
+                // check if it is synced already
+                if (piece.position.x == x && piece.position.y == y) {
+                    continue
+                }
+
+                piece.position = Position(x, y)
+            }
+        }
+    }
+
+    fun isHorizontalInBoard(x: Int): Boolean {
+        return x in 0 until size
+    }
+
+    fun isVerticalInBoard(y: Int): Boolean {
+        return y in 0 until size
+    }
+
     fun printBoard(): String {
         val builder = StringBuilder()
 
