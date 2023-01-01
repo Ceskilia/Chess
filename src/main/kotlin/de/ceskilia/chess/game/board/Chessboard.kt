@@ -31,11 +31,14 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     fun lastMove(): Move? = if (hasLastMove()) moves.last() else null
 
     // TODO: CHECKS
-    fun move(piece: ChessPiece, endPosition: Position): Move.Type {
+    fun move(piece: ChessPiece, endPosition: Position): Move.Type? {
 
         if (!piece.canMoveTo(endPosition)) {
-            return Move.Type.INVALID_END_POSITION
+            return null
         }
+
+        // check if it is pinned
+        // check if the king is in check
 
         val startPosition = piece.position
         piece.position = endPosition
@@ -65,9 +68,9 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         return moveType
     }
 
-    fun move(startPosition: Position, endPosition: Position): Move.Type {
+    fun move(startPosition: Position, endPosition: Position): Move.Type? {
         val piece = getPieceAt(startPosition)
-        return if (piece != null) move(piece, endPosition) else Move.Type.NO_PIECE_AT_POSITION
+        return if (piece != null) move(piece, endPosition) else null
     }
 
     fun getPieces(color: ChessPiece.Color? = null): List<ChessPiece> {

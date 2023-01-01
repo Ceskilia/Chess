@@ -26,8 +26,6 @@ data class Move(
 
     enum class Type {
 
-        NO_PIECE_AT_POSITION,
-        INVALID_END_POSITION,
         NORMAL,
         CHECK,
         CAPTURE,
