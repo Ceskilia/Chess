@@ -26,6 +26,10 @@ class Bishop(
             x += xOperation.operand
             y += yOperation.operand
 
+            if(!board.isHorizontalInBoard(x) || !board.isVerticalInBoard(y)) {
+                return
+            }
+
             val piece = board.getPieceAt(x, y)
 
             if(piece != null) {
