@@ -52,14 +52,14 @@ abstract class ChessPiece(
 
     }
 
-    enum class Type(val notation: Char) {
+    enum class Type(val notation: Char, val value: Int) {
 
-        PAWN('P'),
-        KNIGHT('N'),
-        BISHOP('B'),
-        ROOK('R'),
-        QUEEN('Q'),
-        KING('K');
+        PAWN('P', 1),
+        KNIGHT('N', 3),
+        BISHOP('B', 3),
+        ROOK('R', 5),
+        QUEEN('Q', 9),
+        KING('K', -1);
 
         // get image from color
 
