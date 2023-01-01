@@ -1,6 +1,6 @@
 package de.ceskilia.chess.game.piece
 
-import de.ceskilia.chess.game.Position
+import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import kotlin.math.abs
 
@@ -12,32 +12,19 @@ class Pawn(
 
     private val startPosition = position
 
-    override fun calculateMoves(): Set<Position> {
+    override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
         val oneStep = position.x + board.directionOf(color)
-
-        // check for normal moves
-        if (board.isBlank(oneStep, position.y)) {
-            moves.add(position.copy(x = oneStep))
-
-            val twoSteps = oneStep + board.directionOf(color)
-
-            if (!moved() && board.isBlank(oneStep, position.y)) {
-                moves.add(position.copy(x = twoSteps))
-            }
-
-        }
-
         val right = position.y + 1
         val left = position.y - 1
 
         // check if right can be captured
-        if (board.isVerticalInBoard(right) && board.isOpponentAt(oneStep, right, color)) {
+        if (board.isVerticalInBoard(right) && board.isOpponentAt(oneStep, right, this)) {
             moves.add(Position.of(oneStep, right))
         }
 
         // check if left can be captured
-        if (board.isVerticalInBoard(left) && board.isOpponentAt(oneStep, left, color)) {
+        if (board.isVerticalInBoard(left) && board.isOpponentAt(oneStep, left, this)) {
             moves.add(Position.of(oneStep, left))
         }
 
@@ -61,6 +48,25 @@ class Pawn(
 
             board.removePieceAt(lastPosition)
             moves.add(Position.of(oneStep, position.y + yDifference))
+        }
+
+        return moves
+    }
+
+    override fun calculateMoves(): Set<Position> {
+        val moves = calculateCoveringMoves().toMutableSet()
+        val oneStep = position.x + board.directionOf(color)
+
+        // check for normal moves
+        if (board.isBlankAt(oneStep, position.y)) {
+            moves.add(position.copy(x = oneStep))
+
+            val twoSteps = oneStep + board.directionOf(color)
+
+            if (!moved() && board.isBlankAt(oneStep, position.y)) {
+                moves.add(position.copy(x = twoSteps))
+            }
+
         }
 
         return moves

@@ -1,6 +1,6 @@
 package de.ceskilia.chess.game.piece
 
-import de.ceskilia.chess.game.Position
+import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 
 abstract class ChessPiece(
@@ -9,6 +9,16 @@ abstract class ChessPiece(
     val color: Color,
     val type: Type
 ) {
+
+    fun isAlly(other: ChessPiece): Boolean {
+        return this.color == other.color
+    }
+
+    fun isOpponent(other: ChessPiece): Boolean {
+        return !isAlly(other)
+    }
+
+    //todo: getOpponentPieces/getAllyPieces here or in chessPiece
 
     fun move(position: Position) {
         board.move(this, position)
@@ -22,11 +32,18 @@ abstract class ChessPiece(
         return calculateMoves().isNotEmpty()
     }
 
-    fun isOpponent(color: Color): Boolean {
-        return this.color != color
+    open fun calculateMoves(): Set<Position> {
+        return calculateCoveringMoves()
     }
 
-    abstract fun calculateMoves(): Set<Position>
+    // the term "covering" refers to the fact, that some pieces (pawns) can
+    // make moves, that cannot capture a piece, so we need to differentiate between those to make it possible
+    // to check for possible moves of pieces with type KING
+    fun isCovering(position: Position): Boolean {
+        return calculateCoveringMoves().contains(position)
+    }
+
+    abstract fun calculateCoveringMoves(): Set<Position>
 
     enum class Color {
 
