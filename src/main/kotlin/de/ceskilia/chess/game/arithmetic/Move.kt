@@ -1,4 +1,4 @@
-package de.ceskilia.chess.game
+package de.ceskilia.chess.game.arithmetic
 
 import de.ceskilia.chess.game.piece.ChessPiece
 
