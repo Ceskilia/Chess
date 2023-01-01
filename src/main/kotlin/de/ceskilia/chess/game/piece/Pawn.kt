@@ -63,7 +63,7 @@ class Pawn(
 
             val twoSteps = oneStep + board.directionOf(color)
 
-            if (!moved() && board.isBlankAt(oneStep, position.y)) {
+            if (!moved() && board.isBlankAt(twoSteps, position.y)) {
                 moves.add(position.copy(x = twoSteps))
             }
 
