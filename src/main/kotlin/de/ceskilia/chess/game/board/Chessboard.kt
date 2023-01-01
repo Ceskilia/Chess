@@ -3,8 +3,8 @@
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.piece.ChessPiece
-import de.ceskilia.chess.game.Move
-import de.ceskilia.chess.game.Position
+import de.ceskilia.chess.game.arithmetic.Move
+import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
@@ -70,33 +70,47 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         return if (piece != null) move(piece, endPosition) else Move.Type.NO_PIECE_AT_POSITION
     }
 
-    fun getPieces(): List<ChessPiece> {
-        return board.flatten().filterNotNull()
+    fun getPieces(color: ChessPiece.Color? = null): List<ChessPiece> {
+        return board.flatten()
+            .filterNotNull()
+            .filter { color == null || it.color == color }
     }
 
     fun getPieceAt(x: Int, y: Int): ChessPiece? {
         return board[x][y]
     }
 
+    fun getPieceAt(position: Position): ChessPiece? {
+        return board[position.x][position.y]
+    }
+
     fun isPieceAt(x: Int, y: Int): Boolean {
         return getPieceAt(x, y) != null
     }
 
-    fun isAllyAt(x: Int, y: Int, color: ChessPiece.Color): Boolean {
-        return getPieceAt(x, y)?.color == color
+    fun isPieceAt(position: Position): Boolean {
+        return isPieceAt(position.x, position.y)
     }
 
-    fun isOpponentAt(x: Int, y: Int, color: ChessPiece.Color): Boolean {
-        val piece = getPieceAt(x, y) ?: return false
-        return piece.isOpponent(color)
+    fun isAllyAt(x: Int, y: Int, piece: ChessPiece): Boolean {
+        return getPieceAt(x, y)?.isAlly(piece) ?: false
     }
 
-    fun isBlank(x: Int, y: Int): Boolean {
+    fun isAllyAt(position: Position, piece: ChessPiece): Boolean {
+        return isAllyAt(position.x, position.y, piece)
+    }
+
+    fun isOpponentAt(x: Int, y: Int, piece: ChessPiece): Boolean {
+        val checkingPiece = getPieceAt(x, y) ?: return false
+        return checkingPiece.isOpponent(piece)
+    }
+
+    fun isOpponentAt(position: Position, piece: ChessPiece): Boolean {
+        return isOpponentAt(position.x, position.y, piece)
+    }
+
+    fun isBlankAt(x: Int, y: Int): Boolean {
         return !isPieceAt(x, y)
-    }
-
-    fun getPieceAt(position: Position): ChessPiece? {
-        return board[position.x][position.y]
     }
 
     fun removePieceAt(position: Position) {
