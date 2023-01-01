@@ -20,7 +20,7 @@ abstract class ChessPiece(
 
     //todo: getOpponentPieces/getAllyPieces here or in chessPiece
 
-    fun move(position: Position) {
+    fun moveTo(position: Position) {
         board.move(this, position)
     }
 
