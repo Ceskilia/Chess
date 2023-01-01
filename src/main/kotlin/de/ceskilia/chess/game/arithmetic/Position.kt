@@ -1,4 +1,4 @@
-package de.ceskilia.chess.game
+package de.ceskilia.chess.game.arithmetic
 
 import de.ceskilia.chess.util.isEven
 import de.ceskilia.chess.util.notNegative
@@ -46,6 +46,10 @@ class Position private constructor(val x: Int, val y: Int) {
     }
 
     fun copy(x: Int = this.x, y: Int = this.y): Position = of(x, y)
+
+    fun copyAdding(x: Int = 0, y: Int = 0): Position {
+        return of(this.x + x, this.y + y)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
