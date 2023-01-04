@@ -22,12 +22,12 @@ class Bishop(
         var x = position.x
         var y = position.y
 
-        while(board.isHorizontalInBoard(x) && board.isVerticalInBoard(y)) {
+        while(true) {
             x += xOperation.operand
             y += yOperation.operand
 
             if(!board.isHorizontalInBoard(x) || !board.isVerticalInBoard(y)) {
-                return
+                break
             }
 
             val piece = board.getPieceAt(x, y)
