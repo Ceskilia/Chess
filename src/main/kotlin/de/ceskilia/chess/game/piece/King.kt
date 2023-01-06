@@ -11,11 +11,11 @@ class King(
 ) : ChessPiece(board, position, color, Type.KING) {
 
     override fun calculateCoveringMoves(): Set<Position> {
-        return modifyMovesIf(mutableSetOf(), Operation.ADD) { !board.isAllyAt(position, this) }
+        return modifyMovesIf(mutableSetOf(), Operation.ADD) { !board.isAllyAt(it, this) }
     }
 
     override fun calculateMoves(): Set<Position> {
-        return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) {
+        return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
             board.getPieces()
                 .filter { it.color != color }
                 .any { it.isCovering(position) }
