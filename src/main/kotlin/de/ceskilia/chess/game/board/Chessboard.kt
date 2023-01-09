@@ -43,14 +43,19 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         val startPosition = piece.position
         piece.position = endPosition
 
+        board[endPosition.x][endPosition.y] = piece
+        removePieceAt(startPosition)
+
         var moveType = Move.Type.NORMAL
         val endPiece = board[endPosition.x][endPosition.y]
         val capture = endPiece != null
-        val check = piece.canMoveTo(getPieces()
-            .filter { it.color != piece.color }
-            .first { it.type == ChessPiece.Type.KING }
-            .position
-        )
+        val check = getPieces(piece.color).any { ally ->
+            ally.canMoveTo(getPieces()
+                .filter { it.color != piece.color }
+                .first { it.type == ChessPiece.Type.KING }
+                .position
+            )
+        }
 
         if (capture) {
             capturedPieces.add(endPiece!!)
@@ -61,8 +66,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             moveType = if (moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
         }
 
-        removePieceAt(startPosition)
-        board[endPosition.x][endPosition.y] = piece
         moves.add(Move(piece, startPosition, endPosition, moveType))
 
         return moveType
@@ -95,6 +98,10 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         return isPieceAt(position.x, position.y)
     }
 
+    fun isBlankAt(x: Int, y: Int): Boolean {
+        return !isPieceAt(x, y)
+    }
+
     fun isAllyAt(x: Int, y: Int, piece: ChessPiece): Boolean {
         return getPieceAt(x, y)?.isAlly(piece) ?: false
     }
@@ -110,10 +117,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
     fun isOpponentAt(position: Position, piece: ChessPiece): Boolean {
         return isOpponentAt(position.x, position.y, piece)
-    }
-
-    fun isBlankAt(x: Int, y: Int): Boolean {
-        return !isPieceAt(x, y)
     }
 
     fun removePieceAt(position: Position) {
