@@ -9,7 +9,7 @@ class Rook(
     board: Chessboard,
     position: Position,
     color: Color
-) : ChessPiece(board, position, color, Type.BISHOP) {
+) : ChessPiece(board, position, color, Type.ROOK) {
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
