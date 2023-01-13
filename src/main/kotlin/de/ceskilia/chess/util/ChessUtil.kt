@@ -3,11 +3,12 @@ package de.ceskilia.chess.util
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
 
-fun ChessPiece.addMoves(
-    moves: MutableSet<Position>,
+// todo: keine extension function
+fun ChessPiece.calculateArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
-) {
+): Set<Position> {
+    val moves = mutableSetOf<Position>()
     var x = position.x
     var y = position.y
 
@@ -26,7 +27,7 @@ fun ChessPiece.addMoves(
         }
 
         val piece = board.getPieceAt(x, y)
-
+        
         if (piece != null) {
 
             if (isOpponent(piece)) {
@@ -39,6 +40,7 @@ fun ChessPiece.addMoves(
         moves.add(Position.of(x, y))
     }
 
+    return moves
 }
 
 enum class Operation(val operand: Int) {
