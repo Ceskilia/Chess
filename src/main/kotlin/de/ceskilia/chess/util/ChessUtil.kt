@@ -27,8 +27,9 @@ fun ChessPiece.calculateArithmeticMoves(
         }
 
         val piece = board.getPieceAt(x, y)
-        
-        if (piece != null) {
+
+        // temporary solution
+        if (piece != null && piece.type != ChessPiece.Type.KING) {
 
             if (isOpponent(piece)) {
                 moves.add(Position.of(x, y))
