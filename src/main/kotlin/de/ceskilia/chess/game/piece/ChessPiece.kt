@@ -18,7 +18,7 @@ abstract class ChessPiece(
         return !isAlly(other)
     }
 
-    //todo: getOpponentPieces/getAllyPieces here or in chessPiece
+    // todo: getOpponentPieces/getAllyPieces here or in chessPiece
 
     fun moveTo(position: Position) {
         board.move(this, position)
