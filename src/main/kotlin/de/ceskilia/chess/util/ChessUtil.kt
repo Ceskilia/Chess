@@ -1,10 +1,11 @@
 package de.ceskilia.chess.util
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
 
 // todo: keine extension function
-fun ChessPiece.calculateArithmeticMoves(
+fun BlockableChessPiece.calculateArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
 ): Set<Position> {
