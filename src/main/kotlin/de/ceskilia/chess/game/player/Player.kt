@@ -4,6 +4,7 @@ package de.ceskilia.chess.game.player
 
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Player(
@@ -54,14 +55,35 @@ data class Player(
             if (checkingPieces.size == 1) {
                 val checkingPiece = checkingPieces.first()
 
-                // check if pieces can take
                 getPieces().filter { it != king }.forEach {
+
+                    // check if piece can take
                     if (it.canMoveTo(checkingPiece.position)) {
-                        moves[it] = mutableSetOf(checkingPiece.position)
+                        moves[it] = setOf(checkingPiece.position)
                     }
+
+                    if(checkingPiece !is BlockableChessPiece) {
+                        return@forEach
+                    }
+
+                    // check if piece can block
+                    for (line in checkingPiece.calculateLines()) {
+
+                        // check if this is the checking line
+                        if (!line.contains(king.position)) {
+                            continue
+                        }
+
+                        for (position in line) {
+                            if (it.canMoveTo(position)) {
+                                moves[it] = moves.getOrDefault(it, setOf()) + position
+                            }
+                        }
+
+                    }
+
                 }
 
-                //todo: check if it can be blocked
             }
 
             return moves
