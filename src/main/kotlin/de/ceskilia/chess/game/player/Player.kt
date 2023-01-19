@@ -30,7 +30,7 @@ data class Player(
     }
 
     fun isChecked(): Boolean {
-        return getOpponentPieces().any() { it.canMoveTo(getKing().position) }
+        return getOpponentPieces().any { it.canMoveTo(getKing().position) }
     }
 
     fun canMoveTo(piece: ChessPiece, position: Position): Boolean {
@@ -62,24 +62,16 @@ data class Player(
                         moves[it] = setOf(checkingPiece.position)
                     }
 
-                    if(checkingPiece !is BlockableChessPiece) {
+                    // check if piece can be blocked
+                    if (checkingPiece !is BlockableChessPiece) {
                         return@forEach
                     }
 
-                    // check if piece can block
-                    for (line in checkingPiece.calculateLines()) {
+                    val blockingMoves = it.calculateBlockableMoves(checkingPiece, king)
 
-                        // check if this is the checking line
-                        if (!line.contains(king.position)) {
-                            continue
-                        }
-
-                        for (position in line) {
-                            if (it.canMoveTo(position)) {
-                                moves[it] = moves.getOrDefault(it, setOf()) + position
-                            }
-                        }
-
+                    moves.compute(it) { _, currentMoves ->
+                        if (currentMoves.isNullOrEmpty()) blockingMoves
+                        else currentMoves + blockingMoves
                     }
 
                 }

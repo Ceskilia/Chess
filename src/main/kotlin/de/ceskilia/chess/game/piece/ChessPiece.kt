@@ -32,6 +32,30 @@ abstract class ChessPiece(
         return calculateMoves().isNotEmpty()
     }
 
+    fun calculateBlockableMoves(
+        checkingPiece: BlockableChessPiece,
+        ownKing: ChessPiece = board.getPieces(color).first { it.type == Type.KING }
+    ): Set<Position> {
+        val moves = mutableSetOf<Position>()
+
+        for (line in checkingPiece.calculateLines()) {
+
+            // check if this is the checking line
+            if (!line.contains(ownKing.position)) {
+                continue
+            }
+
+            for (position in line) {
+                if (canMoveTo(position)) {
+                    moves += position
+                }
+            }
+
+        }
+
+        return moves
+    }
+
     open fun calculateMoves(): Set<Position> {
         return calculateCoveringMoves()
     }
