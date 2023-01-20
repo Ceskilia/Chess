@@ -66,7 +66,8 @@ data class Player(
     }
 
     fun hasMoves(): Boolean {
-        return calculateMoves().isNotEmpty()
+        val moves = calculateMoves()
+        return moves.isNotEmpty() && moves.values.any { it.isNotEmpty() }
     }
 
     fun calculateMoves(): Map<ChessPiece, Set<Position>> {
