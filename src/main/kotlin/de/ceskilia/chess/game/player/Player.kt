@@ -17,6 +17,10 @@ data class Player(
         return game.board.getPieces(pieceColor)
     }
 
+    fun getOpponents(): List<Player> {
+        return game.players.filter { it != this }
+    }
+
     fun getOpponentPieces(): List<ChessPiece> {
         return game.board.getPieces().filter { it.color != this.pieceColor }
     }
@@ -29,8 +33,32 @@ data class Player(
         return getPieces().contains(chessPiece)
     }
 
+    fun isStalemated(): Boolean {
+        return isChecked() && !hasMoves()
+    }
+
     fun isChecked(): Boolean {
         return getOpponentPieces().any { it.canMoveTo(getKing().position) }
+    }
+
+    fun isChecking(player: Player): Boolean {
+        return getPieces().any { it.canMoveTo(player.getKing().position) }
+    }
+
+    fun isCheckedBy(player: Player): Boolean {
+        return player.isChecking(this)
+    }
+
+    fun isCheckmated(): Boolean {
+        return isChecked() && !hasMoves()
+    }
+
+    fun isCheckmating(player: Player): Boolean {
+        return isChecking(player) && !player.hasMoves()
+    }
+
+    fun isCheckmatedBy(player: Player): Boolean {
+        return isCheckedBy(player) && !hasMoves()
     }
 
     fun canMoveTo(piece: ChessPiece, position: Position): Boolean {
