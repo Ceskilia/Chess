@@ -32,7 +32,7 @@ abstract class ChessPiece(
         return calculateMoves().isNotEmpty()
     }
 
-    fun calculateBlockableMoves(
+    fun calculateBlockingMoves(
         checkingPiece: BlockableChessPiece,
         ownKing: ChessPiece = board.getPieces(color).first { it.type == Type.KING }
     ): Set<Position> {

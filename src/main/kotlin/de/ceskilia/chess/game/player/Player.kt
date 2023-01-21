@@ -96,7 +96,7 @@ data class Player(
                         return@forEach
                     }
 
-                    val blockingMoves = it.calculateBlockableMoves(checkingPiece, king)
+                    val blockingMoves = it.calculateBlockingMoves(checkingPiece, king)
 
                     moves.compute(it) { _, currentMoves ->
                         if (currentMoves.isNullOrEmpty()) blockingMoves
