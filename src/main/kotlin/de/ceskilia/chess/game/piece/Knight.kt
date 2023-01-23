@@ -15,8 +15,17 @@ class Knight(
 
         for(x in (-2..2).filter { it != 0 } ) {
             val y = if(x.isEven()) 1 else 2
-            moves.add(position.copyAdding(x, -y))
-            moves.add(position.copyAdding(x, y))
+            val rightPosition = position.copyAdding(x, -y)
+            val leftPosition = position.copyAdding(x, y)
+
+            if(!board.isAllyAt(rightPosition, this)) {
+                moves.add(rightPosition)
+            }
+
+            if(!board.isAllyAt(leftPosition, this)) {
+                moves.add(leftPosition)
+            }
+
         }
 
         return moves
