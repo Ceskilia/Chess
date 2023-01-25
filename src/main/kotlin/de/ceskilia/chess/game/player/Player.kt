@@ -3,6 +3,7 @@
 package de.ceskilia.chess.game.player
 
 import de.ceskilia.chess.game.ChessGame
+import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
@@ -59,6 +60,11 @@ data class Player(
 
     fun isCheckmatedBy(player: Player): Boolean {
         return isCheckedBy(player) && !hasMoves()
+    }
+
+    // check if it is pinned
+    fun move(piece: ChessPiece, endPosition: Position): Move? {
+        return if (canMoveTo(piece, endPosition)) game.board.move(piece, endPosition) else null
     }
 
     fun canMoveTo(piece: ChessPiece, position: Position): Boolean {

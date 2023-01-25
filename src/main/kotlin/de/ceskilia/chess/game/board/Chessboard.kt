@@ -16,7 +16,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     }
 
     init {
-        notNegative(size) { "Size may not be negative: size=$size" }
+        notNegative(size) { "Size may not be negative. Provided: $size" }
     }
 
     val moves = mutableListOf<Move>()
@@ -31,23 +31,20 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     fun lastMove(): Move? = if (hasLastMove()) moves.last() else null
 
     // TODO: CHECKS
-    fun move(piece: ChessPiece, endPosition: Position): Move.Type? {
+    fun move(piece: ChessPiece, endPosition: Position): Move? {
 
         if (!piece.canMoveTo(endPosition)) {
             return null
         }
 
-        // check if it is pinned
-        // check if the king is in check
-
         val startPosition = piece.position
-        piece.position = endPosition
+        val endPiece = board[endPosition.x][endPosition.y]
 
+        piece.position = endPosition
         board[endPosition.x][endPosition.y] = piece
         removePieceAt(startPosition)
 
         var moveType = Move.Type.NORMAL
-        val endPiece = board[endPosition.x][endPosition.y]
         val capture = endPiece != null
         val check = getPieces(piece.color).any { ally ->
             ally.canMoveTo(getPieces()
@@ -66,12 +63,12 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             moveType = if (moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
         }
 
-        moves.add(Move(piece, startPosition, endPosition, moveType))
-
-        return moveType
+        val move = Move(piece, startPosition, endPosition, moveType)
+        moves.add(move)
+        return move
     }
 
-    fun move(startPosition: Position, endPosition: Position): Move.Type? {
+    fun move(startPosition: Position, endPosition: Position): Move? {
         val piece = getPieceAt(startPosition)
         return if (piece != null) move(piece, endPosition) else null
     }
@@ -100,6 +97,10 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
     fun isBlankAt(x: Int, y: Int): Boolean {
         return !isPieceAt(x, y)
+    }
+
+    fun isBlankAt(position: Position): Boolean {
+        return !isPieceAt(position)
     }
 
     fun isAllyAt(x: Int, y: Int, piece: ChessPiece): Boolean {
