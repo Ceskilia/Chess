@@ -39,7 +39,7 @@ class Pawn(
         // check for en passant
         if (lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x) {
 
-            val yDifference = position.compareTo(lastPosition).y
+            val yDifference = lastPosition.y - position.y
 
             // the pawns need to stand next to each other
             if (abs(yDifference) != 1) {

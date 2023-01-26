@@ -37,6 +37,7 @@ abstract class ChessPiece(
         ownKing: ChessPiece = board.getPieces(color).first { it.type == Type.KING }
     ): Set<Position> {
         val moves = mutableSetOf<Position>()
+        val possibleMoves = calculateMoves()
 
         for (line in checkingPiece.calculateLines()) {
 
@@ -46,7 +47,7 @@ abstract class ChessPiece(
             }
 
             for (position in line) {
-                if (canMoveTo(position)) {
+                if (possibleMoves.contains(position)) {
                     moves += position
                 }
             }
