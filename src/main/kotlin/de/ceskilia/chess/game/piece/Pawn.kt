@@ -28,7 +28,7 @@ class Pawn(
             moves.add(Position.of(oneStep, left))
         }
 
-        val lastMove = board.lastMove() ?: return moves
+        val lastMove = board.history.lastMove() ?: return moves
         val lastPosition = lastMove.newPosition
 
         // if the last move somehow was done by the same color -> don't check for en passant
