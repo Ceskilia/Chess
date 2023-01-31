@@ -2,7 +2,7 @@
 
 package de.ceskilia.chess.game.board
 
-import de.ceskilia.chess.game.BoardHistory
+import de.ceskilia.chess.game.GameHistory
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
@@ -20,7 +20,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         notNegative(size) { "Size may not be negative. Provided: $size" }
     }
 
-    val history = BoardHistory()
+    val history = GameHistory()
 
     protected val board: List<MutableList<ChessPiece?>> = List(size) {
         MutableList(size) { null }
