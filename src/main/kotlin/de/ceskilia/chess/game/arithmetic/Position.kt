@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package de.ceskilia.chess.game.arithmetic
 
 import de.ceskilia.chess.util.isEven
@@ -48,7 +50,13 @@ class Position private constructor(val x: Int, val y: Int) {
     fun copy(x: Int = this.x, y: Int = this.y): Position = of(x, y)
 
     fun copyAdding(x: Int = 0, y: Int = 0): Position {
-        return of(this.x + x, this.y + y)
+        return copy(this.x + x, this.y + y)
+    }
+
+    fun tryCopyAdding(x: Int = 0, y: Int = 0, condition: (Int, Int) -> Boolean): Position? {
+        val newX = this.x + x
+        val newY = this.y + y
+        return if(condition(newX, newY)) copy(newX, newY) else null
     }
 
     override fun equals(other: Any?): Boolean {
