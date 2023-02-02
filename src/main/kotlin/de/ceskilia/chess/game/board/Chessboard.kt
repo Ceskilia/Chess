@@ -59,9 +59,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             moveType = if (moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
         }
 
-        val move = Move(piece, startPosition, endPosition, moveType)
-        history.moves.add(move)
-        return move
+        return Move(piece, startPosition, endPosition, moveType)
     }
 
     fun move(startPosition: Position, endPosition: Position): Move? {
@@ -136,12 +134,16 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         }
     }
 
-    fun isHorizontalInBoard(x: Int): Boolean {
+    fun isVerticalInBoard(x: Int): Boolean {
         return x in 0 until size
     }
 
-    fun isVerticalInBoard(y: Int): Boolean {
+    fun isHorizontalInBoard(y: Int): Boolean {
         return y in 0 until size
+    }
+
+    fun isValidPosition(x: Int, y: Int): Boolean {
+        return isVerticalInBoard(x) && isHorizontalInBoard(y)
     }
 
     fun printBoard(): String {
