@@ -74,7 +74,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     }
 
     fun getPieceAt(x: Int, y: Int): ChessPiece? {
-        return board[x][y]
+        return if(isValidPosition(x, y)) board[x][y] else null
     }
 
     fun getPieceAt(position: Position): ChessPiece? {
