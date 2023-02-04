@@ -2,6 +2,7 @@ package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
+import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.isEven
 
 class Knight(
@@ -15,20 +16,15 @@ class Knight(
 
         for(x in (-2..2).filter { it != 0 } ) {
             val y = if(x.isEven()) 1 else 2
-            val rightPosition = position.copyAdding(x, -y)
-            val leftPosition = position.copyAdding(x, y)
-
-            if(!board.isAllyAt(rightPosition, this)) {
-                moves.add(rightPosition)
-            }
-
-            if(!board.isAllyAt(leftPosition, this)) {
-                moves.add(leftPosition)
-            }
-
+            moves.addNonNull(position.tryCopyAdding(x, -y, ::isMovablePosition))
+            moves.addNonNull(position.tryCopyAdding(x, y, ::isMovablePosition))
         }
 
         return moves
+    }
+
+    private fun isMovablePosition(x: Int, y: Int): Boolean {
+        return !board.isAllyAt(x, y, this)
     }
 
 }

@@ -1,7 +1,10 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
+import de.ceskilia.chess.util.addNonNull
 import kotlin.math.abs
 
 class Pawn(
@@ -14,22 +17,13 @@ class Pawn(
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
-        val oneStep = position.x + board.directionOf(color)
-        val right = position.y + 1
-        val left = position.y - 1
 
-        // check if right can be captured
-        if (board.isVerticalInBoard(right) && board.isOpponentAt(oneStep, right, this)) {
-            moves.add(Position.of(oneStep, right))
-        }
+        moves.addNonNull(checkNormalCaptures(CaptureDirection.RIGHT))
+        moves.addNonNull(checkNormalCaptures(CaptureDirection.LEFT))
 
-        // check if left can be captured
-        if (board.isVerticalInBoard(left) && board.isOpponentAt(oneStep, left, this)) {
-            moves.add(Position.of(oneStep, left))
-        }
+        // todo: what happens when oneStep not in board (promotion)
 
         val lastMove = board.history.lastMove() ?: return moves
-        val lastPosition = lastMove.newPosition
 
         // if the last move somehow was done by the same color -> don't check for en passant
         if (lastMove.chessPiece.color == color) {
@@ -37,7 +31,10 @@ class Pawn(
         }
 
         // check for en passant
-        if (lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x) {
+        val lastPosition = lastMove.newPosition
+        val canEnPassant = lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x
+
+        if (canEnPassant) {
 
             val yDifference = lastPosition.y - position.y
 
@@ -47,7 +44,7 @@ class Pawn(
             }
 
             board.removePieceAt(lastPosition)
-            moves.add(Position.of(oneStep, position.y + yDifference))
+            position.copyAdding(board.directionOf(color), yDifference)
         }
 
         return moves
@@ -55,23 +52,39 @@ class Pawn(
 
     override fun calculateMoves(): Set<Position> {
         val moves = calculateCoveringMoves().toMutableSet()
-        val oneStep = position.x + board.directionOf(color)
 
         // check for normal moves
-        if (board.isBlankAt(oneStep, position.y)) {
-            moves.add(position.copy(x = oneStep))
+        val oneStep = position.tryCopyAdding(board.directionOf(color)) { x, y ->
+            board.isBlankAt(x, y)
+        }
 
-            val twoSteps = oneStep + board.directionOf(color)
+        if(oneStep != null) {
+            moves.add(oneStep)
 
-            if (!moved() && board.isBlankAt(twoSteps, position.y)) {
-                moves.add(position.copy(x = twoSteps))
+            val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
+                !moved() && board.isBlankAt(x, y)
             }
 
+            moves.addNonNull(twoSteps)
         }
 
         return moves
     }
 
-    private fun moved(): Boolean = position != startPosition
+    fun moved(): Boolean = position != startPosition
+
+
+    private fun checkNormalCaptures(direction: CaptureDirection): Position? {
+        return position.tryCopyAdding(x = board.directionOf(color), y = direction.y) { x, y ->
+            board.isOpponentAt(x, y, this)
+        }
+    }
+
+    private enum class CaptureDirection(val y: Int) {
+
+        LEFT(-1),
+        RIGHT(1)
+
+    }
 
 }

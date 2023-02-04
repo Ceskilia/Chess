@@ -2,7 +2,6 @@ package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
-import java.util.function.Predicate
 
 class King(
     board: Chessboard,
@@ -25,7 +24,7 @@ class King(
     private fun modifyMovesIf(
         moves: MutableSet<Position>,
         operation: Operation,
-        predicate: Predicate<Position>
+        condition: (Position) -> Boolean
     ): Set<Position> {
 
         for (x in -1..1) {
@@ -36,17 +35,9 @@ class King(
                     continue
                 }
 
-                val xCoordinate = position.x + x
-                val yCoordinate = position.y + y
+                val position = position.tryCopyAdding(x, y, board::isValidPosition) ?: continue
 
-                if (!board.isHorizontalInBoard(xCoordinate) || !board.isVerticalInBoard(yCoordinate)) {
-                    continue
-                }
-
-                val position = Position.of(xCoordinate, yCoordinate)
-
-                // check if the position is valid
-                if (predicate.negate().test(position)) {
+                if (!condition(position)) {
                     continue
                 }
 

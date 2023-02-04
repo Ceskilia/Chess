@@ -40,9 +40,10 @@ abstract class ChessPiece(
         val possibleMoves = calculateMoves()
 
         for (line in checkingPiece.calculateLines()) {
+            val isCheckingLine = line.contains(ownKing.position)
 
             // check if this is the checking line
-            if (!line.contains(ownKing.position)) {
+            if (!isCheckingLine) {
                 continue
             }
 
