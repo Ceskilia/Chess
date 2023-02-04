@@ -8,7 +8,7 @@ abstract class ChessPiece(
     var position: Position,
     val color: Color,
     val type: Type
-) {
+) : Movable {
 
     fun isAlly(other: ChessPiece): Boolean {
         return this.color == other.color
@@ -18,26 +18,19 @@ abstract class ChessPiece(
         return !isAlly(other)
     }
 
-    // todo: getOpponentPieces/getAllyPieces here or in chessPiece
-
     fun moveTo(position: Position) {
         board.move(this, position)
     }
 
-    fun canMoveTo(position: Position): Boolean {
-        return calculateMoves().contains(position)
-    }
-
-    fun hasMoves(): Boolean {
-        return calculateMoves().isNotEmpty()
-    }
-
     fun calculateBlockingMoves(
-        checkingPiece: BlockableChessPiece,
-        ownKing: ChessPiece = board.getPieces(color).first { it.type == Type.KING }
+        checkingPiece: Blockable,
+        king: ChessPiece? = null
     ): Set<Position> {
         val moves = mutableSetOf<Position>()
         val possibleMoves = calculateMoves()
+        val ownKing = king ?: board.getPieces(color).first { it.type == Type.KING }
+
+        check(isAlly(ownKing)) { "The provided king is not an ally. Expected: $color, Provided: ${ownKing.color}." }
 
         for (line in checkingPiece.calculateLines()) {
             val isCheckingLine = line.contains(ownKing.position)
@@ -57,19 +50,6 @@ abstract class ChessPiece(
 
         return moves
     }
-
-    open fun calculateMoves(): Set<Position> {
-        return calculateCoveringMoves()
-    }
-
-    // the term "covering" refers to the fact, that some pieces (pawns) can
-    // make moves, that cannot capture a piece, so we need to differentiate between those to make it possible
-    // to check for possible moves of pieces with type KING
-    fun isCovering(position: Position): Boolean {
-        return calculateCoveringMoves().contains(position)
-    }
-
-    abstract fun calculateCoveringMoves(): Set<Position>
 
     enum class Color {
 

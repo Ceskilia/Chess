@@ -1,11 +1,9 @@
 package de.ceskilia.chess.util
 
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
 
-// todo: keine extension function
-fun BlockableChessPiece.calculateArithmeticMoves(
+fun ChessPiece.calculateArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
 ): Set<Position> {
@@ -15,24 +13,24 @@ fun BlockableChessPiece.calculateArithmeticMoves(
 
     while (true) {
 
-        if(xOperation != null) {
+        if (xOperation != null) {
             x += xOperation.operand
         }
 
-        if(yOperation != null) {
+        if (yOperation != null) {
             y += yOperation.operand
         }
 
-        if (!board.isHorizontalInBoard(x) || !board.isVerticalInBoard(y)) {
+        if (!board.isValidPosition(x, y)) {
             break
         }
 
         val piece = board.getPieceAt(x, y)
 
         // temporary solution
-        if (piece != null && piece.type != ChessPiece.Type.KING) {
+        if (piece != null) {
 
-            if (isOpponent(piece)) {
+            if (isOpponent(piece) && piece.type != ChessPiece.Type.KING) {
                 moves.add(Position.of(x, y))
             }
 

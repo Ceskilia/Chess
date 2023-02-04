@@ -9,7 +9,7 @@ class Rook(
     board: Chessboard,
     position: Position,
     color: Color
-) : BlockableChessPiece(board, position, color, Type.ROOK) {
+) : ChessPiece(board, position, color, Type.ROOK), Blockable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(

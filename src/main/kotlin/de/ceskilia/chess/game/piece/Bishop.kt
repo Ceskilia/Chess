@@ -9,7 +9,7 @@ class Bishop(
     board: Chessboard,
     position: Position,
     color: Color
-) : BlockableChessPiece(board, position, color, Type.BISHOP) {
+) : ChessPiece(board, position, color, Type.BISHOP), Blockable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(

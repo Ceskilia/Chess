@@ -9,7 +9,7 @@ class Queen(
     board: Chessboard,
     position: Position,
     color: Color
-) : BlockableChessPiece(board, position, color, Type.QUEEN) {
+) : ChessPiece(board, position, color, Type.QUEEN), Blockable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
