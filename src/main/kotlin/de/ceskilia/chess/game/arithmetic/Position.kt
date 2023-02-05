@@ -56,6 +56,11 @@ class Position private constructor(val x: Int, val y: Int) {
     fun tryCopyAdding(x: Int = 0, y: Int = 0, condition: (Int, Int) -> Boolean): Position? {
         val newX = this.x + x
         val newY = this.y + y
+
+        if(newX < 0 || newY < 0) {
+            return null
+        }
+
         return if(condition(newX, newY)) copy(newX, newY) else null
     }
 
