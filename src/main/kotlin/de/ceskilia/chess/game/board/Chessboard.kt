@@ -43,8 +43,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         var moveType = Move.Type.NORMAL
         val capture = endPiece != null
         val check = getPieces(piece.color).any { ally ->
-            ally.canMoveTo(getPieces()
-                .filter { it.color != piece.color }
+            ally.canMoveTo(getOpponentPieces(piece.color)
                 .first { it.type == ChessPiece.Type.KING }
                 .position
             )
@@ -71,6 +70,12 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         return board.flatten()
             .filterNotNull()
             .filter { color == null || it.color == color }
+    }
+
+    fun getOpponentPieces(color: ChessPiece.Color): List<ChessPiece> {
+        return board.flatten()
+            .filterNotNull()
+            .filter { it.color != color }
     }
 
     fun getPieceAt(x: Int, y: Int): ChessPiece? {

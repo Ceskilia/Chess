@@ -16,9 +16,7 @@ class King(
 
     override fun calculateMoves(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
-            board.getPieces()
-                .filter { it.color != color }
-                .any { it.isCovering(position) }
+            board.getOpponentPieces(color).any { it.isCovering(position) }
         }
     }
 
