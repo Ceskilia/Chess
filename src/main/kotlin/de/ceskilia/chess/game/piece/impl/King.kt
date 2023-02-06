@@ -1,7 +1,8 @@
-package de.ceskilia.chess.game.piece
+package de.ceskilia.chess.game.piece.impl
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
+import de.ceskilia.chess.game.piece.ChessPiece
 
 class King(
     board: Chessboard,
