@@ -18,12 +18,18 @@ abstract class ChessPiece(
         return !isAlly(other)
     }
 
+    fun isPinned(): Boolean {
+        return board.getOpponentPieces(color)
+            .filterIsInstance<BlockableChessPiece>()
+            .any { it.isPinning(this) }
+    }
+
     fun moveTo(position: Position) {
         board.move(this, position)
     }
 
     fun calculateBlockingMoves(
-        checkingPiece: Blockable,
+        checkingPiece: BlockableChessPiece,
         king: ChessPiece? = null
     ): Set<Position> {
         val moves = mutableSetOf<Position>()
