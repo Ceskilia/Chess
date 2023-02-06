@@ -5,7 +5,7 @@ package de.ceskilia.chess.game.player
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.Blockable
+import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Player(
@@ -23,7 +23,7 @@ data class Player(
     }
 
     fun getOpponentPieces(): List<ChessPiece> {
-        return game.board.getPieces().filter { it.color != this.pieceColor }
+        return game.board.getOpponentPieces(pieceColor)
     }
 
     fun getKing(): ChessPiece {
@@ -98,7 +98,7 @@ data class Player(
                     }
 
                     // check if piece can be blocked
-                    if (checkingPiece !is Blockable) {
+                    if (checkingPiece !is BlockableChessPiece) {
                         return@forEach
                     }
 
