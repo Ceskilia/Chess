@@ -22,7 +22,7 @@ fun BlockableChessPiece.calculateArithmeticMoves(
     }
 }
 
-fun BlockableChessPiece.calculatePinMoves(line: Set<Position>): Set<Position> {
+fun BlockableChessPiece.addPinMoves(line: Set<Position>): Set<Position> {
     val startMoves = line.toMutableSet()
     val lastPosition = startMoves.firstOrNull { board.isOpponentAt(it, this) } ?: return startMoves
 
