@@ -4,6 +4,8 @@ import de.ceskilia.chess.game.arithmetic.Position
 
 interface Movable {
 
+    fun moveTo(position: Position)
+
     fun canMoveTo(position: Position): Boolean {
         return calculateMoves().contains(position)
     }
@@ -12,7 +14,9 @@ interface Movable {
         return calculateMoves().isNotEmpty()
     }
 
-    fun calculateMoves(): Set<Position> {
+    fun calculateMoves(): Set<Position>
+
+    fun calculateMovesUnpinned(): Set<Position> {
         return calculateCoveringMoves()
     }
 

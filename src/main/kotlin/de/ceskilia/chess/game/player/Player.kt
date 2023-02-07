@@ -117,7 +117,8 @@ data class Player(
             return moves
         }
 
-        return pieces.associateWith { it.calculateMoves() }
+
+        return getPieces().associateWith(ChessPiece::calculateMoves)
     }
 
 }

@@ -51,7 +51,7 @@ class Pawn(
         return moves
     }
 
-    override fun calculateMoves(): Set<Position> {
+    override fun calculateMovesUnpinned(): Set<Position> {
         val moves = calculateCoveringMoves().toMutableSet()
 
         // check for normal moves

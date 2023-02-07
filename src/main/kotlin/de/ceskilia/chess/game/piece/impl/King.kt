@@ -14,7 +14,7 @@ class King(
         return modifyMovesIf(mutableSetOf(), Operation.ADD) { !board.isAllyAt(it, this) }
     }
 
-    override fun calculateMoves(): Set<Position> {
+    override fun calculateMovesUnpinned(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
             board.getOpponentPieces(color).any { it.isCovering(position) }
         }

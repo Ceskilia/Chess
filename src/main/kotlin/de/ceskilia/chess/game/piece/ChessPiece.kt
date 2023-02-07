@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
@@ -19,19 +21,16 @@ abstract class ChessPiece(
     }
 
     fun isPinned(): Boolean {
+        return getPinningPiece() != null
+    }
+
+    fun getPinningPiece(): BlockableChessPiece? {
         return board.getOpponentPieces(color)
             .filterIsInstance<BlockableChessPiece>()
-            .any { it.isPinning(this) }
+            .firstOrNull { it.isPinning(this) }
     }
 
-    fun moveTo(position: Position) {
-        board.move(this, position)
-    }
-
-    fun calculateBlockingMoves(
-        checkingPiece: BlockableChessPiece,
-        king: ChessPiece? = null
-    ): Set<Position> {
+    fun calculateBlockingMoves(checkingPiece: BlockableChessPiece, king: ChessPiece? = null): Set<Position> {
         val moves = mutableSetOf<Position>()
         val possibleMoves = calculateMoves()
         val ownKing = king ?: board.getPieces(color).first { it.type == Type.KING }
@@ -55,6 +54,14 @@ abstract class ChessPiece(
         }
 
         return moves
+    }
+
+    override fun calculateMoves(): Set<Position> {
+        return if (isPinned()) emptySet() else calculateMovesUnpinned()
+    }
+
+    override fun moveTo(position: Position) {
+        board.move(this, position)
     }
 
     enum class Color {
