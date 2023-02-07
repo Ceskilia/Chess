@@ -14,11 +14,12 @@ fun BlockableChessPiece.calculateArithmeticMoves(
         xOperation = xOperation,
         yOperation = yOperation
     ) { piece, moves ->
-        if (isOpponent(piece) && piece.type != ChessPiece.Type.KING) {
-            moves.add(piece.position)
+        if(isAlly(piece)) {
+            return@calculateMoves true
         }
 
-        true
+        moves.add(piece.position)
+        piece.type != ChessPiece.Type.KING
     }
 }
 
