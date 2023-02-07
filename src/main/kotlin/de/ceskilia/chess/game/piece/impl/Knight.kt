@@ -25,7 +25,7 @@ class Knight(
     }
 
     private fun isMovablePosition(x: Int, y: Int): Boolean {
-        return !board.isAllyAt(x, y, this)
+        return board.isValidPosition(x, y) && !board.isAllyAt(x, y, this)
     }
 
 }
