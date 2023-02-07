@@ -78,6 +78,7 @@ data class Player(
 
     fun calculateMoves(): Map<ChessPiece, Set<Position>> {
         val king = getKing()
+        val pieces = getPieces().filter { !it.isPinned() }
         val checkingPieces = getOpponentPieces().filter { it.canMoveTo(king.position) }
 
         if (checkingPieces.isNotEmpty()) {
@@ -90,7 +91,7 @@ data class Player(
             if (checkingPieces.size == 1) {
                 val checkingPiece = checkingPieces.first()
 
-                getPieces().filter { it != king }.forEach {
+                pieces.filter { it != king }.forEach {
 
                     // check if piece can take
                     if (it.canMoveTo(checkingPiece.position)) {
@@ -116,7 +117,7 @@ data class Player(
             return moves
         }
 
-        return getPieces().associateWith { it.calculateMoves() }
+        return pieces.associateWith { it.calculateMoves() }
     }
 
 }
