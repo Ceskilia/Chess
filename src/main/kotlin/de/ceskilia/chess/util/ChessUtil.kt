@@ -4,6 +4,18 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
 
+fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
+    return with(piece) {
+        val moves = calculateMovesUnpinned()
+        val pinningPiece = getPinningPiece() ?: return moves
+
+        pinningPiece.calculatePinLine(this)!!
+            .plus(pinningPiece.position)
+            .filter { moves.contains(it) }
+            .toSet()
+    }
+}
+
 fun BlockableChessPiece.calculateArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
@@ -14,7 +26,7 @@ fun BlockableChessPiece.calculateArithmeticMoves(
         xOperation = xOperation,
         yOperation = yOperation
     ) { piece, moves ->
-        if(isAlly(piece)) {
+        if (isAlly(piece)) {
             return@calculateMoves true
         }
 
