@@ -20,10 +20,7 @@ abstract class BlockableChessPiece(
     }
 
     fun isPinning(other: ChessPiece): Boolean {
-        return calculatePinLines()
-            .firstOrNull { line -> line.any { board.getPieceAt(it)?.type == Type.KING } }
-            ?.mapNotNull { board.getPieceAt(it) }
-            ?.firstOrNull { it.type != Type.KING } == other
+        return other.type != Type.KING && calculatePinLine(other) != null
     }
 
     override fun calculateMoves(): Set<Position> {
@@ -34,6 +31,15 @@ abstract class BlockableChessPiece(
             .plus(pinningPiece.position)
             .filter { moves.contains(it) }
             .toSet()
+    }
+
+    fun calculatePinLine(other: ChessPiece): Set<Position>? {
+        return calculatePinLines()
+            .firstOrNull { line ->
+                val hasKing = line.any { board.getPieceAt(it)?.type == Type.KING }
+                val hasPiece = line.any { board.getPieceAt(it) == other }
+                hasKing && hasPiece
+            }
     }
 
     open fun calculatePinLines(): List<Set<Position>> {
