@@ -6,6 +6,7 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.util.addNonNull
+import de.ceskilia.chess.util.calculateExtendedMovesPinned
 import kotlin.math.abs
 
 class Pawn(
@@ -13,8 +14,6 @@ class Pawn(
     position: Position,
     color: Color
 ) : ChessPiece(board, position, color, Type.PAWN) {
-
-    private val startPosition = position
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
@@ -33,9 +32,9 @@ class Pawn(
 
         // check for en passant
         val lastPosition = lastMove.newPosition
-        val canEnPassant = lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x
+        val possibleEnPassant = lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x
 
-        if (canEnPassant) {
+        if (possibleEnPassant) {
 
             val yDifference = lastPosition.y - position.y
 
@@ -45,7 +44,7 @@ class Pawn(
             }
 
             board.removePieceAt(lastPosition)
-            position.copyAdding(board.directionOf(color), yDifference)
+            moves.add(position.copyAdding(board.directionOf(color), yDifference))
         }
 
         return moves
@@ -63,7 +62,7 @@ class Pawn(
             moves.add(oneStep)
 
             val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
-                !moved() && board.isBlankAt(x, y)
+                !hasMoved() && board.isBlankAt(x, y)
             }
 
             moves.addNonNull(twoSteps)
@@ -72,8 +71,9 @@ class Pawn(
         return moves
     }
 
-    fun moved(): Boolean = position != startPosition
-
+    override fun calculateMoves(): Set<Position> {
+        return calculateExtendedMovesPinned(this)
+    }
 
     private fun checkNormalCaptures(direction: CaptureDirection): Position? {
         return position.tryCopyAdding(x = board.directionOf(color), y = direction.y) { x, y ->
