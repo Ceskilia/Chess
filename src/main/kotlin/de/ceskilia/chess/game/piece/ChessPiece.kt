@@ -12,6 +12,8 @@ abstract class ChessPiece(
     val type: Type
 ) : Movable {
 
+    private val startPosition = position
+
     fun isAlly(other: ChessPiece): Boolean {
         return this.color == other.color
     }
@@ -56,12 +58,16 @@ abstract class ChessPiece(
         return moves
     }
 
-    override fun calculateMoves(): Set<Position> {
-        return if (isPinned()) emptySet() else calculateMovesUnpinned()
-    }
-
     override fun moveTo(position: Position) {
         board.move(this, position)
+    }
+
+    override fun hasMoved(): Boolean {
+        return position != startPosition
+    }
+
+    override fun calculateMoves(): Set<Position> {
+        return if (isPinned()) emptySet() else calculateMovesUnpinned()
     }
 
     enum class Color {

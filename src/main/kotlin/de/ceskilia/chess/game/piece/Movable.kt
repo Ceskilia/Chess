@@ -4,11 +4,14 @@ import de.ceskilia.chess.game.arithmetic.Position
 
 interface Movable {
 
+
     fun moveTo(position: Position)
 
     fun canMoveTo(position: Position): Boolean {
         return calculateMoves().contains(position)
     }
+
+    fun hasMoved(): Boolean
 
     fun hasMoves(): Boolean {
         return calculateMoves().isNotEmpty()
