@@ -15,6 +15,31 @@ class Pawn(
     color: Color
 ) : ChessPiece(board, position, color, Type.PAWN) {
 
+    override fun calculateMoves(): Set<Position> {
+        return calculateExtendedMovesPinned(this)
+    }
+
+    override fun calculateMovesUnpinned(): Set<Position> {
+        val moves = calculateCoveringMoves().toMutableSet()
+
+        // check for normal moves
+        val oneStep = position.tryCopyAdding(board.directionOf(color)) { x, y ->
+            board.isBlankAt(x, y)
+        }
+
+        if(oneStep != null) {
+            moves.add(oneStep)
+
+            val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
+                !hasMoved() && board.isBlankAt(x, y)
+            }
+
+            moves.addNonNull(twoSteps)
+        }
+
+        return moves
+    }
+
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
 
@@ -48,31 +73,6 @@ class Pawn(
         }
 
         return moves
-    }
-
-    override fun calculateMovesUnpinned(): Set<Position> {
-        val moves = calculateCoveringMoves().toMutableSet()
-
-        // check for normal moves
-        val oneStep = position.tryCopyAdding(board.directionOf(color)) { x, y ->
-            board.isBlankAt(x, y)
-        }
-
-        if(oneStep != null) {
-            moves.add(oneStep)
-
-            val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
-                !hasMoved() && board.isBlankAt(x, y)
-            }
-
-            moves.addNonNull(twoSteps)
-        }
-
-        return moves
-    }
-
-    override fun calculateMoves(): Set<Position> {
-        return calculateExtendedMovesPinned(this)
     }
 
     private fun checkNormalCaptures(direction: CaptureDirection): Position? {

@@ -10,14 +10,14 @@ class King(
     color: Color
 ) : ChessPiece(board, position, color, Type.KING) {
 
-    override fun calculateCoveringMoves(): Set<Position> {
-        return modifyMovesIf(mutableSetOf(), Operation.ADD) { !board.isAllyAt(it, this) }
-    }
-
     override fun calculateMovesUnpinned(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
             board.getOpponentPieces(color).any { it.isCovering(position) }
         }
+    }
+
+    override fun calculateCoveringMoves(): Set<Position> {
+        return modifyMovesIf(mutableSetOf(), Operation.ADD) { !board.isAllyAt(it, this) }
     }
 
     private fun modifyMovesIf(
