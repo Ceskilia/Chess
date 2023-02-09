@@ -68,7 +68,6 @@ class Pawn(
                 return moves
             }
 
-            board.removePieceAt(lastPosition)
             moves.add(position.copyAdding(board.directionOf(color), yDifference))
         }
 

@@ -6,6 +6,7 @@ import de.ceskilia.chess.game.GameHistory
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.util.isEnPassant
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
@@ -27,7 +28,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     }
 
     // TODO: CHECKS
-    fun move(piece: ChessPiece, endPosition: Position): Move? {
+    open fun move(piece: ChessPiece, endPosition: Position): Move? {
 
         if (!piece.canMoveTo(endPosition)) {
             return null
@@ -40,7 +41,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         board[endPosition.x][endPosition.y] = piece
         removePieceAt(startPosition)
 
-        var moveType = Move.Type.NORMAL
         val capture = endPiece != null
         val check = getPieces(piece.color).any { ally ->
             ally.canMoveTo(getOpponentPieces(piece.color)
@@ -51,17 +51,19 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
         if (capture) {
             history.capturedPieces.add(endPiece!!)
-            moveType = Move.Type.CAPTURE
         }
 
-        if (check) {
-            moveType = if (moveType == Move.Type.CAPTURE) Move.Type.CAPTURE_CHECK else Move.Type.CHECK
+        val move = Move(piece, startPosition, endPosition, check, capture)
+
+        if(move.isEnPassant()) {
+            removePieceAt(history.lastMove()!!.newPosition)
         }
 
-        return Move(piece, startPosition, endPosition, moveType)
+        history.moves.add(move)
+        return move
     }
 
-    fun move(startPosition: Position, endPosition: Position): Move? {
+    open fun move(startPosition: Position, endPosition: Position): Move? {
         val piece = getPieceAt(startPosition)
         return if (piece != null) move(piece, endPosition) else null
     }
