@@ -58,7 +58,9 @@ class Pawn(
 
         // check for en passant
         val lastPosition = lastMove.newPosition
-        val possibleEnPassant = lastMove.chessPiece.type == Type.PAWN && position.x == lastPosition.x
+        val possibleEnPassant = lastMove.chessPiece.type == Type.PAWN
+                && board.history.movesOf(lastMove.chessPiece).size == 1
+                && position.x == lastPosition.x
 
         if (possibleEnPassant) {
 

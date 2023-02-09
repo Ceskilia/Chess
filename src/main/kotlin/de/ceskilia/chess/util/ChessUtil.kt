@@ -1,10 +1,8 @@
 package de.ceskilia.chess.util
 
-import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.BlockableChessPiece
 import de.ceskilia.chess.game.piece.ChessPiece
-import kotlin.math.abs
 
 fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
     return with(piece) {
@@ -21,12 +19,6 @@ fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
 fun Position.whenOccupiedBy(piece: ChessPiece, action: () -> Unit): Position {
     piece.board.queueMoveAction(piece, this, action)
     return this
-}
-
-fun Move.isEnPassant(): Boolean {
-    val isPawn = chessPiece.type == ChessPiece.Type.PAWN
-    val movedDiagonal = abs(startPosition.x - newPosition.x) == 1 && abs(startPosition.y - newPosition.y) == 1
-    return isPawn && movedDiagonal
 }
 
 fun BlockableChessPiece.addPinMoves(line: Set<Position>): Set<Position> {
