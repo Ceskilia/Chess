@@ -7,6 +7,7 @@ import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateExtendedMovesPinned
+import de.ceskilia.chess.util.whenOccupiedBy
 import kotlin.math.abs
 
 class Pawn(
@@ -68,7 +69,9 @@ class Pawn(
                 return moves
             }
 
-            moves.add(position.copyAdding(board.directionOf(color), yDifference))
+            moves.add(position.copyAdding(board.directionOf(color), yDifference).whenOccupiedBy(this) {
+                board.removePieceAt(lastPosition)
+            })
         }
 
         return moves

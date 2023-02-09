@@ -6,7 +6,6 @@ import de.ceskilia.chess.game.GameHistory
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.util.isEnPassant
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
@@ -23,6 +22,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
 
     val history = GameHistory()
 
+    protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, () -> Unit>>>()
     protected val board: List<MutableList<ChessPiece?>> = List(size) {
         MutableList(size) { null }
     }
@@ -37,6 +37,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         val startPosition = piece.position
         val endPiece = board[endPosition.x][endPosition.y]
 
+        executeQueuedAction(piece, endPosition)
         piece.position = endPosition
         board[endPosition.x][endPosition.y] = piece
         removePieceAt(startPosition)
@@ -54,11 +55,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         }
 
         val move = Move(piece, startPosition, endPosition, check, capture)
-
-        if(move.isEnPassant()) {
-            removePieceAt(history.lastMove()!!.newPosition)
-        }
-
         history.moves.add(move)
         return move
     }
@@ -180,6 +176,21 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         }
 
         return builder.toString()
+    }
+
+    fun queueMoveAction(piece: ChessPiece, position: Position, action: () -> Unit) {
+        queuedMoveActions.compute(piece) { _, value ->
+            val actions = value ?: mutableSetOf()
+            if(actions.none { it.first == position })
+                actions.add(position to action)
+            return@compute actions
+        }
+    }
+
+    private fun executeQueuedAction(piece: ChessPiece, endPosition: Position) {
+        val actionMovingTo = queuedMoveActions[piece]?.firstOrNull { it.first == endPosition }?.second
+        actionMovingTo?.invoke()
+        queuedMoveActions.remove(piece)
     }
 
     abstract fun directionOf(color: ChessPiece.Color): Int

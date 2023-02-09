@@ -18,6 +18,11 @@ fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
     }
 }
 
+fun Position.whenOccupiedBy(piece: ChessPiece, action: () -> Unit): Position {
+    piece.board.queueMoveAction(piece, this, action)
+    return this
+}
+
 fun Move.isEnPassant(): Boolean {
     val isPawn = chessPiece.type == ChessPiece.Type.PAWN
     val movedDiagonal = abs(startPosition.x - newPosition.x) == 1 && abs(startPosition.y - newPosition.y) == 1
