@@ -75,7 +75,7 @@ class WinDetection(val game: ChessGame) {
         }
 
         // threefold repetition
-        // take last 9 elements (4 from the one side | 5 from the other ("ababa" = 3fold))
+        // take last 9 elements (4 from the one side | 5 from the other ("ababa" = 3fold)) TODO ("abcabcabc" is also 3fold)
         val repetitionMoves = chessboard.history.lastMoves(9)
             .groupBy { it.chessPiece.color }
             .values
@@ -97,7 +97,7 @@ class WinDetection(val game: ChessGame) {
 
         // no pawn move and no capture
         if (lastFiftyMoves.none { it.chessPiece.type == ChessPiece.Type.PAWN }
-            && lastFiftyMoves.none { it.type.isCapture() }) {
+            && lastFiftyMoves.none { it.isCapture }) {
             return DrawType.FIFTY_MOVES
         }
 

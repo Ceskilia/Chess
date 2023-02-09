@@ -6,7 +6,8 @@ data class Move(
     val chessPiece: ChessPiece,
     val startPosition: Position,
     val newPosition: Position,
-    val type: Type
+    val isCheck: Boolean,
+    val isCapture: Boolean
 ) {
 
     companion object {
@@ -19,27 +20,9 @@ data class Move(
     override fun toString(): String {
         // (if PAWN: use column/y, if same pieces can make same move insert ???)
         return chessPiece.type.notation.toString() +
-                (if (type.isCapture()) CAPTURE_NOTATION else "") +
+                (if (isCapture) CAPTURE_NOTATION else "") +
                 newPosition.toString() +
-                (if (type.isCheck()) CHECK_NOTATION else "")
-    }
-
-    enum class Type {
-
-        NORMAL,
-        CHECK,
-        CAPTURE,
-        CAPTURE_CHECK;
-
-        // TODO: IS THIS DESIGN GOOD?
-        fun isCapture(): Boolean {
-            return this == CAPTURE || this == CAPTURE_CHECK
-        }
-
-        fun isCheck(): Boolean {
-            return this == CHECK || this == CAPTURE_CHECK
-        }
-
+                (if (isCheck) CHECK_NOTATION else "")
     }
 
 }
