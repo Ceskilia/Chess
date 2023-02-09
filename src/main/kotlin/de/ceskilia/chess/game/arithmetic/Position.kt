@@ -37,11 +37,6 @@ class Position private constructor(val x: Int, val y: Int) {
 
     }
 
-    // use interface
-    fun compareTo(other: Position): Distance {
-        return Distance(other.x - this.x, other.y - this.y)
-    }
-
     fun color(): Color {
         // the difference between x and y is always even
         return if ((x - y).isEven()) Color.WHITE else Color.BLACK
@@ -57,11 +52,11 @@ class Position private constructor(val x: Int, val y: Int) {
         val newX = this.x + x
         val newY = this.y + y
 
-        if(newX < 0 || newY < 0) {
+        if (newX < 0 || newY < 0) {
             return null
         }
 
-        return if(condition(newX, newY)) copy(newX, newY) else null
+        return if (condition(newX, newY)) copy(newX, newY) else null
     }
 
     override fun equals(other: Any?): Boolean {
