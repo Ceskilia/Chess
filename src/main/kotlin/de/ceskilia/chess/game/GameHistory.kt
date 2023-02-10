@@ -15,6 +15,10 @@ class GameHistory {
         return ceil(moves.size / 2.0).toInt()
     }
 
+    fun movesOf(piece: ChessPiece): List<Move> {
+        return moves.filter { it.chessPiece == piece }
+    }
+
     fun hasLastMove(): Boolean = moves.isNotEmpty()
 
     fun lastMove(): Move? = if (hasLastMove()) moves.last() else null
