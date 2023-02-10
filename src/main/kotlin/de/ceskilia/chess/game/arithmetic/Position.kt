@@ -2,6 +2,7 @@
 
 package de.ceskilia.chess.game.arithmetic
 
+import de.ceskilia.chess.util.addElement
 import de.ceskilia.chess.util.isEven
 import de.ceskilia.chess.util.notNegative
 
@@ -23,16 +24,12 @@ class Position private constructor(val x: Int, val y: Int) {
 
         fun of(x: Int, y: Int): Position {
             notNegative(x, y) { "Coordinates may be not negative: x=$x, y=$y" }
-            return CACHED_POSITIONS.firstOrNull { it.x == x && it.y == y } ?: cachePosition(Position(x, y))
+            return CACHED_POSITIONS.firstOrNull { it.x == x && it.y == y }
+                ?: CACHED_POSITIONS.addElement(Position(x, y))
         }
 
         fun letterToCoordinate(number: Int): Char {
             return (number + LETTER_START_POINT).toChar()
-        }
-
-        private fun cachePosition(position: Position): Position {
-            CACHED_POSITIONS.add(position)
-            return position
         }
 
     }
