@@ -28,8 +28,16 @@ class Position private constructor(val x: Int, val y: Int) {
                 ?: CACHED_POSITIONS.addElement(Position(x, y))
         }
 
-        fun letterToCoordinate(number: Int): Char {
+        fun fromNotation(notation: String): Position {
+            return of(notation[1].digitToInt(), coordinateFromLetter(notation[0]))
+        }
+
+        fun coordinateToLetter(number: Int): Char {
             return (number + LETTER_START_POINT).toChar()
+        }
+
+        fun coordinateFromLetter(letter: Char): Int {
+            return letter.code - LETTER_START_POINT
         }
 
     }
@@ -75,7 +83,7 @@ class Position private constructor(val x: Int, val y: Int) {
     }
 
     override fun toString(): String {
-        return letterToCoordinate(y) + x.toString()
+        return coordinateToLetter(y) + x.toString()
     }
 
     enum class Color {
