@@ -7,7 +7,7 @@ data class Move(
     val startPosition: Position,
     val newPosition: Position,
     val isCheck: Boolean,
-    val isCapture: Boolean
+    val capturedPiece: ChessPiece? = null
 ) {
 
     companion object {
@@ -17,10 +17,12 @@ data class Move(
 
     }
 
+    fun isCapture(): Boolean = capturedPiece != null
+
     override fun toString(): String {
         // (if PAWN: use column/y, if same pieces can make same move insert ???)
         return chessPiece.type.notation.toString() +
-                (if (isCapture) CAPTURE_NOTATION else "") +
+                (if (isCapture()) CAPTURE_NOTATION else "") +
                 newPosition.toString() +
                 (if (isCheck) CHECK_NOTATION else "")
     }

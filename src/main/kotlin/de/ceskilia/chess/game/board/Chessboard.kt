@@ -42,7 +42,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
         board[endPosition.x][endPosition.y] = piece
         removePieceAt(startPosition)
 
-        val capture = endPiece != null
         val check = getPieces(piece.color).any { ally ->
             ally.canMoveTo(getOpponentPieces(piece.color)
                 .first { it.type == ChessPiece.Type.KING }
@@ -50,11 +49,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             )
         }
 
-        if (capture) {
-            history.capturedPieces.add(endPiece!!)
-        }
-
-        val move = Move(piece, startPosition, endPosition, check, capture)
+        val move = Move(piece, startPosition, endPosition, check, endPiece)
         history.moves.add(move)
         return move
     }
