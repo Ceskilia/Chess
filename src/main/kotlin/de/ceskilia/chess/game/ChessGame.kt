@@ -2,6 +2,7 @@
 
 package de.ceskilia.chess.game
 
+import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.DefaultChessboard
 import de.ceskilia.chess.game.piece.ChessPiece
@@ -14,7 +15,10 @@ import de.ceskilia.chess.game.windetection.WinDetection
 
 class ChessGame {
 
-    val history = GameHistory()
+    private val moves = mutableListOf<Move>()
+    private val winDetection = WinDetection(this)
+
+    val history = GameHistory(moves)
     val board = DefaultChessboard(this)
     val players = listOf(
         Player(this, "", ChessPiece.Color.WHITE),
@@ -25,8 +29,6 @@ class ChessGame {
         private set
     var currentTurn: Player = players.first()
         private set
-
-    private val winDetection = WinDetection(this)
 
     init {
         board.setup()
@@ -56,7 +58,7 @@ class ChessGame {
         }
 
         val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
-        history.moves.add(move)
+        moves.add(move)
         shuffleTurn()
 
         // if check, check if mate
@@ -95,15 +97,14 @@ class ChessGame {
                 MoveResult.WRONG_COLOR -> println("Wrong color")
                 MoveResult.INVALID_MOVE -> println("Cant move there")
                 MoveResult.SUCCESS -> {
-                    if(isFinished()) {
-                        break
-                    }
+                    // play sound
                 }
             }
 
         }
 
         println(board)
+        println(history)
     }
 
 }

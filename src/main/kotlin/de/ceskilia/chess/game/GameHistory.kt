@@ -6,9 +6,7 @@ import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.piece.ChessPiece
 import kotlin.math.ceil
 
-class GameHistory {
-
-    val moves = mutableListOf<Move>()
+class GameHistory(val moves: List<Move>) {
 
     fun movesOf(piece: ChessPiece): List<Move> {
         return moves.filter { it.chessPiece == piece }
@@ -28,7 +26,7 @@ class GameHistory {
 
     override fun toString(): String {
         return moves.chunked(2)
-            .mapIndexed { index, moves -> "$index. ${moves.joinToString(" ")}" }
+            .mapIndexed { index, moves -> "${index + 1}. ${moves.joinToString(" ")}" }
             .joinToString("\n")
     }
 
