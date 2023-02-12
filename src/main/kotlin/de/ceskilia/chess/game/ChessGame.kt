@@ -83,7 +83,7 @@ class ChessGame {
     fun start() {
         while (!isFinished()) {
 
-            println(board.printBoard())
+            println(board)
             println()
             println("Enter new position coordinates:")
             println(currentTurn.calculateMoves().map { it.key.type.notation + "-" + it.value })
@@ -103,7 +103,7 @@ class ChessGame {
 
         }
 
-        println(board.printBoard())
+        println(board)
     }
 
 }

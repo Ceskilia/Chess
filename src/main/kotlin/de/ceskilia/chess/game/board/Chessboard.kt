@@ -140,7 +140,22 @@ abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {
         return isVerticalInBoard(x) && isHorizontalInBoard(y)
     }
 
-    fun printBoard(): String {
+    fun queueMoveAction(piece: ChessPiece, position: Position, action: () -> Unit) {
+        queuedMoveActions.compute(piece) { _, value ->
+            val actions = value ?: mutableSetOf()
+            if(actions.none { it.first == position })
+                actions.add(position to action)
+            return@compute actions
+        }
+    }
+
+    private fun executeQueuedAction(piece: ChessPiece, endPosition: Position) {
+        val actionMovingTo = queuedMoveActions[piece]?.firstOrNull { it.first == endPosition }?.second
+        actionMovingTo?.invoke()
+        queuedMoveActions.remove(piece)
+    }
+
+    override fun toString(): String {
         val builder = StringBuilder()
 
         for (row in 0 until DEFAULT_SIZE) {
@@ -167,21 +182,6 @@ abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {
         }
 
         return builder.toString()
-    }
-
-    fun queueMoveAction(piece: ChessPiece, position: Position, action: () -> Unit) {
-        queuedMoveActions.compute(piece) { _, value ->
-            val actions = value ?: mutableSetOf()
-            if(actions.none { it.first == position })
-                actions.add(position to action)
-            return@compute actions
-        }
-    }
-
-    private fun executeQueuedAction(piece: ChessPiece, endPosition: Position) {
-        val actionMovingTo = queuedMoveActions[piece]?.firstOrNull { it.first == endPosition }?.second
-        actionMovingTo?.invoke()
-        queuedMoveActions.remove(piece)
     }
 
     abstract fun directionOf(color: ChessPiece.Color): Int
