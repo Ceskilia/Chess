@@ -1,8 +1,10 @@
 package de.ceskilia.chess.game.windetection
 
 import de.ceskilia.chess.game.ChessGame
+import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.player.Player
+import de.ceskilia.chess.game.result.Draw
 
 class WinDetection(val game: ChessGame) {
 
@@ -19,13 +21,13 @@ class WinDetection(val game: ChessGame) {
         return null
     }
 
-    fun checkDraw(): DrawType? {
+    fun checkDraw(): Draw.Type? {
         val pieces = game.board.getPieces()
 
         // stalemate
         for (player in game.players) {
             if (player.isStalemated()) {
-                return DrawType.STALEMATE
+                return Draw.Type.STALEMATE
             }
         }
 
@@ -35,14 +37,14 @@ class WinDetection(val game: ChessGame) {
         // king and knight vs king
         // king and bishop vs king and bishop (bishop on the same square color)
         when (pieces.size) {
-            2 -> return DrawType.INSUFFICIENT_MATERIAL // 2 kings
+            2 -> return Draw.Type.INSUFFICIENT_MATERIAL // 2 kings
             3 -> run {
                 // 2 kings and 1 other piece
                 if (pieces.none { it.type == ChessPiece.Type.BISHOP || it.type == ChessPiece.Type.KNIGHT }) {
                     return@run
                 }
 
-                return DrawType.INSUFFICIENT_MATERIAL
+                return Draw.Type.INSUFFICIENT_MATERIAL
             }
 
             4 -> run {
@@ -63,7 +65,7 @@ class WinDetection(val game: ChessGame) {
                     return@run
                 }
 
-                return DrawType.INSUFFICIENT_MATERIAL
+                return Draw.Type.INSUFFICIENT_MATERIAL
             }
         }
 
@@ -83,7 +85,7 @@ class WinDetection(val game: ChessGame) {
 
         // when there are only 2 distinct moves, they are going back and forth
         if (repetitionMoves.all { it.size == 2 }) {
-            return DrawType.THREEFOLD_REPETITION
+            return Draw.Type.THREEFOLD_REPETITION
         }
 
         // there need to be at least 50 elements for 50 moves draw
@@ -97,8 +99,8 @@ class WinDetection(val game: ChessGame) {
 
         // no pawn move and no capture
         if (lastFiftyMoves.none { it.chessPiece.type == ChessPiece.Type.PAWN }
-            && lastFiftyMoves.none { it.isCapture }) {
-            return DrawType.FIFTY_MOVES
+            && lastFiftyMoves.none(Move::isCapture)) {
+            return Draw.Type.FIFTY_MOVES
         }
 
         return null
