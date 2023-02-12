@@ -8,13 +8,14 @@ import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
 import de.ceskilia.chess.game.result.GameResult
+import de.ceskilia.chess.game.result.MoveResult
 import de.ceskilia.chess.game.result.Win
 import de.ceskilia.chess.game.windetection.WinDetection
 
 class ChessGame {
 
     val history = GameHistory()
-    val board = DefaultChessboard(history)
+    val board = DefaultChessboard(this)
     val players = listOf(
         Player(this, "", ChessPiece.Color.WHITE),
         Player(this, "", ChessPiece.Color.BLACK)
@@ -47,6 +48,38 @@ class ChessGame {
         ]
     }
 
+    fun move(startPosition: Position, endPosition: Position): MoveResult {
+        val piece = board.getPieceAt(startPosition) ?: return MoveResult.INVALID_POSITION
+
+        if (!currentTurn.isOwnPiece(piece)) {
+            return MoveResult.WRONG_COLOR
+        }
+
+        val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
+        history.moves.add(move)
+        shuffleTurn()
+
+        // if check, check if mate
+        if (move.isCheck) {
+            val winningPlayer = winDetection.isWon()
+
+            if(winningPlayer != null) {
+                finish(Win(winningPlayer))
+            }
+
+            return MoveResult.SUCCESS
+        }
+
+        // always check for a draw
+        val drawType = winDetection.checkDraw()
+
+        if(drawType != null) {
+            finish(Draw(drawType))
+        }
+
+        return MoveResult.SUCCESS
+    }
+
     fun start() {
         while (!isFinished()) {
 
@@ -54,43 +87,23 @@ class ChessGame {
             println()
             println("Enter new position coordinates:")
             println(currentTurn.calculateMoves().map { it.key.type.notation + "-" + it.value })
+
             val (start, end) = readln().chunked(2).map(Position.Companion::fromNotation)
-            val piece = board.getPieceAt(start)
 
-            if (piece == null) {
-                println("No Piece")
-                continue
+            when(move(start, end)) {
+                MoveResult.INVALID_POSITION -> println("No Piece")
+                MoveResult.WRONG_COLOR -> println("Wrong color")
+                MoveResult.INVALID_MOVE -> println("Cant move there")
+                MoveResult.SUCCESS -> {
+                    if(isFinished()) {
+                        break
+                    }
+                }
             }
 
-            if (!currentTurn.isOwnPiece(piece)) {
-                println("Wrong color")
-                continue
-            }
-
-            val move = currentTurn.move(piece, end)
-
-            if (move == null) {
-                println("Cant move there")
-                continue
-            }
-
-            shuffleTurn()
-
-            // if check, check if mate
-            if (move.isCheck) {
-                val winningPlayer = winDetection.isWon() ?: continue
-
-                finish(Win(winningPlayer))
-                //at the end, end the game
-                break
-            }
-
-            // always check for a draw
-            val drawType = winDetection.checkDraw() ?: continue
-
-            finish(Draw(drawType))
-            break
         }
+
+        println(board.printBoard())
     }
 
 }

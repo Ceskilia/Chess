@@ -1,10 +1,10 @@
 package de.ceskilia.chess.game.board
-import de.ceskilia.chess.game.GameHistory
+import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.impl.*
 
-class DefaultChessboard(history: GameHistory) : Chessboard(history) {
+class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 
     override fun directionOf(color: ChessPiece.Color): Int {
         return when (color) {

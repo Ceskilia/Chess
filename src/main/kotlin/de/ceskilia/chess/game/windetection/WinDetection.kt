@@ -70,7 +70,7 @@ class WinDetection(val game: ChessGame) {
         }
 
         val chessboard = game.board
-        val history = chessboard.history
+        val history = chessboard.game.history
 
         // there need to be at least 9 elements for threefold repetition/50 moves draw
         if (history.moves.size < 9) {

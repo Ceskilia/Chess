@@ -49,7 +49,7 @@ class Pawn(
 
         // todo: what happens when oneStep not in board (promotion)
 
-        val history = board.history
+        val history = board.game.history
         val lastMove = history.lastMove() ?: return moves
         val lastChessPiece = lastMove.chessPiece
 
