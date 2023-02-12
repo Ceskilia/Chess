@@ -8,6 +8,10 @@ import kotlin.math.ceil
 
 class GameHistory(val moves: List<Move>) {
 
+    fun capturedPieces(): List<ChessPiece> {
+        return moves.filter(Move::isCapture).map { it.capturedPiece!! }
+    }
+
     fun movesOf(piece: ChessPiece): List<Move> {
         return moves.filter { it.chessPiece == piece }
     }
