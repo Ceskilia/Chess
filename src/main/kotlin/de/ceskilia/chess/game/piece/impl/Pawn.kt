@@ -49,17 +49,19 @@ class Pawn(
 
         // todo: what happens when oneStep not in board (promotion)
 
-        val lastMove = board.history.lastMove() ?: return moves
+        val history = board.history
+        val lastMove = history.lastMove() ?: return moves
+        val lastChessPiece = lastMove.chessPiece
 
         // if the last move somehow was done by the same color -> don't check for en passant
-        if (lastMove.chessPiece.color == color) {
+        if (lastChessPiece.color == color) {
             return moves
         }
 
         // check for en passant
         val lastPosition = lastMove.newPosition
-        val possibleEnPassant = lastMove.chessPiece.type == Type.PAWN
-                && board.history.movesOf(lastMove.chessPiece).size == 1
+        val possibleEnPassant = lastChessPiece.type == Type.PAWN
+                && history.movesOf(lastChessPiece).size == 1
                 && position.x == lastPosition.x
 
         if (possibleEnPassant) {

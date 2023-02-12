@@ -13,7 +13,8 @@ import de.ceskilia.chess.game.windetection.WinDetection
 
 class ChessGame {
 
-    val board = DefaultChessboard()
+    val history = GameHistory()
+    val board = DefaultChessboard(history)
     val players = listOf(
         Player(this, "", ChessPiece.Color.WHITE),
         Player(this, "", ChessPiece.Color.BLACK)
@@ -37,6 +38,14 @@ class ChessGame {
     }
 
     fun isFinished(): Boolean = result != null
+
+    fun shuffleTurn() {
+        val currentIndex = players.indexOf(currentTurn)
+        this.currentTurn = players[
+            if (currentIndex == players.lastIndex) 0
+            else currentIndex + 1
+        ]
+    }
 
     fun start() {
         while (!isFinished()) {
@@ -82,14 +91,6 @@ class ChessGame {
             finish(Draw(drawType))
             break
         }
-    }
-
-    private fun shuffleTurn() {
-        val currentIndex = players.indexOf(currentTurn)
-        this.currentTurn = players[
-            if (currentIndex == players.lastIndex) 0
-            else currentIndex + 1
-        ]
     }
 
 }

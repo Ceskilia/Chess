@@ -8,7 +8,7 @@ import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.util.notNegative
 
-abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
+abstract class Chessboard(val history: GameHistory, val size: Int = DEFAULT_SIZE) {
 
     companion object {
 
@@ -19,8 +19,6 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
     init {
         notNegative(size) { "Size may not be negative. Provided: $size" }
     }
-
-    val history = GameHistory()
 
     protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, () -> Unit>>>()
     protected val board: List<MutableList<ChessPiece?>> = List(size) {
@@ -49,9 +47,7 @@ abstract class Chessboard(val size: Int = DEFAULT_SIZE) {
             )
         }
 
-        val move = Move(piece, startPosition, endPosition, check, endPiece)
-        history.moves.add(move)
-        return move
+        return Move(piece, startPosition, endPosition, check, endPiece)
     }
 
     open fun move(startPosition: Position, endPosition: Position): Move? {
