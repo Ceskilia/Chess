@@ -62,7 +62,6 @@ data class Player(
         return isCheckedBy(player) && !hasMoves()
     }
 
-    // check if it is pinned
     fun move(piece: ChessPiece, endPosition: Position): Move? {
         return if (canMoveTo(piece, endPosition)) game.board.move(piece, endPosition) else null
     }
