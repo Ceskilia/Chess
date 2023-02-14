@@ -46,20 +46,12 @@ data class Player(
         return getPieces().any { it.canMoveTo(player.getKing().position) }
     }
 
-    fun isCheckedBy(player: Player): Boolean {
-        return player.isChecking(this)
-    }
-
     fun isCheckmated(): Boolean {
         return isChecked() && !hasMoves()
     }
 
     fun isCheckmating(player: Player): Boolean {
         return isChecking(player) && !player.hasMoves()
-    }
-
-    fun isCheckmatedBy(player: Player): Boolean {
-        return isCheckedBy(player) && !hasMoves()
     }
 
     fun move(piece: ChessPiece, endPosition: Position): Move? {
