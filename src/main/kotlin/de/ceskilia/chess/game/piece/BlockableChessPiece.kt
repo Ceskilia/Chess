@@ -14,6 +14,10 @@ abstract class BlockableChessPiece(
     type: Type
 ) : ChessPiece(board, position, color, type) {
 
+    override fun calculateMoves(): Set<Position> {
+        return calculateExtendedMovesPinned(this)
+    }
+
     override fun calculateCoveringMoves(): Set<Position> {
         return calculateLines()
             .flatten()
@@ -22,10 +26,6 @@ abstract class BlockableChessPiece(
 
     fun isPinning(other: ChessPiece): Boolean {
         return other.type != Type.KING && calculatePinLine(other) != null
-    }
-
-    override fun calculateMoves(): Set<Position> {
-        return calculateExtendedMovesPinned(this)
     }
 
     fun calculatePinLine(other: ChessPiece): Set<Position>? {
