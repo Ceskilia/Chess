@@ -3,6 +3,8 @@ package de.ceskilia.chess.game.windetection
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.piece.impl.Bishop
+import de.ceskilia.chess.game.piece.impl.Knight
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
 
@@ -40,7 +42,7 @@ class WinDetection(val game: ChessGame) {
             2 -> return Draw.Type.INSUFFICIENT_MATERIAL // 2 kings
             3 -> run {
                 // 2 kings and 1 other piece
-                if (pieces.none { it.type == ChessPiece.Type.BISHOP || it.type == ChessPiece.Type.KNIGHT }) {
+                if (pieces.none { it is Bishop || it is Knight }) {
                     return@run
                 }
 
@@ -51,7 +53,7 @@ class WinDetection(val game: ChessGame) {
 
                 // filter only bishops
                 val bishops = pieces.filter { it.type != ChessPiece.Type.KING }
-                    .filter { it.type == ChessPiece.Type.BISHOP }
+                    .filterIsInstance<Bishop>()
 
                 // the last remaining pieces must be bishops
                 if (bishops.size != 2) {
