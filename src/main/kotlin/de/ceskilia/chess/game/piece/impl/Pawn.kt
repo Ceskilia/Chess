@@ -44,8 +44,8 @@ class Pawn(
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
 
-        moves.addNonNull(checkNormalCaptures(CaptureDirection.RIGHT))
-        moves.addNonNull(checkNormalCaptures(CaptureDirection.LEFT))
+        moves.addNonNull(checkNormalCaptures(-1))
+        moves.addNonNull(checkNormalCaptures(1))
 
         // todo: what happens when oneStep not in board (promotion)
 
@@ -81,17 +81,10 @@ class Pawn(
         return moves
     }
 
-    private fun checkNormalCaptures(direction: CaptureDirection): Position? {
-        return position.tryCopyAdding(x = board.directionOf(color), y = direction.y) { x, y ->
+    private fun checkNormalCaptures(yDirection: Int): Position? {
+        return position.tryCopyAdding(x = board.directionOf(color), y = yDirection) { x, y ->
             board.isOpponentAt(x, y, this)
         }
-    }
-
-    private enum class CaptureDirection(val y: Int) {
-
-        LEFT(-1),
-        RIGHT(1)
-
     }
 
 }
