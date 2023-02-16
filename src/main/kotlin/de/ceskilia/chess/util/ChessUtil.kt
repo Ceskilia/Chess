@@ -1,7 +1,7 @@
 package de.ceskilia.chess.util
 
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.BlockableChessPiece
+import de.ceskilia.chess.game.piece.Blockable
 import de.ceskilia.chess.game.piece.ChessPiece
 
 fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
@@ -21,7 +21,7 @@ fun Position.whenOccupiedBy(piece: ChessPiece, action: () -> Unit): Position {
     return this
 }
 
-fun BlockableChessPiece.addPinMoves(line: Set<Position>): Set<Position> {
+fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
     val startMoves = line.toMutableSet()
     val lastPosition = startMoves.firstOrNull { board.isOpponentAt(it, this) } ?: return startMoves
 
@@ -44,7 +44,7 @@ fun BlockableChessPiece.addPinMoves(line: Set<Position>): Set<Position> {
     }
 }
 
-fun BlockableChessPiece.calculateArithmeticMoves(
+fun Blockable.calculateArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
 ): Set<Position> {
@@ -63,7 +63,7 @@ fun BlockableChessPiece.calculateArithmeticMoves(
     }
 }
 
-private fun BlockableChessPiece.calculateMoves(
+private fun Blockable.calculateMoves(
     startMoves: MutableSet<Position>,
     startPosition: Position,
     xOperation: Operation? = null,

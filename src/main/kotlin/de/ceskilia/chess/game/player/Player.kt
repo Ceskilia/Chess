@@ -5,7 +5,7 @@ package de.ceskilia.chess.game.player
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.BlockableChessPiece
+import de.ceskilia.chess.game.piece.Blockable
 import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Player(
@@ -90,7 +90,7 @@ data class Player(
                     }
 
                     // check if piece can be blocked
-                    if (checkingPiece !is BlockableChessPiece) {
+                    if (checkingPiece !is Blockable) {
                         return@forEach
                     }
 

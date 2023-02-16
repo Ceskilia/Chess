@@ -1,18 +1,14 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 
-abstract class ChessPiece(
-    val board: Chessboard,
-    var position: Position,
-    val color: Color,
-    val type: Type
-) : Movable {
+interface ChessPiece : Movable {
 
-    private val startPosition = position
+    val board: Chessboard
+    var position: Position
+    val color: Color
+    val type: Type
 
     fun isAlly(other: ChessPiece): Boolean {
         return this.color == other.color
@@ -26,13 +22,13 @@ abstract class ChessPiece(
         return getPinningPiece() != null
     }
 
-    fun getPinningPiece(): BlockableChessPiece? {
+    fun getPinningPiece(): Blockable? {
         return board.getOpponentPieces(color)
-            .filterIsInstance<BlockableChessPiece>()
+            .filterIsInstance<Blockable>()
             .firstOrNull { it.isPinning(this) }
     }
 
-    fun calculateBlockingMoves(checkingPiece: BlockableChessPiece, king: ChessPiece? = null): Set<Position> {
+    fun calculateBlockingMoves(checkingPiece: Blockable, king: ChessPiece? = null): Set<Position> {
         val moves = mutableSetOf<Position>()
         val possibleMoves = calculateMoves()
         val ownKing = king ?: board.getPieces(color).first { it.type == Type.KING }
@@ -60,10 +56,6 @@ abstract class ChessPiece(
 
     override fun moveTo(position: Position) {
         board.move(this, position)
-    }
-
-    override fun hasMoved(): Boolean {
-        return position != startPosition
     }
 
     override fun calculateMoves(): Set<Position> {

@@ -3,9 +3,9 @@
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.ChessGame
-import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {

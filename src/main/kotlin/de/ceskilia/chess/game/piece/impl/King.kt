@@ -3,12 +3,13 @@ package de.ceskilia.chess.game.piece.impl
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.piece.DefaultChessPiece
 
 class King(
     board: Chessboard,
     position: Position,
-    color: Color
-) : ChessPiece(board, position, color, Type.KING) {
+    color: ChessPiece.Color
+) : DefaultChessPiece(board, position, color, ChessPiece.Type.KING) {
 
     override fun calculateMovesUnpinned(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
