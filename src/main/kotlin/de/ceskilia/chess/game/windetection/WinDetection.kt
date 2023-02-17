@@ -84,7 +84,7 @@ class WinDetection(val game: ChessGame) {
         val repetitionMoves = history.lastMoves(9)
             .groupBy { it.chessPiece.color }
             .values
-            .distinct()
+            .map { it.distinct() }
 
         // when there are only 2 distinct moves, they are going back and forth
         if (repetitionMoves.all { it.size == 2 }) {
