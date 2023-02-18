@@ -27,4 +27,28 @@ data class Move(
                 (if (isCheck) CHECK_NOTATION else "")
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Move
+
+        if (chessPiece != other.chessPiece) return false
+        if (startPosition != other.startPosition) return false
+        if (newPosition != other.newPosition) return false
+        if (isCheck != other.isCheck) return false
+        if (capturedPiece != other.capturedPiece) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = chessPiece.hashCode()
+        result = 31 * result + startPosition.hashCode()
+        result = 31 * result + newPosition.hashCode()
+        result = 31 * result + isCheck.hashCode()
+        result = 31 * result + (capturedPiece?.hashCode() ?: 0)
+        return result
+    }
+
 }
