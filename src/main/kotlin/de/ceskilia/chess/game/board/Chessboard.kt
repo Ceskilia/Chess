@@ -6,9 +6,14 @@ import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.piece.Creatable
+import de.ceskilia.chess.game.piece.Promotable
 import de.ceskilia.chess.util.notNegative
 
-abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {
+abstract class Chessboard(
+    val game: ChessGame,
+    val size: Int = DEFAULT_SIZE,
+) {
 
     companion object {
 
@@ -19,6 +24,8 @@ abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {
     init {
         notNegative(size) { "Size may not be negative. Provided: $size" }
     }
+
+    abstract val registeredCreatables: List<Creatable>
 
     protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, () -> Unit>>>()
     protected val board: List<MutableList<ChessPiece?>> = List(size) {
@@ -40,11 +47,17 @@ abstract class Chessboard(val game: ChessGame, val size: Int = DEFAULT_SIZE) {
         board[endPosition.x][endPosition.y] = piece
         removePieceAt(startPosition)
 
+        // todo: maybe use Player
         val check = getPieces(piece.color).any { ally ->
             ally.canMoveTo(getOpponentPieces(piece.color)
                 .first { it.type == ChessPiece.Type.KING }
                 .position
             )
+        }
+
+        if(piece is Promotable && piece.canPromote()) {
+            val position = piece.position
+            board[position.x][position.y] = piece.promote()
         }
 
         return Move(piece, startPosition, endPosition, check, endPiece)

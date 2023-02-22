@@ -5,7 +5,9 @@ package de.ceskilia.chess.game.piece.impl
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.DefaultChessPiece
+import de.ceskilia.chess.game.piece.Promotable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateExtendedMovesPinned
 import de.ceskilia.chess.util.whenOccupiedBy
@@ -15,7 +17,7 @@ class Pawn(
     board: Chessboard,
     position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.PAWN) {
+) : DefaultChessPiece(board, position, color, ChessPiece.Type.PAWN), Promotable {
 
     override fun calculateMoves(): Set<Position> {
         return calculateExtendedMovesPinned(this)
@@ -29,7 +31,7 @@ class Pawn(
             board.isBlankAt(x, y)
         }
 
-        if(oneStep != null) {
+        if (oneStep != null) {
             moves.add(oneStep)
 
             val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
@@ -80,6 +82,28 @@ class Pawn(
         }
 
         return moves
+    }
+
+    override fun canPromote(): Boolean {
+        return !board.isVerticalInBoard(position.x + board.directionOf(color))
+    }
+
+    override fun promote(): Creatable {
+        val pieces = board.registeredCreatables
+            .filter { it.color == this.color }
+
+        while (true) {
+            println("Please select a piece: ${pieces.map { it::class.simpleName }}")
+
+            val input = readln().trim()
+            val piece = pieces.firstOrNull { it::class.simpleName == input }
+
+            if(piece != null) {
+                return piece.createCopyAt(position)
+            }
+
+            println("This is not a valid piece!")
+        }
     }
 
     private fun checkNormalCaptures(yDirection: Int): Position? {
