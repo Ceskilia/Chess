@@ -29,7 +29,8 @@ class Position private constructor(val x: Int, val y: Int) {
         }
 
         fun fromNotation(notation: String): Position {
-            return of(notation[1].digitToInt(), coordinateFromLetter(notation[0]))
+            // Positions are indexed: a8 -> Position(0, 7)
+            return of(coordinateFromLetter(notation[0]), notation[1].digitToInt() - 1)
         }
 
         fun coordinateToLetter(number: Int): Char {
@@ -41,6 +42,10 @@ class Position private constructor(val x: Int, val y: Int) {
         }
 
     }
+
+    fun formattedX(): Char = coordinateToLetter(x)
+
+    fun formattedY(): Int = y + 1
 
     fun color(): Color {
         // the difference between x and y is always even
@@ -83,7 +88,7 @@ class Position private constructor(val x: Int, val y: Int) {
     }
 
     override fun toString(): String {
-        return coordinateToLetter(y) + x.toString()
+        return formattedX() + formattedY().toString()
     }
 
     enum class Color {

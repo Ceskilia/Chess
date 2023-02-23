@@ -40,11 +40,11 @@ abstract class Chessboard(
         }
 
         val startPosition = piece.position
-        val endPiece = board[endPosition.x][endPosition.y]
+        val endPiece = board[endPosition.y][endPosition.x]
 
         executeQueuedAction(piece, endPosition)
         piece.position = endPosition
-        board[endPosition.x][endPosition.y] = piece
+        board[endPosition.y][endPosition.x] = piece
         removePieceAt(startPosition)
 
         // todo: maybe use Player
@@ -57,7 +57,7 @@ abstract class Chessboard(
 
         if(piece is Promotable && piece.canPromote()) {
             val position = piece.position
-            board[position.x][position.y] = piece.promote()
+            board[position.y][position.x] = piece.promote()
         }
 
         return Move(piece, startPosition, endPosition, check, endPiece)
@@ -81,11 +81,11 @@ abstract class Chessboard(
     }
 
     fun getPieceAt(x: Int, y: Int): ChessPiece? {
-        return if(isValidPosition(x, y)) board[x][y] else null
+        return if(isValidPosition(x, y)) board[y][x] else null
     }
 
     fun getPieceAt(position: Position): ChessPiece? {
-        return board[position.x][position.y]
+        return getPieceAt(position.x, position.y)
     }
 
     fun isPieceAt(x: Int, y: Int): Boolean {
@@ -122,17 +122,18 @@ abstract class Chessboard(
     }
 
     fun removePieceAt(position: Position) {
-        board[position.x][position.y] = null
+        board[position.y][position.x] = null
     }
 
     fun syncPieces() {
         // sync: board is right
-        for (x in board.indices) {
-            for (y in board[x].indices) {
-                val piece = board[x][y] ?: continue
+        for (y in board.indices) {
+            for (x in board[y].indices) {
+                val piece = getPieceAt(x, y) ?: continue
+                val position = piece.position
 
                 // check if it is synced already
-                if (piece.position.x == x && piece.position.y == y) {
+                if (position.x == x && position.y == y) {
                     continue
                 }
 
@@ -141,16 +142,16 @@ abstract class Chessboard(
         }
     }
 
-    fun isVerticalInBoard(x: Int): Boolean {
+    fun isHorizontalInBoard(x: Int): Boolean {
         return x in 0 until size
     }
 
-    fun isHorizontalInBoard(y: Int): Boolean {
+    fun isVerticalInBoard(y: Int): Boolean {
         return y in 0 until size
     }
 
     fun isValidPosition(x: Int, y: Int): Boolean {
-        return isVerticalInBoard(x) && isHorizontalInBoard(y)
+        return isHorizontalInBoard(x) && isVerticalInBoard(y)
     }
 
     fun queueMoveAction(piece: ChessPiece, position: Position, action: () -> Unit) {

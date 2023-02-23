@@ -19,6 +19,8 @@ class Pawn(
     color: ChessPiece.Color
 ) : DefaultChessPiece(board, position, color, ChessPiece.Type.PAWN), Promotable {
 
+    private val direction = board.directionOf(color)
+
     override fun calculateMoves(): Set<Position> {
         return calculateExtendedMovesPinned(this)
     }
@@ -27,14 +29,14 @@ class Pawn(
         val moves = calculateCoveringMoves().toMutableSet()
 
         // check for normal moves
-        val oneStep = position.tryCopyAdding(board.directionOf(color)) { x, y ->
+        val oneStep = position.tryCopyAdding(y = direction) { x, y ->
             board.isBlankAt(x, y)
         }
 
         if (oneStep != null) {
             moves.add(oneStep)
 
-            val twoSteps = oneStep.tryCopyAdding(board.directionOf(color)) { x, y ->
+            val twoSteps = oneStep.tryCopyAdding(y = direction) { x, y ->
                 !hasMoved() && board.isBlankAt(x, y)
             }
 
@@ -65,18 +67,18 @@ class Pawn(
         val lastPosition = lastMove.newPosition
         val possibleEnPassant = lastChessPiece.type == ChessPiece.Type.PAWN
                 && history.movesOf(lastChessPiece).size == 1
-                && position.x == lastPosition.x
+                && position.y == lastPosition.y
 
         if (possibleEnPassant) {
 
-            val yDifference = lastPosition.y - position.y
+            val xDifference = lastPosition.x - position.x
 
             // the pawns need to stand next to each other
-            if (abs(yDifference) != 1) {
+            if (abs(xDifference) != 1) {
                 return moves
             }
 
-            moves.add(position.copyAdding(board.directionOf(color), yDifference).whenOccupiedBy(this) {
+            moves.add(position.copyAdding(xDifference, direction).whenOccupiedBy(this) {
                 board.removePieceAt(lastPosition)
             })
         }
@@ -85,7 +87,7 @@ class Pawn(
     }
 
     override fun canPromote(): Boolean {
-        return !board.isVerticalInBoard(position.x + board.directionOf(color))
+        return !board.isHorizontalInBoard(position.y + direction)
     }
 
     override fun promote(): Creatable {
@@ -98,7 +100,7 @@ class Pawn(
             val input = readln().trim()
             val piece = pieces.firstOrNull { it::class.simpleName == input }
 
-            if(piece != null) {
+            if (piece != null) {
                 return piece.createCopyAt(position)
             }
 
@@ -106,8 +108,8 @@ class Pawn(
         }
     }
 
-    private fun checkNormalCaptures(yDirection: Int): Position? {
-        return position.tryCopyAdding(x = board.directionOf(color), y = yDirection) { x, y ->
+    private fun checkNormalCaptures(xDirection: Int): Position? {
+        return position.tryCopyAdding(x = xDirection, y = direction) { x, y ->
             board.isOpponentAt(x, y, this)
         }
     }
