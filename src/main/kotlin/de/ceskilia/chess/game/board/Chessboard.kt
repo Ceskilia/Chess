@@ -44,7 +44,7 @@ abstract class Chessboard(
 
         executeQueuedAction(piece, endPosition)
         piece.position = endPosition
-        board[endPosition.y][endPosition.x] = piece
+        board[endPosition.y][endPosition.x] = piece // this or promote so PAWNS don't get to last rank
         removePieceAt(startPosition)
 
         // todo: maybe use Player
@@ -176,7 +176,7 @@ abstract class Chessboard(
             builder.append("  ")
                 .append("+---".repeat(DEFAULT_SIZE) + '+')
                 .append("\n")
-                .append("$row ")
+                .append("${row + 1} ")
 
             for (column in 0 until DEFAULT_SIZE) {
                 builder.append("| ${board[row][column]?.type?.notation ?: " "} ")
@@ -192,7 +192,7 @@ abstract class Chessboard(
             .append("  ")
 
         for (column in 0 until DEFAULT_SIZE) {
-            builder.append(" $column  ")
+            builder.append(" ${Position.coordinateToLetter(column)}  ")
         }
 
         return builder.toString()
