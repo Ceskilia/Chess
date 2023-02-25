@@ -22,8 +22,8 @@ interface Blockable : ChessPiece {
 
     fun calculatePinLine(other: ChessPiece): Set<Position>? {
         return calculatePinLines().firstOrNull { line ->
-            val hasKing = line.any { board.getPieceAt(it)?.type == ChessPiece.Type.KING }
-            val hasPiece = line.any { board.getPieceAt(it) == other }
+            val hasKing = line.any { board.pieceAt(it)?.type == ChessPiece.Type.KING }
+            val hasPiece = line.any { board.pieceAt(it) == other }
             hasKing && hasPiece
         }
     }

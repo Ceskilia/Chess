@@ -24,7 +24,7 @@ class WinDetection(val game: ChessGame) {
     }
 
     fun checkDraw(): Draw.Type? {
-        val pieces = game.board.getPieces()
+        val pieces = game.board.pieces()
 
         // stalemate
         for (player in game.players) {

@@ -51,7 +51,7 @@ class ChessGame {
     }
 
     fun move(startPosition: Position, endPosition: Position): MoveResult {
-        val piece = board.getPieceAt(startPosition) ?: return MoveResult.INVALID_POSITION
+        val piece = board.pieceAt(startPosition) ?: return MoveResult.INVALID_POSITION
 
         if (!currentTurn.isOwnPiece(piece)) {
             return MoveResult.WRONG_COLOR

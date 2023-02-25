@@ -83,11 +83,11 @@ private fun Blockable.calculateMoves(
             y += yOperation.operand
         }
 
-        if (!board.isValidPosition(x, y)) {
+        if (!board.isInBoard(x, y)) {
             break
         }
 
-        val piece = board.getPieceAt(x, y)
+        val piece = board.pieceAt(x, y)
 
         if (piece != null && condition(piece, startMoves)) {
             break

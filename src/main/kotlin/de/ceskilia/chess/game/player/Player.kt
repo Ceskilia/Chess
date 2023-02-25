@@ -15,7 +15,7 @@ data class Player(
 ) {
 
     fun getPieces(): List<ChessPiece> {
-        return game.board.getPieces(pieceColor)
+        return game.board.pieces(pieceColor)
     }
 
     fun getOpponents(): List<Player> {
@@ -23,7 +23,7 @@ data class Player(
     }
 
     fun getOpponentPieces(): List<ChessPiece> {
-        return game.board.getOpponentPieces(pieceColor)
+        return game.board.opponentPieces(pieceColor)
     }
 
     fun getKing(): ChessPiece {

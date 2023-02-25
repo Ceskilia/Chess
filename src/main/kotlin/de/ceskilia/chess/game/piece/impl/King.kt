@@ -12,7 +12,7 @@ class King(
 
     override fun calculateMovesUnpinned(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
-            board.getOpponentPieces(color).any { it.isCovering(position) }
+            board.opponentPieces(color).any { it.isCovering(position) }
         }
     }
 
@@ -34,7 +34,7 @@ class King(
                     continue
                 }
 
-                val position = position.tryCopyAdding(x, y, board::isValidPosition) ?: continue
+                val position = position.tryCopyAdding(x, y, board::isInBoard) ?: continue
 
                 if (!condition(position)) {
                     continue

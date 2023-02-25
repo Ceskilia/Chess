@@ -86,7 +86,7 @@ class Pawn(
     }
 
     override fun canPromote(): Boolean {
-        return !board.isHorizontalInBoard(position.y + direction)
+        return !board.isInBoard(position.y + direction)
     }
 
     override fun promote(): Creatable {

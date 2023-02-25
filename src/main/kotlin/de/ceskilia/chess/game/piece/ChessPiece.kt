@@ -23,7 +23,7 @@ interface ChessPiece : Movable {
     }
 
     fun getPinningPiece(): Blockable? {
-        return board.getOpponentPieces(color)
+        return board.opponentPieces(color)
             .filterIsInstance<Blockable>()
             .firstOrNull { it.isPinning(this) }
     }
@@ -31,7 +31,7 @@ interface ChessPiece : Movable {
     fun calculateBlockingMoves(checkingPiece: Blockable, king: ChessPiece? = null): Set<Position> {
         val moves = mutableSetOf<Position>()
         val possibleMoves = calculateMoves()
-        val ownKing = king ?: board.getPieces(color).first { it.type == Type.KING }
+        val ownKing = king ?: board.pieces(color).first { it.type == Type.KING }
 
         check(isAlly(ownKing)) { "The provided king is not an ally. Expected: $color, Provided: ${ownKing.color}." }
 
