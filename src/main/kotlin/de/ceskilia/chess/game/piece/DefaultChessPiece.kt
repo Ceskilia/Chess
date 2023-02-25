@@ -4,16 +4,28 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 
 abstract class DefaultChessPiece(
-    final override val board: Chessboard,
-    final override var position: Position,
-    final override val color: ChessPiece.Color,
-    final override val type: ChessPiece.Type
+    override val board: Chessboard,
+    override val color: ChessPiece.Color,
+    override val type: ChessPiece.Type
 ) : ChessPiece {
 
-    private val startPosition = position
+    companion object {
+
+        val DEFAULT_POSITION = Position.of(0, 0)
+
+    }
+
+    final override var position = DEFAULT_POSITION
+        set(value) {
+            if (!this::startPosition.isInitialized)
+                this.startPosition = value
+            field = value
+        }
+
+    private lateinit var startPosition: Position
 
     override fun hasMoved(): Boolean {
-        return startPosition != position
+        return this::startPosition.isInitialized && startPosition != position
     }
 
 }

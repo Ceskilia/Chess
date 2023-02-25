@@ -11,9 +11,8 @@ import de.ceskilia.chess.util.calculateArithmeticMoves
 
 class Bishop(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.BISHOP), Blockable, Creatable {
+) : DefaultChessPiece(board, color, ChessPiece.Type.BISHOP), Blockable, Creatable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
@@ -25,7 +24,7 @@ class Bishop(
     }
 
     override fun createCopyAt(position: Position): Creatable {
-        return Bishop(this.board, position, this.color)
+        return Bishop(this.board, this.color).withPosition(position)
     }
 
 }

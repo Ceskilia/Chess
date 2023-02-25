@@ -11,9 +11,8 @@ import de.ceskilia.chess.util.calculateArithmeticMoves
 
 class Rook(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.ROOK), Blockable, Creatable {
+) : DefaultChessPiece(board, color, ChessPiece.Type.ROOK), Blockable, Creatable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
@@ -25,7 +24,7 @@ class Rook(
     }
 
     override fun createCopyAt(position: Position): Creatable {
-        return Rook(this.board, position, this.color)
+        return Rook(this.board, this.color).withPosition(position)
     }
 
 }

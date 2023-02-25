@@ -10,9 +10,8 @@ import de.ceskilia.chess.util.isEven
 
 class Knight(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.KNIGHT), Creatable {
+) : DefaultChessPiece(board, color, ChessPiece.Type.KNIGHT), Creatable {
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
@@ -27,7 +26,7 @@ class Knight(
     }
 
     override fun createCopyAt(position: Position): Creatable {
-        return Knight(this.board, position, this.color)
+        return Knight(this.board, this.color).withPosition(position)
     }
 
     private fun isMovablePosition(x: Int, y: Int): Boolean {

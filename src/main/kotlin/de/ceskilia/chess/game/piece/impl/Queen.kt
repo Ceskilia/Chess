@@ -11,9 +11,8 @@ import de.ceskilia.chess.util.calculateArithmeticMoves
 
 class Queen(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.QUEEN), Blockable, Creatable {
+) : DefaultChessPiece(board, color, ChessPiece.Type.QUEEN), Blockable, Creatable {
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
@@ -29,7 +28,7 @@ class Queen(
     }
 
     override fun createCopyAt(position: Position): Creatable {
-        return Queen(this.board, position, this.color)
+        return Queen(this.board, this.color).withPosition(position)
     }
 
 }

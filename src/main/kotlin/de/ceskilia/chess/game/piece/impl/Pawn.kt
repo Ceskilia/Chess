@@ -15,9 +15,8 @@ import kotlin.math.abs
 
 class Pawn(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.PAWN), Promotable {
+) : DefaultChessPiece(board, color, ChessPiece.Type.PAWN), Promotable {
 
     private val direction = board.directionOf(color)
 

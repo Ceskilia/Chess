@@ -7,9 +7,8 @@ import de.ceskilia.chess.game.piece.DefaultChessPiece
 
 class King(
     board: Chessboard,
-    position: Position,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, position, color, ChessPiece.Type.KING) {
+) : DefaultChessPiece(board, color, ChessPiece.Type.KING) {
 
     override fun calculateMovesUnpinned(): Set<Position> {
         return modifyMovesIf(calculateCoveringMoves().toMutableSet(), Operation.REMOVE) { position ->
