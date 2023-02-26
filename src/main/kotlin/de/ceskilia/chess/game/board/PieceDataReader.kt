@@ -5,7 +5,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 
 interface PieceDataReader {
 
-    fun pieces(color: ChessPiece.Color?): List<ChessPiece>
+    fun pieces(color: ChessPiece.Color? = null): List<ChessPiece>
 
     fun opponentPieces(color: ChessPiece.Color): List<ChessPiece>
 
