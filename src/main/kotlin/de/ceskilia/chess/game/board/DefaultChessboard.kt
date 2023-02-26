@@ -1,6 +1,7 @@
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.ChessGame
+import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.impl.*
@@ -17,33 +18,31 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
     }
 
     override fun setup() {
-        board[0][4] = King(this, ChessPiece.Color.BLACK)
-        board[0][3] = Queen(this, ChessPiece.Color.BLACK)
-        board[0][1] = Knight(this, ChessPiece.Color.BLACK)
-        board[0][6] = Knight(this, ChessPiece.Color.BLACK)
-        board[0][2] = Bishop(this, ChessPiece.Color.BLACK)
-        board[0][5] = Bishop(this, ChessPiece.Color.BLACK)
-        board[0][0] = Rook(this, ChessPiece.Color.BLACK)
-        board[0][7] = Rook(this, ChessPiece.Color.BLACK)
 
-        for (x in 0 until DEFAULT_SIZE) {
-            board[1][x] = Pawn(this, ChessPiece.Color.BLACK)
+        placePieces(
+            Position.of(4, 0) to King(this, ChessPiece.Color.BLACK),
+            Position.of(3, 0) to Queen(this, ChessPiece.Color.BLACK),
+            Position.of(1, 0) to Knight(this, ChessPiece.Color.BLACK),
+            Position.of(6, 0) to Knight(this, ChessPiece.Color.BLACK),
+            Position.of(2, 0) to Bishop(this, ChessPiece.Color.BLACK),
+            Position.of(5, 0) to Bishop(this, ChessPiece.Color.BLACK),
+            Position.of(0, 0) to Rook(this, ChessPiece.Color.BLACK),
+            Position.of(7, 0) to Rook(this, ChessPiece.Color.BLACK),
+            //
+            Position.of(4, 7) to King(this, ChessPiece.Color.WHITE),
+            Position.of(3, 7) to Queen(this, ChessPiece.Color.WHITE),
+            Position.of(1, 7) to Knight(this, ChessPiece.Color.WHITE),
+            Position.of(6, 7) to Knight(this, ChessPiece.Color.WHITE),
+            Position.of(2, 7) to Bishop(this, ChessPiece.Color.WHITE),
+            Position.of(5, 7) to Bishop(this, ChessPiece.Color.WHITE),
+            Position.of(0, 7) to Rook(this, ChessPiece.Color.WHITE),
+            Position.of(7, 7) to Rook(this, ChessPiece.Color.WHITE)
+        )
+
+        for (x in 0 until size) {
+            placePiece(x, 1, Pawn(this, ChessPiece.Color.BLACK))
+            placePiece(x, 6, Pawn(this, ChessPiece.Color.WHITE))
         }
-
-        //board[1][5] = Queen(this, Position.of(0, 3), ChessPiece.Color.BLACK)
-
-        for (x in 0 until DEFAULT_SIZE) {
-            board[6][x] = Pawn(this, ChessPiece.Color.WHITE)
-        }
-
-        board[7][4] = King(this, ChessPiece.Color.WHITE)
-        board[7][3] = Queen(this, ChessPiece.Color.WHITE)
-        board[7][1] = Knight(this, ChessPiece.Color.WHITE)
-        board[7][6] = Knight(this, ChessPiece.Color.WHITE)
-        board[7][2] = Bishop(this, ChessPiece.Color.WHITE)
-        board[7][5] = Bishop(this, ChessPiece.Color.WHITE)
-        board[7][0] = Rook(this, ChessPiece.Color.WHITE)
-        board[7][7] = Rook(this, ChessPiece.Color.WHITE)
 
         syncPieces()
     }
