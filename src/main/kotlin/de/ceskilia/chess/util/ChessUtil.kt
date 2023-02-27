@@ -44,7 +44,7 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
     }
 }
 
-fun Blockable.calculateArithmeticMoves(
+fun Blockable.calculateCoveringArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
 ): Set<Position> {
@@ -54,11 +54,12 @@ fun Blockable.calculateArithmeticMoves(
         xOperation = xOperation,
         yOperation = yOperation
     ) { piece, moves ->
+        moves.add(piece.position)
+
         if (isAlly(piece)) {
             return@calculateMoves true
         }
 
-        moves.add(piece.position)
         piece.type != ChessPiece.Type.KING
     }
 }

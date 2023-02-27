@@ -25,7 +25,10 @@ class Pawn(
     }
 
     override fun calculateMovesUnpinned(): Set<Position> {
-        val moves = calculateCoveringMoves().toMutableSet()
+        val moves = calculateCoveringMoves()
+            .filter { board.isOpponentAt(it, this) }
+            .toMutableSet()
+        moves.addNonNull(checkEnPassant())
 
         // check for normal moves
         val oneStep = position.tryCopyAdding(y = direction) { x, y ->
@@ -47,41 +50,8 @@ class Pawn(
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()
-
-        moves.addNonNull(checkNormalCaptures(-1))
-        moves.addNonNull(checkNormalCaptures(1))
-
-        // todo: what happens when oneStep not in board (promotion)
-
-        val history = board.game.history
-        val lastMove = history.lastMove() ?: return moves
-        val lastChessPiece = lastMove.chessPiece
-
-        // if the last move somehow was done by the same color -> don't check for en passant
-        if (lastChessPiece.color == color) {
-            return moves
-        }
-
-        // check for en passant
-        val lastPosition = lastMove.newPosition
-        val possibleEnPassant = lastChessPiece.type == ChessPiece.Type.PAWN
-                && history.movesOf(lastChessPiece).size == 1
-                && position.y == lastPosition.y
-
-        if (possibleEnPassant) {
-
-            val xDifference = lastPosition.x - position.x
-
-            // the pawns need to stand next to each other
-            if (abs(xDifference) != 1) {
-                return moves
-            }
-
-            moves.add(position.copyAdding(xDifference, direction).whenOccupiedBy(this) {
-                board.removePieceAt(lastPosition)
-            })
-        }
-
+        moves.addNonNull(checkCapture(1))
+        moves.addNonNull(checkCapture(-1))
         return moves
     }
 
@@ -107,10 +77,41 @@ class Pawn(
         }
     }
 
-    private fun checkNormalCaptures(xDirection: Int): Position? {
-        return position.tryCopyAdding(x = xDirection, y = direction) { x, y ->
-            board.isOpponentAt(x, y, this)
+    private fun checkCapture(xDirection: Int): Position? {
+        return position.tryCopyAdding(x = xDirection, y = direction, board::isInBoard)
+    }
+
+    private fun checkEnPassant(): Position? {
+        val history = board.game.history
+        val lastMove = history.lastMove() ?: return null
+        val lastChessPiece = lastMove.chessPiece
+
+        // if the last move somehow was done by the same color -> don't check for en passant
+        if (lastChessPiece.color == color) {
+            return null
         }
+
+        // check for en passant
+        val lastPosition = lastMove.newPosition
+        val possibleEnPassant = lastChessPiece.type == ChessPiece.Type.PAWN
+                && history.movesOf(lastChessPiece).size == 1
+                && position.y == lastPosition.y
+
+        if (possibleEnPassant) {
+
+            val xDifference = lastPosition.x - position.x
+
+            // the pawns need to stand next to each other
+            if (abs(xDifference) != 1) {
+                return null
+            }
+
+            return position.copyAdding(xDifference, direction).whenOccupiedBy(this) {
+                board.removePieceAt(lastPosition)
+            }
+        }
+
+        return null
     }
 
 }

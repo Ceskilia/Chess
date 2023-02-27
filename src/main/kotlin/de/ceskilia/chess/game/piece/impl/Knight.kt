@@ -18,8 +18,8 @@ class Knight(
 
         for(x in (-2..2).filter { it != 0 } ) {
             val y = if(x.isEven()) 1 else 2
-            moves.addNonNull(position.tryCopyAdding(x, -y, ::isMovablePosition))
-            moves.addNonNull(position.tryCopyAdding(x, y, ::isMovablePosition))
+            moves.addNonNull(position.tryCopyAdding(x, -y, board::isInBoard))
+            moves.addNonNull(position.tryCopyAdding(x, y, board::isInBoard))
         }
 
         return moves
@@ -27,10 +27,6 @@ class Knight(
 
     override fun createCopyAt(position: Position): Creatable {
         return Knight(this.board, this.color).withPosition(position)
-    }
-
-    private fun isMovablePosition(x: Int, y: Int): Boolean {
-        return board.isInBoard(x, y) && !board.isAllyAt(x, y, this)
     }
 
 }
