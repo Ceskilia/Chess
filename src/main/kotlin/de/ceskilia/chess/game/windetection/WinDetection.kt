@@ -13,7 +13,7 @@ class WinDetection(val game: ChessGame) {
     fun isWon(): Player? {
 
         game.players.forEach {
-            it.getOpponents().forEach { opponent ->
+            it.opponents().forEach { opponent ->
                 if(opponent.isCheckmating(it)) {
                     return opponent
                 }

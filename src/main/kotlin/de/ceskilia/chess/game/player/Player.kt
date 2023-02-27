@@ -14,24 +14,24 @@ data class Player(
     val pieceColor: ChessPiece.Color
 ) {
 
-    fun getPieces(): List<ChessPiece> {
+    fun pieces(): List<ChessPiece> {
         return game.board.pieces(pieceColor)
     }
 
-    fun getOpponents(): List<Player> {
+    fun opponents(): List<Player> {
         return game.players.filter { it != this }
     }
 
-    fun getOpponentPieces(): List<ChessPiece> {
+    fun opponentPieces(): List<ChessPiece> {
         return game.board.opponentPieces(pieceColor)
     }
 
-    fun getKing(): ChessPiece {
-        return getPieces().first { it.type == ChessPiece.Type.KING }
+    fun king(): ChessPiece {
+        return pieces().first { it.type == ChessPiece.Type.KING }
     }
 
     fun isOwnPiece(chessPiece: ChessPiece): Boolean {
-        return getPieces().contains(chessPiece)
+        return pieces().contains(chessPiece)
     }
 
     fun isStalemated(): Boolean {
@@ -39,11 +39,11 @@ data class Player(
     }
 
     fun isChecked(): Boolean {
-        return getOpponentPieces().any { it.canMoveTo(getKing().position) }
+        return opponentPieces().any { it.canMoveTo(king().position) }
     }
 
     fun isChecking(player: Player): Boolean {
-        return getPieces().any { it.canMoveTo(player.getKing().position) }
+        return pieces().any { it.canMoveTo(player.king().position) }
     }
 
     fun isCheckmated(): Boolean {
@@ -68,9 +68,9 @@ data class Player(
     }
 
     fun calculateMoves(): Map<ChessPiece, Set<Position>> {
-        val king = getKing()
-        val pieces = getPieces().filter { !it.isPinned() }
-        val checkingPieces = getOpponentPieces().filter { it.canMoveTo(king.position) }
+        val king = king()
+        val pieces = pieces().filter { !it.isPinned() }
+        val checkingPieces = opponentPieces().filter { it.canMoveTo(king.position) }
 
         if (checkingPieces.isNotEmpty()) {
             val moves = mutableMapOf<ChessPiece, Set<Position>>()
@@ -109,7 +109,7 @@ data class Player(
         }
 
 
-        return getPieces().associateWith(ChessPiece::calculateMoves)
+        return pieces().associateWith(ChessPiece::calculateMoves)
     }
 
 }
