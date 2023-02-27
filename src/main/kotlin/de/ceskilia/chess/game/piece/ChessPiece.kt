@@ -62,6 +62,12 @@ interface ChessPiece : Movable {
         return if (isPinned()) emptySet() else calculateMovesUnpinned()
     }
 
+    override fun calculateMovesUnpinned(): Set<Position> {
+        return calculateCoveringMoves()
+            .filter { !board.isAllyAt(it, this) }
+            .toSet()
+    }
+
     enum class Color {
 
         BLACK,
