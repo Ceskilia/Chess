@@ -7,7 +7,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.DefaultChessPiece
 import de.ceskilia.chess.util.Operation
-import de.ceskilia.chess.util.calculateArithmeticMoves
+import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
 class Bishop(
     board: Chessboard,
@@ -16,10 +16,10 @@ class Bishop(
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
-            calculateArithmeticMoves(Operation.DECREMENT, Operation.DECREMENT),
-            calculateArithmeticMoves(Operation.DECREMENT, Operation.INCREMENT),
-            calculateArithmeticMoves(Operation.INCREMENT, Operation.DECREMENT),
-            calculateArithmeticMoves(Operation.INCREMENT, Operation.INCREMENT)
+            calculateCoveringArithmeticMoves(Operation.DECREMENT, Operation.DECREMENT),
+            calculateCoveringArithmeticMoves(Operation.DECREMENT, Operation.INCREMENT),
+            calculateCoveringArithmeticMoves(Operation.INCREMENT, Operation.DECREMENT),
+            calculateCoveringArithmeticMoves(Operation.INCREMENT, Operation.INCREMENT)
         )
     }
 

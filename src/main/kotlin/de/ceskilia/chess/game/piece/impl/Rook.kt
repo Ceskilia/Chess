@@ -7,7 +7,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.DefaultChessPiece
 import de.ceskilia.chess.util.Operation
-import de.ceskilia.chess.util.calculateArithmeticMoves
+import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
 class Rook(
     board: Chessboard,
@@ -16,10 +16,10 @@ class Rook(
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
-            calculateArithmeticMoves(xOperation = Operation.DECREMENT),
-            calculateArithmeticMoves(xOperation = Operation.INCREMENT),
-            calculateArithmeticMoves(yOperation = Operation.DECREMENT),
-            calculateArithmeticMoves(yOperation = Operation.INCREMENT)
+            calculateCoveringArithmeticMoves(xOperation = Operation.DECREMENT),
+            calculateCoveringArithmeticMoves(xOperation = Operation.INCREMENT),
+            calculateCoveringArithmeticMoves(yOperation = Operation.DECREMENT),
+            calculateCoveringArithmeticMoves(yOperation = Operation.INCREMENT)
         )
     }
 
