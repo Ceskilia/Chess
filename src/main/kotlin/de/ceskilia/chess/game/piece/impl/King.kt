@@ -3,7 +3,6 @@ package de.ceskilia.chess.game.piece.impl
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
-import de.ceskilia.chess.game.piece.DefaultChessPiece
 import de.ceskilia.chess.util.addNonNull
 
 class King(

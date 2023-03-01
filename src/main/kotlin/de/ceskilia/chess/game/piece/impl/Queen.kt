@@ -5,7 +5,6 @@ import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.Blockable
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
-import de.ceskilia.chess.game.piece.DefaultChessPiece
 import de.ceskilia.chess.util.Operation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 

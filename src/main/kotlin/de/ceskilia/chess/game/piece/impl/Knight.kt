@@ -4,7 +4,6 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
-import de.ceskilia.chess.game.piece.DefaultChessPiece
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.isEven
 
