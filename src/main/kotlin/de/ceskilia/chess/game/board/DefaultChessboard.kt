@@ -17,27 +17,29 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
         }
     }
 
+    private fun lastRankOf(color: ChessPiece.Color): Int {
+        return when (color) {
+            ChessPiece.Color.WHITE -> 7
+            ChessPiece.Color.BLACK -> 0
+        }
+    }
+
     override fun setup() {
 
-        placePieces(
-            Position.of(4, 0) to King(this, ChessPiece.Color.BLACK),
-            Position.of(3, 0) to Queen(this, ChessPiece.Color.BLACK),
-            Position.of(1, 0) to Knight(this, ChessPiece.Color.BLACK),
-            Position.of(6, 0) to Knight(this, ChessPiece.Color.BLACK),
-            Position.of(2, 0) to Bishop(this, ChessPiece.Color.BLACK),
-            Position.of(5, 0) to Bishop(this, ChessPiece.Color.BLACK),
-            Position.of(0, 0) to Rook(this, ChessPiece.Color.BLACK),
-            Position.of(7, 0) to Rook(this, ChessPiece.Color.BLACK),
-            //
-            Position.of(4, 7) to King(this, ChessPiece.Color.WHITE),
-            Position.of(3, 7) to Queen(this, ChessPiece.Color.WHITE),
-            Position.of(1, 7) to Knight(this, ChessPiece.Color.WHITE),
-            Position.of(6, 7) to Knight(this, ChessPiece.Color.WHITE),
-            Position.of(2, 7) to Bishop(this, ChessPiece.Color.WHITE),
-            Position.of(5, 7) to Bishop(this, ChessPiece.Color.WHITE),
-            Position.of(0, 7) to Rook(this, ChessPiece.Color.WHITE),
-            Position.of(7, 7) to Rook(this, ChessPiece.Color.WHITE)
-        )
+        for(color in ChessPiece.Color.values()) {
+            val rank = lastRankOf(color)
+            placePieces(
+                Position.of(4, rank) to King(this, color),
+                Position.of(3, rank) to Queen(this, color),
+                Position.of(1, rank) to Knight(this, color),
+                Position.of(6, rank) to Knight(this, color),
+                Position.of(2, rank) to Bishop(this, color),
+                Position.of(5, rank) to Bishop(this, color),
+                Position.of(0, rank) to Rook(this, color),
+                Position.of(7, rank) to Rook(this, color)
+            )
+        }
+
 
         for (x in 0 until size) {
             placePiece(x, 1, Pawn(this, ChessPiece.Color.BLACK))
