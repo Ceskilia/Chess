@@ -4,8 +4,7 @@ package de.ceskilia.chess.game
 
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.board.DefaultChessboard
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
 import de.ceskilia.chess.game.result.GameResult
@@ -13,25 +12,26 @@ import de.ceskilia.chess.game.result.MoveResult
 import de.ceskilia.chess.game.result.Win
 import de.ceskilia.chess.game.windetection.WinDetection
 
-class ChessGame {
+abstract class ChessGame {
 
     private val moves = mutableListOf<Move>()
-    private val winDetection = WinDetection(this)
+    protected val winDetection by lazy { WinDetection(this) }
 
     val history = GameHistory(moves)
-    val board = DefaultChessboard(this)
-    val players = listOf(
-        Player(this, "", ChessPiece.Color.WHITE),
-        Player(this, "", ChessPiece.Color.BLACK)
-    )
+
+    abstract val players: List<Player>
+    abstract val board: Chessboard
 
     var result: GameResult<*>? = null
         private set
-    var currentTurn: Player = players.first()
+    lateinit var currentTurn: Player
         private set
 
     init {
-        board.setup()
+        lazy {
+            currentTurn = players.first()
+            board.setup()
+        }
     }
 
     fun finish(result: GameResult<*>) {
@@ -50,7 +50,7 @@ class ChessGame {
         ]
     }
 
-    fun move(startPosition: Position, endPosition: Position): MoveResult {
+    open fun move(startPosition: Position, endPosition: Position): MoveResult {
         val piece = board.pieceAt(startPosition) ?: return MoveResult.INVALID_POSITION
 
         if (!currentTurn.isOwnPiece(piece)) {
@@ -82,29 +82,6 @@ class ChessGame {
         return MoveResult.SUCCESS
     }
 
-    fun start() {
-        while (!isFinished()) {
-
-            println(board)
-            println()
-            println("Enter new position coordinates:")
-            println(currentTurn.calculateMoves().map { it.key.type.notation + "-" + it.value })
-
-            val (start, end) = readln().chunked(2).map(Position.Companion::fromNotation)
-
-            when(move(start, end)) {
-                MoveResult.INVALID_POSITION -> println("No Piece")
-                MoveResult.WRONG_COLOR -> println("Wrong color")
-                MoveResult.INVALID_MOVE -> println("Cant move there")
-                MoveResult.SUCCESS -> {
-                    // play sound
-                }
-            }
-
-        }
-
-        println(board)
-        println(history)
-    }
+    abstract fun start()
 
 }
