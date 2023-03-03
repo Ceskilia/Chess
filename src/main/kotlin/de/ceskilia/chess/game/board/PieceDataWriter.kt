@@ -5,13 +5,13 @@ import de.ceskilia.chess.game.piece.ChessPiece
 
 interface PieceDataWriter {
 
-    fun placePiece(x: Int, y: Int, chessPiece: ChessPiece?)
+    fun placePiece(chessPiece: ChessPiece?, x: Int, y: Int)
 
-    fun placePiece(position: Position, chessPiece: ChessPiece?) {
-        placePiece(position.x, position.y, chessPiece)
+    fun placePiece(chessPiece: ChessPiece?, position: Position) {
+        placePiece(chessPiece, position.x, position.y)
     }
 
-    fun placePieces(vararg pairs: Pair<Position, ChessPiece?>) {
+    fun placePieces(vararg pairs: Pair<ChessPiece?, Position>) {
         pairs.forEach {
             placePiece(it.first, it.second)
         }

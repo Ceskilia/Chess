@@ -23,14 +23,14 @@ class InternalTable : PieceDataHandler {
         return InternalTable(this.pieces)
     }
 
-    override fun placePiece(x: Int, y: Int, chessPiece: ChessPiece?) {
+    override fun placePiece(chessPiece: ChessPiece?, x: Int, y: Int) {
         pieces[y][x] = chessPiece
     }
 
     override fun removePieceAt(position: Position) {
         pieces[position.y][position.x] = null
     }
-    
+
     override fun pieces(color: ChessPiece.Color?): List<ChessPiece> {
         return pieces.flatten()
             .filterNotNull()
@@ -42,7 +42,7 @@ class InternalTable : PieceDataHandler {
             .filterNotNull()
             .filter { it.color != color }
     }
-    
+
     override fun pieceAt(x: Int, y: Int): ChessPiece? {
         return if (isInBoard(x, y)) pieces[y][x] else null
     }

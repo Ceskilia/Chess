@@ -26,24 +26,23 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 
     override fun setup() {
 
-        for(color in ChessPiece.Color.values()) {
+        for (color in ChessPiece.Color.values()) {
             val rank = lastRankOf(color)
             placePieces(
-                Position.of(4, rank) to King(this, color),
-                Position.of(3, rank) to Queen(this, color),
-                Position.of(1, rank) to Knight(this, color),
-                Position.of(6, rank) to Knight(this, color),
-                Position.of(2, rank) to Bishop(this, color),
-                Position.of(5, rank) to Bishop(this, color),
-                Position.of(0, rank) to Rook(this, color),
-                Position.of(7, rank) to Rook(this, color)
+                King(this, color) to Position.of(4, rank),
+                Queen(this, color) to Position.of(3, rank),
+                Knight(this, color) to Position.of(1, rank),
+                Knight(this, color) to Position.of(6, rank),
+                Bishop(this, color) to Position.of(2, rank),
+                Bishop(this, color) to Position.of(5, rank),
+                Rook(this, color) to Position.of(0, rank),
+                Rook(this, color) to Position.of(7, rank)
             )
         }
 
-
         for (x in 0 until size) {
-            placePiece(x, 1, Pawn(this, ChessPiece.Color.BLACK))
-            placePiece(x, 6, Pawn(this, ChessPiece.Color.WHITE))
+            placePiece(Pawn(this, ChessPiece.Color.BLACK), x, 1)
+            placePiece(Pawn(this, ChessPiece.Color.WHITE), x, 6)
         }
 
         syncPieces()
