@@ -6,7 +6,9 @@ import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.piece.ChessPiece
 import kotlin.math.ceil
 
-class GameHistory(val moves: List<Move>) {
+class GameHistory {
+
+    val moves: List<Move> = mutableListOf()
 
     fun capturedPieces(): List<ChessPiece> {
         return moves.filter(Move::isCapture).map { it.capturedPiece!! }
