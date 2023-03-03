@@ -21,7 +21,7 @@ abstract class ChessGame {
     var result: GameResult<*>? = null
         private set
     lateinit var currentTurn: Player
-        private set
+        protected set
 
     protected val winDetection by lazy { WinDetection(this) }
 
