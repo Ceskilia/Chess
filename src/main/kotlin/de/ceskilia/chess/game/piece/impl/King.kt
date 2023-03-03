@@ -54,12 +54,12 @@ class King(
         }
 
         return setOfNotNull(
-            castle(Operation.INCREMENT), // short-castle
-            castle(Operation.DECREMENT) // long-castle
+            checkCastleDirection(Operation.INCREMENT), // short-castle
+            checkCastleDirection(Operation.DECREMENT) // long-castle
         )
     }
 
-    private fun castle(xOperation: Operation): Position? {
+    private fun checkCastleDirection(xOperation: Operation): Position? {
         val line = calculateCoveringArithmeticMoves(xOperation)
             .mapNotNull { board.pieceAt(it) }
             .filter { it.type == ChessPiece.Type.ROOK }
