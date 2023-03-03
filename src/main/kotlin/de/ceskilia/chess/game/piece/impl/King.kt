@@ -7,7 +7,6 @@ import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.util.Operation
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
-import de.ceskilia.chess.util.whenOccupiedBy
 
 class King(
     board: Chessboard,
@@ -15,9 +14,7 @@ class King(
 ) : DefaultChessPiece(board, color, ChessPiece.Type.KING), Checkable {
 
     override fun calculateMovesUnpinned(): Set<Position> {
-        val moves = calculateCoveringMoves()
-            .plus(checkCastle())
-            .toMutableSet()
+        val moves = calculateCoveringMoves().toMutableSet()
 
         moves.removeIf {
             val isAlly = board.isAllyAt(it, this)
@@ -26,7 +23,7 @@ class King(
             isAlly || isCovered
         }
 
-        return moves
+        return moves.plus(checkCastle())
     }
 
     override fun calculateCoveringMoves(): Set<Position> {
@@ -53,25 +50,22 @@ class King(
             return emptySet()
         }
 
-        return setOfNotNull(
-            checkCastleDirection(Operation.INCREMENT), // short-castle
-            checkCastleDirection(Operation.DECREMENT) // long-castle
-        )
+        return checkCastleDirection(Operation.INCREMENT) + checkCastleDirection(Operation.DECREMENT)
     }
 
-    private fun checkCastleDirection(xOperation: Operation): Position? {
+    private fun checkCastleDirection(xOperation: Operation): Set<Position> {
         val line = calculateCoveringArithmeticMoves(xOperation)
             .mapNotNull { board.pieceAt(it) }
             .filter { it.type == ChessPiece.Type.ROOK }
 
         if (line.size != 1) {
-            return null
+            return emptySet()
         }
 
         val rook = line.first()
 
         if (rook.hasMoved()) {
-            return null
+            return emptySet()
         }
 
         val direction = xOperation.operand
@@ -80,12 +74,19 @@ class King(
         val blocked = newRookPosition.isCoveredByOpponent() || endPosition.isCoveredByOpponent()
 
         if (blocked) {
-            return null
+            return emptySet()
         }
 
-        return endPosition.whenOccupiedBy(this) {
+        val rookMove = rook.position.whenAimedAt {
+            board.moveUnchecked(rook, newRookPosition)
+            board.moveUnchecked(this, endPosition)
+            true
+        }
+        val twoSteps = endPosition.whenOccupied {
             board.moveUnchecked(rook, newRookPosition)
         }
+
+        return setOf(rookMove, twoSteps)
     }
 
 }
