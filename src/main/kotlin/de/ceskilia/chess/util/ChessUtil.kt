@@ -16,7 +16,7 @@ fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
     }
 }
 
-fun Position.whenOccupiedBy(piece: ChessPiece, action: () -> Unit): Position {
+fun Position.whenOccupiedBy(piece: ChessPiece, action: (Position) -> Unit): Position {
     piece.board.queueMoveAction(piece, this, action)
     return this
 }
@@ -44,7 +44,7 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
     }
 }
 
-fun Blockable.calculateCoveringArithmeticMoves(
+fun ChessPiece.calculateCoveringArithmeticMoves(
     xOperation: Operation? = null,
     yOperation: Operation? = null
 ): Set<Position> {
@@ -64,7 +64,7 @@ fun Blockable.calculateCoveringArithmeticMoves(
     }
 }
 
-private fun Blockable.calculateMoves(
+private fun ChessPiece.calculateMoves(
     startMoves: MutableSet<Position>,
     startPosition: Position,
     xOperation: Operation? = null,

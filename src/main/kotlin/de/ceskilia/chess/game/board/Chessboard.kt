@@ -28,7 +28,7 @@ abstract class Chessboard(
 
     abstract val registeredCreatables: List<Creatable>
 
-    protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, () -> Unit>>>()
+    protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, (Position) -> Unit>>>()
 
     open fun move(piece: ChessPiece, endPosition: Position): Move? {
 
@@ -81,7 +81,7 @@ abstract class Chessboard(
         }
     }
 
-    fun queueMoveAction(piece: ChessPiece, position: Position, action: () -> Unit) {
+    fun queueMoveAction(piece: ChessPiece, position: Position, action: (Position) -> Unit) {
         queuedMoveActions.compute(piece) { _, value ->
             val actions = value ?: mutableSetOf()
             if (actions.none { it.first == position })
@@ -92,7 +92,7 @@ abstract class Chessboard(
 
     private fun executeQueuedAction(piece: ChessPiece, endPosition: Position) {
         val actionMovingTo = queuedMoveActions[piece]?.firstOrNull { it.first == endPosition }?.second
-        actionMovingTo?.invoke()
+        actionMovingTo?.invoke(endPosition)
         queuedMoveActions.remove(piece)
     }
 
