@@ -5,7 +5,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 data class Move(
     val chessPiece: ChessPiece,
     val startPosition: Position,
-    val newPosition: Position,
+    val endPosition: Position,
     val isCheck: Boolean,
     val capturedPiece: ChessPiece? = null
 ) {
@@ -23,7 +23,7 @@ data class Move(
         // (if PAWN: use column/y, if same pieces can make same move insert ???)
         return chessPiece.type.notation.toString() +
                 (if (isCapture()) CAPTURE_NOTATION else "") +
-                newPosition.toString() +
+                endPosition.toString() +
                 (if (isCheck) CHECK_NOTATION else "")
     }
 
@@ -35,7 +35,7 @@ data class Move(
 
         if (chessPiece != other.chessPiece) return false
         if (startPosition != other.startPosition) return false
-        if (newPosition != other.newPosition) return false
+        if (endPosition != other.endPosition) return false
         if (isCheck != other.isCheck) return false
         if (capturedPiece != other.capturedPiece) return false
 
@@ -45,7 +45,7 @@ data class Move(
     override fun hashCode(): Int {
         var result = chessPiece.hashCode()
         result = 31 * result + startPosition.hashCode()
-        result = 31 * result + newPosition.hashCode()
+        result = 31 * result + endPosition.hashCode()
         result = 31 * result + isCheck.hashCode()
         result = 31 * result + (capturedPiece?.hashCode() ?: 0)
         return result
