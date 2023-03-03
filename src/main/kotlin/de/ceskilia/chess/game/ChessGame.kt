@@ -14,24 +14,20 @@ import de.ceskilia.chess.game.windetection.WinDetection
 
 abstract class ChessGame {
 
-    private val moves = mutableListOf<Move>()
-    protected val winDetection by lazy { WinDetection(this) }
-
-    val history = GameHistory(moves)
-
     abstract val players: List<Player>
     abstract val board: Chessboard
 
+    val history = GameHistory()
     var result: GameResult<*>? = null
         private set
     lateinit var currentTurn: Player
         private set
 
-    init {
-        lazy {
-            currentTurn = players.first()
-            board.setup()
-        }
+    protected val winDetection by lazy { WinDetection(this) }
+
+    fun setup() {
+        this.currentTurn = players.first()
+        board.setup()
     }
 
     fun finish(result: GameResult<*>) {
@@ -50,6 +46,12 @@ abstract class ChessGame {
         ]
     }
 
+    fun processMoves(moves: List<Move>) {
+        moves.forEach {
+            move(it.startPosition, it.endPosition)
+        }
+    }
+
     open fun move(startPosition: Position, endPosition: Position): MoveResult {
         val piece = board.pieceAt(startPosition) ?: return MoveResult.INVALID_POSITION
 
@@ -58,7 +60,7 @@ abstract class ChessGame {
         }
 
         val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
-        moves.add(move)
+        (history.moves as MutableList).add(move)
         shuffleTurn()
 
         // if check, check if mate
