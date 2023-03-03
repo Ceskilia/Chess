@@ -10,6 +10,22 @@ interface ChessPiece : Movable {
     val color: Color
     val type: Type
 
+    fun Position.isCoveredByOpponent(): Boolean {
+        return board.opponentPieces(color).any { it.isCovering(this) }
+    }
+
+    fun Position.whenOccupied(action: (Position) -> Unit): Position {
+        return whenAimedAt {
+            action(it)
+            false
+        }
+    }
+
+    fun Position.whenAimedAt(result: (Position) -> Boolean): Position {
+        board.queueMoveAction(this@ChessPiece, this, result)
+        return this
+    }
+
     fun isAlly(other: ChessPiece): Boolean {
         return this.color == other.color
     }

@@ -9,7 +9,6 @@ import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.Promotable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateExtendedMovesPinned
-import de.ceskilia.chess.util.whenOccupiedBy
 import kotlin.math.abs
 
 class Pawn(
@@ -105,7 +104,7 @@ class Pawn(
                 return null
             }
 
-            return position.copyAdding(xDifference, direction).whenOccupiedBy(this) {
+            return position.copyAdding(xDifference, direction).whenOccupied {
                 board.removePieceAt(lastPosition)
             }
         }

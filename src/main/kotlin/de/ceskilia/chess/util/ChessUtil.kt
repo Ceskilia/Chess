@@ -16,11 +16,6 @@ fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
     }
 }
 
-fun Position.whenOccupiedBy(piece: ChessPiece, action: (Position) -> Unit): Position {
-    piece.board.queueMoveAction(piece, this, action)
-    return this
-}
-
 fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
     val startMoves = line.toMutableSet()
     val lastPosition = startMoves.firstOrNull { board.isOpponentAt(it, this) } ?: return startMoves
