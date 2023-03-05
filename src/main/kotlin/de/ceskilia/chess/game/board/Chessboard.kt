@@ -5,6 +5,7 @@ package de.ceskilia.chess.game.board
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.Checkable
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.Promotable
@@ -27,8 +28,8 @@ abstract class Chessboard(
     }
 
     abstract val registeredCreatables: List<Creatable>
-
-    protected val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Pair<Position, (Position) -> Unit>>>()
+    
+    private val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Action>>()
 
     open fun move(piece: ChessPiece, endPosition: Position): Move? {
 
@@ -37,23 +38,19 @@ abstract class Chessboard(
         }
 
         val startPosition = piece.position
-        val endPiece = table.pieceAt(endPosition)
+        val endPiece = pieceAt(endPosition)
+        val cancelled = evaluateQueuedAction(piece, endPosition)
 
-        executeQueuedAction(piece, endPosition)
-        piece.position = endPosition
-        table.placePiece(endPosition, piece) // this or promote so PAWNS don't get to last rank
-        removePieceAt(startPosition)
-
-        // todo: maybe use Player
-        val check = pieces(piece.color).any { ally ->
-            ally.canMoveTo(opponentPieces(piece.color)
-                .first { it.type == ChessPiece.Type.KING }
-                .position
-            )
+        if (!cancelled) {
+            moveUnchecked(piece, endPosition) // this or promote so PAWNS don't get to last rank
         }
 
+        val check = opponentPieces(piece.color)
+            .filterIsInstance<Checkable>()
+            .any(Checkable::isChecked)
+
         if (piece is Promotable && piece.canPromote()) {
-            table.placePiece(piece.position, piece.promote())
+            placePiece(piece.promote(), piece.position)
         }
 
         return Move(piece, startPosition, endPosition, check, endPiece)
@@ -81,19 +78,21 @@ abstract class Chessboard(
         }
     }
 
-    fun queueMoveAction(piece: ChessPiece, position: Position, action: (Position) -> Unit) {
+    fun queueMoveAction(piece: ChessPiece, position: Position, result: (Position) -> Boolean) {
         queuedMoveActions.compute(piece) { _, value ->
             val actions = value ?: mutableSetOf()
-            if (actions.none { it.first == position })
-                actions.add(position to action)
+            if (actions.none { it.position == position })
+                actions.add(Action(position, result))
             return@compute actions
         }
     }
 
-    private fun executeQueuedAction(piece: ChessPiece, endPosition: Position) {
-        val actionMovingTo = queuedMoveActions[piece]?.firstOrNull { it.first == endPosition }?.second
-        actionMovingTo?.invoke(endPosition)
+    private fun evaluateQueuedAction(piece: ChessPiece, endPosition: Position): Boolean {
+        val actionMovingTo = queuedMoveActions[piece]
+            ?.firstOrNull { it.position == endPosition }
+            ?.result
         queuedMoveActions.remove(piece)
+        return actionMovingTo?.invoke(endPosition) ?: false
     }
 
     override fun toString(): String {
@@ -106,7 +105,7 @@ abstract class Chessboard(
                 .append("${row + 1} ")
 
             for (column in 0 until size) {
-                builder.append("| ${table.pieceAt(column, row)?.type?.notation ?: " "} ")
+                builder.append("| ${pieceAt(column, row)?.type?.notation ?: " "} ")
             }
 
             builder.append("|")
