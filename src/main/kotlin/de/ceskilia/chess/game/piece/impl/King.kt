@@ -77,10 +77,9 @@ class King(
             return emptySet()
         }
 
-        val rookMove = rook.position.whenAimedAt {
+        val rookMove = rook.position.whenOccupied(true) {
             board.moveUnchecked(rook, newRookPosition)
             board.moveUnchecked(this, endPosition)
-            true
         }
         val twoSteps = endPosition.whenOccupied {
             board.moveUnchecked(rook, newRookPosition)
