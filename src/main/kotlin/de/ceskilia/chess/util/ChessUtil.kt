@@ -7,7 +7,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
     return with(piece) {
         val moves = calculateMovesUnpinned()
-        val pinningPiece = getPinningPiece() ?: return moves
+        val pinningPiece = pinningPiece() ?: return moves
 
         pinningPiece.calculatePinLine(this)!!
             .plus(pinningPiece.position)

@@ -28,10 +28,10 @@ interface ChessPiece : Movable {
     }
 
     fun isPinned(): Boolean {
-        return getPinningPiece() != null
+        return pinningPiece() != null
     }
 
-    fun getPinningPiece(): Blockable? {
+    fun pinningPiece(): Blockable? {
         return board.opponentPieces(color)
             .filterIsInstance<Blockable>()
             .firstOrNull { it.isPinning(this) }
