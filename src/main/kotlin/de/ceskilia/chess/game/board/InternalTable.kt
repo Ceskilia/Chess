@@ -44,10 +44,10 @@ class InternalTable : PieceDataHandler {
     }
 
     override fun pieceAt(x: Int, y: Int): ChessPiece? {
-        return if (isInBoard(x, y)) pieces[y][x] else null
+        return if (inBounds(x, y)) pieces[y][x] else null
     }
 
-    override fun isInBoard(coordinate: Int): Boolean {
+    override fun inBounds(coordinate: Int): Boolean {
         return coordinate in pieces.indices
     }
 

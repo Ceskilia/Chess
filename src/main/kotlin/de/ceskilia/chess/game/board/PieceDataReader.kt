@@ -48,10 +48,10 @@ interface PieceDataReader {
         return isOpponentAt(position.x, position.y, piece)
     }
 
-    fun isInBoard(coordinate: Int): Boolean
+    fun inBounds(coordinate: Int): Boolean
 
-    fun isInBoard(x: Int, y: Int): Boolean {
-        return isInBoard(x) && isInBoard(y)
+    fun inBounds(x: Int, y: Int): Boolean {
+        return inBounds(x) && inBounds(y)
     }
 
 }

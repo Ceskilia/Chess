@@ -37,7 +37,7 @@ class King(
                     continue
                 }
 
-                moves.addNonNull(position.tryCopyAdding(x, y, board::isInBoard))
+                moves.addNonNull(position.tryCopyAdding(x, y, board::inBounds))
             }
         }
 

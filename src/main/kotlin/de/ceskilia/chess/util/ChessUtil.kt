@@ -79,7 +79,7 @@ private fun ChessPiece.calculateMoves(
             y += yOperation.operand
         }
 
-        if (!board.isInBoard(x, y)) {
+        if (!board.inBounds(x, y)) {
             break
         }
 

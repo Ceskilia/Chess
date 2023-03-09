@@ -54,7 +54,7 @@ class Pawn(
     }
 
     override fun canPromote(): Boolean {
-        return !board.isInBoard(position.y + direction)
+        return !board.inBounds(position.y + direction)
     }
 
     override fun promote(): Creatable {
@@ -76,7 +76,7 @@ class Pawn(
     }
 
     private fun checkCapture(xDirection: Int): Position? {
-        return position.tryCopyAdding(x = xDirection, y = direction, board::isInBoard)
+        return position.tryCopyAdding(x = xDirection, y = direction, board::inBounds)
     }
 
     private fun checkEnPassant(): Position? {
