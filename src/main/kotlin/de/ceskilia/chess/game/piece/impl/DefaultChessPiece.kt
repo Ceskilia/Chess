@@ -29,4 +29,9 @@ abstract class DefaultChessPiece(
         return this::startPosition.isInitialized && startPosition != position
     }
 
+    fun <T : DefaultChessPiece> T.withPosition(position: Position): T {
+        this.position = position
+        return this
+    }
+
 }
