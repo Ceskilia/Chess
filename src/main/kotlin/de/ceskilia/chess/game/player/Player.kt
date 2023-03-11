@@ -6,6 +6,7 @@ import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.Blockable
+import de.ceskilia.chess.game.piece.Checkable
 import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Player(
@@ -26,8 +27,10 @@ data class Player(
         return game.board.opponentPieces(pieceColor)
     }
 
-    fun king(): ChessPiece {
-        return pieces().first { it.type == ChessPiece.Type.KING }
+    fun ownCheckable(): Checkable {
+        return pieces()
+            .filterIsInstance<Checkable>()
+            .first()
     }
 
     fun isOwnPiece(chessPiece: ChessPiece): Boolean {
@@ -39,11 +42,11 @@ data class Player(
     }
 
     fun isChecked(): Boolean {
-        return opponentPieces().any { it.canMoveTo(king().position) }
+        return ownCheckable().isChecked()
     }
 
     fun isChecking(player: Player): Boolean {
-        return pieces().any { it.canMoveTo(player.king().position) }
+        return pieces().any { it.canMoveTo(player.ownCheckable().position) }
     }
 
     fun isCheckmated(): Boolean {
@@ -68,7 +71,7 @@ data class Player(
     }
 
     fun calculateMoves(): Map<ChessPiece, Set<Position>> {
-        val king = king()
+        val king = ownCheckable()
         val pieces = pieces().filter { !it.isPinned() }
         val checkingPieces = opponentPieces().filter { it.canMoveTo(king.position) }
 
