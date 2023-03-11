@@ -4,23 +4,16 @@ package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
+import java.util.*
 
-class InternalTable : PieceDataHandler {
+class InternalTable(size: Int) : PieceDataHandler {
 
     val pieces: List<MutableList<ChessPiece?>>
 
-    constructor(size: Int) {
+    init {
         this.pieces = List(size) {
             MutableList(size) { null }
         }
-    }
-
-    private constructor(pieces: List<MutableList<ChessPiece?>>) {
-        this.pieces = pieces
-    }
-
-    fun copy(): InternalTable {
-        return InternalTable(this.pieces)
     }
 
     override fun placePiece(chessPiece: ChessPiece?, x: Int, y: Int) {
