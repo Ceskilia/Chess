@@ -19,7 +19,7 @@ class Pawn(
     private val direction = board.directionOf(color)
 
     override fun calculateMoves(): Set<Position> {
-        return calculateExtendedMovesPinned(this)
+        return calculateExtendedMovesPinned()
     }
 
     override fun calculateMovesUnpinned(): Set<Position> {

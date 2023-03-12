@@ -4,16 +4,14 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.Blockable
 import de.ceskilia.chess.game.piece.ChessPiece
 
-fun calculateExtendedMovesPinned(piece: ChessPiece): Set<Position> {
-    return with(piece) {
-        val moves = calculateMovesUnpinned()
-        val pinningPiece = pinningPiece() ?: return moves
+fun ChessPiece.calculateExtendedMovesPinned(): Set<Position> {
+    val moves = calculateMovesUnpinned()
+    val pinningPiece = pinningPiece() ?: return moves
 
-        pinningPiece.calculatePinLine(this)!!
-            .plus(pinningPiece.position)
-            .filter { moves.contains(it) }
-            .toSet()
-    }
+    return pinningPiece.calculatePinLine(this)!!
+        .plus(pinningPiece.position)
+        .filter { moves.contains(it) }
+        .toSet()
 }
 
 fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {

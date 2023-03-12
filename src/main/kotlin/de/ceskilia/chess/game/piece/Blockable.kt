@@ -7,7 +7,7 @@ import de.ceskilia.chess.util.calculateExtendedMovesPinned
 interface Blockable : ChessPiece {
 
     override fun calculateMoves(): Set<Position> {
-        return calculateExtendedMovesPinned(this)
+        return calculateExtendedMovesPinned()
     }
 
     override fun calculateCoveringMoves(): Set<Position> {
