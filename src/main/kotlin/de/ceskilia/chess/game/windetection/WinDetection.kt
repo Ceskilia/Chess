@@ -73,20 +73,18 @@ class WinDetection(val game: ChessGame) {
 
         val history = game.history
 
-        // there need to be at least 9 elements for threefold repetition/50 moves draw
-        if (history.moves.size < 9) {
+        // there need to be at least 10 elements for threefold repetition/50 moves draw
+        if (history.moves.size < 10) {
             return null
         }
 
         // threefold repetition
-        // take last 9 elements (4 from the one side | 5 from the other ("ababa" = 3fold)) TODO ("abcabcabc" is also 3fold)
-        val repetitionMoves = history.lastMoves(9)
-            .groupBy { it.chessPiece.color }
-            .values
-            .map { it.distinct() }
+        val tableStatesOccurrences = game.history.encodedTableStates.map { state ->
+            game.history.encodedTableStates.count { it == state }
+        }.distinct()
 
-        // when there are only 2 distinct moves, they are going back and forth
-        if (repetitionMoves.all { it.size == 2 }) {
+        // when there are 3 or more positions that are the same -> its three folded
+        if (tableStatesOccurrences.any { it >= 3 }) {
             return Draw.Type.THREEFOLD_REPETITION
         }
 

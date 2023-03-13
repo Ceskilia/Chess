@@ -9,6 +9,7 @@ import kotlin.math.ceil
 class GameHistory {
 
     val moves: List<Move> = mutableListOf()
+    val encodedTableStates: List<Long> = mutableListOf()
 
     fun capturedPieces(): List<ChessPiece> {
         return moves.filter(Move::isCapture).map { it.capturedPiece!! }

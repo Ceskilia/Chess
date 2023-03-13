@@ -61,6 +61,7 @@ abstract class ChessGame {
 
         val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
         (history.moves as MutableList).add(move)
+        (history.encodedTableStates as MutableList).add(board.encodeCurrentState())
         shuffleTurn()
 
         // if check, check if mate

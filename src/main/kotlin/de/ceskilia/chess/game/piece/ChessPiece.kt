@@ -19,6 +19,18 @@ interface ChessPiece : Movable {
         return this
     }
 
+    // find other solution: this hash codes are not made for uniqueness
+    fun encodeState(): Long {
+        var result = board.hashCode().toLong()
+
+        result *= 31 * position.x // coordinates need to have different impact
+        result *= 43 * position.y // elso P(2, 3) would be the same as P(3, 2)
+        result = 31 * result + color.hashCode()
+        result = 31 * result + type.hashCode()
+
+        return result
+    }
+
     fun isAlly(other: ChessPiece): Boolean {
         return this.color == other.color
     }

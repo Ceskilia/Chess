@@ -78,6 +78,10 @@ abstract class Chessboard(
         }
     }
 
+    fun encodeCurrentState(): Long {
+        return pieces().sumOf(ChessPiece::encodeState)
+    }
+
     fun queueMoveAction(
         piece: ChessPiece,
         position: Position,
