@@ -2,7 +2,6 @@
 
 package de.ceskilia.chess.game.board
 
-import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.piece.ChessPiece
 import java.util.*
 
@@ -18,10 +17,6 @@ class InternalTable(size: Int) : PieceDataHandler {
 
     override fun placePiece(chessPiece: ChessPiece?, x: Int, y: Int) {
         pieces[y][x] = chessPiece
-    }
-
-    override fun removePieceAt(position: Position) {
-        pieces[position.y][position.x] = null
     }
 
     override fun pieces(color: ChessPiece.Color?): List<ChessPiece> {

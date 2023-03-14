@@ -23,6 +23,8 @@ interface PieceDataWriter {
         placePiece(piece, position)
     }
 
-    fun removePieceAt(position: Position)
+    fun removePieceAt(position: Position) {
+        placePiece(null, position)
+    }
 
 }
