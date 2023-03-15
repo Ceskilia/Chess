@@ -38,7 +38,7 @@ data class Player(
     }
 
     fun isStalemated(): Boolean {
-        return isChecked() && !hasMoves()
+        return !hasMoves() && !isChecked()
     }
 
     fun isChecked(): Boolean {
@@ -50,7 +50,7 @@ data class Player(
     }
 
     fun isCheckmated(): Boolean {
-        return isChecked() && !hasMoves()
+        return !hasMoves() && isChecked()
     }
 
     fun isCheckmating(player: Player): Boolean {
@@ -72,7 +72,6 @@ data class Player(
 
     fun calculateMoves(): Map<ChessPiece, Set<Position>> {
         val king = ownCheckable()
-        val pieces = pieces().filter { !it.isPinned() }
         val checkingPieces = opponentPieces().filter { it.canMoveTo(king.position) }
 
         if (checkingPieces.isNotEmpty()) {
@@ -85,7 +84,7 @@ data class Player(
             if (checkingPieces.size == 1) {
                 val checkingPiece = checkingPieces.first()
 
-                pieces.filter { it != king }.forEach {
+                pieces().filter { !it.isPinned() }.filter { it != king }.forEach {
 
                     // check if piece can take
                     if (it.canMoveTo(checkingPiece.position)) {
