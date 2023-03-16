@@ -40,8 +40,8 @@ interface PieceDataReader {
     }
 
     fun isOpponentAt(x: Int, y: Int, piece: ChessPiece): Boolean {
-        val checkingPiece = pieceAt(x, y) ?: return false
-        return checkingPiece.isOpponent(piece)
+        val other = pieceAt(x, y) ?: return false
+        return other.isOpponent(piece)
     }
 
     fun isOpponentAt(position: Position, piece: ChessPiece): Boolean {
