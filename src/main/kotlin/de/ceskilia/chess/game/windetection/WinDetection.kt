@@ -52,8 +52,7 @@ class WinDetection(val game: ChessGame) {
             4 -> run {
 
                 // filter only bishops
-                val bishops = pieces.filter { it.type != ChessPiece.Type.KING }
-                    .filterIsInstance<Bishop>()
+                val bishops = pieces.filterIsInstance<Bishop>()
 
                 // the last remaining pieces must be bishops
                 if (bishops.size != 2) {
