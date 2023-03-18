@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+ @file:Suppress("MemberVisibilityCanBePrivate")
 
 package de.ceskilia.chess.game.board
 
@@ -49,9 +49,10 @@ abstract class Chessboard(
             .filterIsInstance<Checkable>()
             .any(Checkable::isChecked)
 
-        if (piece is Promotable && piece.canPromote()) {
-            placePiece(piece.promote(), piece.position)
-        }
+        pieces(piece.color)
+            .filterIsInstance<Promotable>()
+            .filter(Promotable::canPromote)
+            .forEach { placePiece(it.promote(), it.position) }
 
         return Move(piece, startPosition, endPosition, check, endPiece)
     }
