@@ -30,10 +30,9 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
 
         if (piece.type == ChessPiece.Type.KING) {
             moves.add(piece.position)
-            return@calculateMoves true
         }
 
-        moves.any { board.isPieceAt(it) }
+        true
     }
 }
 
