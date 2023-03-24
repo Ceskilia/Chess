@@ -14,21 +14,16 @@ import de.ceskilia.chess.game.windetection.WinDetection
 
 abstract class ChessGame {
 
-    abstract val players: List<Player>
     abstract val board: Chessboard
+    abstract val players: List<Player>
+    abstract var currentTurn: Player
+        protected set
 
     val history = GameHistory()
     var result: GameResult<*>? = null
         private set
-    lateinit var currentTurn: Player
-        protected set
 
     protected val winDetection by lazy { WinDetection(this) }
-
-    fun setup() {
-        this.currentTurn = players.first()
-        board.setup()
-    }
 
     fun finish(result: GameResult<*>) {
         if(this.result != null)
