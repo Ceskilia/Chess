@@ -24,7 +24,7 @@ class ChessBoardTest {
     @Test
     fun can_en_passant_white() {
         with(game) {
-            setup()
+            board.setup()
             assertAll(
                 Executable { assertSuccess(move(Position.of(0, 6), Position.of(0, 4))) },
                 Executable { assertSuccess(move(Position.of(7, 1), Position.of(7, 2))) },
@@ -39,7 +39,7 @@ class ChessBoardTest {
     @Test
     fun can_en_passant_black() {
         with(game) {
-            setup()
+            board.setup()
             assertAll(
                 Executable { assertSuccess(move(Position.of(7, 6), Position.of(7, 5))) },
                 Executable { assertSuccess(move(Position.of(0, 1), Position.of(0, 3))) },
