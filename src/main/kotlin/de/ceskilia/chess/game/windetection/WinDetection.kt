@@ -10,7 +10,7 @@ import de.ceskilia.chess.game.result.Draw
 
 class WinDetection(val game: ChessGame) {
 
-    fun isWon(): Player? {
+    fun checkWinner(): Player? {
 
         game.players.forEach {
             it.opponents().forEach { opponent ->
