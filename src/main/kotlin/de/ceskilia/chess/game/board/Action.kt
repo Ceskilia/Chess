@@ -5,7 +5,8 @@ import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Action(
     val position: Position,
-    val action: (Position) -> Result
+    val result: Result,
+    val action: (Position) -> Unit
 ) {
 
     data class Result(val cancel: Boolean = false, val capturedPiece: ChessPiece? = null) {

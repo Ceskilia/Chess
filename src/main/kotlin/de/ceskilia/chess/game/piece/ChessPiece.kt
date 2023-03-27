@@ -15,8 +15,8 @@ interface ChessPiece : Movable {
         return board.opponentPieces(color).any { it.isCovering(this) }
     }
 
-    fun Position.whenOccupied(action: (Position) -> Action.Result): Position {
-        board.queueMoveAction(this@ChessPiece, this, action)
+    fun Position.whenOccupied(result: Action.Result = Action.Result.DEFAULT, action: (Position) -> Unit): Position {
+        board.queueMoveAction(this@ChessPiece, this, result, action)
         return this
     }
 

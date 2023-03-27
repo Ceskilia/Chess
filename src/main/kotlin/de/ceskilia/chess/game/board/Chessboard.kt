@@ -86,12 +86,13 @@ abstract class Chessboard(
     fun queueMoveAction(
         piece: ChessPiece,
         position: Position,
-        action: (Position) -> Action.Result
+        result: Action.Result,
+        action: (Position) -> Unit
     ) {
         queuedMoveActions.compute(piece) { _, value ->
             val actions = value ?: mutableSetOf()
             if (actions.none { it.position == position })
-                actions.add(Action(position, action))
+                actions.add(Action(position, result, action))
             return@compute actions
         }
     }
@@ -101,7 +102,12 @@ abstract class Chessboard(
             ?.firstOrNull { it.position == endPosition }
         queuedMoveActions.remove(piece)
 
-        return actionMovingTo?.action?.invoke(endPosition) ?: Action.Result.DEFAULT
+        if (actionMovingTo == null) {
+            return Action.Result.DEFAULT
+        }
+
+        actionMovingTo.action.invoke(endPosition)
+        return actionMovingTo.result
     }
 
     override fun toString(): String {
