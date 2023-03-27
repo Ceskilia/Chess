@@ -1,5 +1,22 @@
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.ChessPiece
 
-internal data class Action(val position: Position, val cancel: Boolean, val action: (Position) -> Unit)
+data class Action(
+    val position: Position,
+    val action: (Position) -> Result
+) {
+
+    data class Result(val cancel: Boolean = false, val capturedPiece: ChessPiece? = null) {
+
+        companion object {
+
+            val DEFAULT: Result = Result()
+            val CANCEL: Result = Result(cancel = true)
+
+        }
+
+    }
+
+}
