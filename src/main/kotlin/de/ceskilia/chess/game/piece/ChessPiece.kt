@@ -1,6 +1,7 @@
 package de.ceskilia.chess.game.piece
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
 
 interface ChessPiece : Movable {
@@ -14,8 +15,8 @@ interface ChessPiece : Movable {
         return board.opponentPieces(color).any { it.isCovering(this) }
     }
 
-    fun Position.whenOccupied(cancel: Boolean = false, action: (Position) -> Unit): Position {
-        board.queueMoveAction(this@ChessPiece, this, cancel, action)
+    fun Position.whenOccupied(action: (Position) -> Action.Result): Position {
+        board.queueMoveAction(this@ChessPiece, this, action)
         return this
     }
 
@@ -23,8 +24,8 @@ interface ChessPiece : Movable {
     fun encodeState(): Long {
         var result = board.hashCode().toLong()
 
-        result *= 31 * position.x // coordinates need to have different impact
-        result *= 43 * position.y // elso P(2, 3) would be the same as P(3, 2)
+        result *= 31 * position.x // coordinates need to have different impact [ P(2, 3) would be the same as P(3, 2) ]
+        result *= 43 * position.y
         result = 31 * result + color.hashCode()
         result = 31 * result + type.hashCode()
 

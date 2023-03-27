@@ -1,4 +1,4 @@
- @file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate")
 
 package de.ceskilia.chess.game.board
 
@@ -28,7 +28,7 @@ abstract class Chessboard(
     }
 
     abstract val registeredCreatables: List<Creatable>
-    
+
     private val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Action>>()
 
     open fun move(piece: ChessPiece, endPosition: Position): Move? {
@@ -38,10 +38,10 @@ abstract class Chessboard(
         }
 
         val startPosition = piece.position
-        val endPiece = pieceAt(endPosition)
-        val cancelled = evaluateQueuedAction(piece, endPosition)
+        val (cancel, capturedPiece) = evaluateQueuedAction(piece, endPosition)
+        val endPiece = capturedPiece ?: pieceAt(endPosition)
 
-        if (!cancelled) {
+        if (!cancel) {
             moveUnchecked(piece, endPosition) // this or promote so PAWNS don't get to last rank
         }
 
@@ -86,28 +86,22 @@ abstract class Chessboard(
     fun queueMoveAction(
         piece: ChessPiece,
         position: Position,
-        cancel: Boolean,
-        action: (Position) -> Unit
+        action: (Position) -> Action.Result
     ) {
         queuedMoveActions.compute(piece) { _, value ->
             val actions = value ?: mutableSetOf()
             if (actions.none { it.position == position })
-                actions.add(Action(position, cancel, action))
+                actions.add(Action(position, action))
             return@compute actions
         }
     }
 
-    private fun evaluateQueuedAction(piece: ChessPiece, endPosition: Position): Boolean {
+    private fun evaluateQueuedAction(piece: ChessPiece, endPosition: Position): Action.Result {
         val actionMovingTo = queuedMoveActions[piece]
             ?.firstOrNull { it.position == endPosition }
         queuedMoveActions.remove(piece)
 
-        if(actionMovingTo == null) {
-            return false
-        }
-
-        actionMovingTo.action.invoke(endPosition)
-        return actionMovingTo.cancel
+        return actionMovingTo?.action?.invoke(endPosition) ?: Action.Result.DEFAULT
     }
 
     override fun toString(): String {
