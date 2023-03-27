@@ -3,6 +3,7 @@
 package de.ceskilia.chess.game.piece.impl
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
@@ -104,9 +105,10 @@ class Pawn(
                 return null
             }
 
-            return position.copyAdding(xDifference, direction).whenOccupied {
-                board.removePieceAt(lastPosition)
-            }
+            return position.copyAdding(xDifference, direction)
+                .whenOccupied(result = Action.Result(capturedPiece = lastChessPiece)) {
+                    board.removePieceAt(lastPosition)
+                }
         }
 
         return null

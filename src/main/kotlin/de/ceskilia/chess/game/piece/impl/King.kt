@@ -1,6 +1,7 @@
 package de.ceskilia.chess.game.piece.impl
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.Checkable
 import de.ceskilia.chess.game.piece.ChessPiece
@@ -56,6 +57,7 @@ class King(
     private fun checkCastleDirection(xOperation: Operation): Set<Position> {
         val line = calculateCoveringArithmeticMoves(xOperation)
             .mapNotNull { board.pieceAt(it) }
+            .filter { it.color == this.color }
             .filter { it.type == ChessPiece.Type.ROOK }
 
         if (line.size != 1) {
@@ -77,7 +79,7 @@ class King(
             return emptySet()
         }
 
-        val rookMove = rook.position.whenOccupied(true) {
+        val rookMove = rook.position.whenOccupied(result = Action.Result.CANCEL) {
             board.moveUnchecked(rook, newRookPosition)
             board.moveUnchecked(this, endPosition)
         }
