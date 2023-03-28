@@ -27,10 +27,8 @@ class WinDetection(val game: ChessGame) {
         val pieces = game.board.pieces()
 
         // stalemate
-        for (player in game.players) {
-            if (player.isStalemated()) {
-                return Draw.Type.STALEMATE
-            }
+        if (game.currentTurn.isStalemated()) {
+            return Draw.Type.STALEMATE
         }
 
         // insufficient material
