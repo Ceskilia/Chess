@@ -9,11 +9,12 @@ import de.ceskilia.chess.game.result.MoveResult
 
 class TextChessGame : ChessGame() {
 
-    override val players = requestPlayers()
     override val board = DefaultChessboard(this)
+    override val players = requestPlayers()
+    override var currentTurn = players.first()
 
     init {
-        setup()
+        board.setup()
     }
 
     override fun start() {
