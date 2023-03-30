@@ -15,6 +15,10 @@ class GameHistory {
         return moves.filter(Move::isCapture).map { it.capturedPiece!! }
     }
 
+    fun ChessPiece.isCaptured(): Boolean {
+        return moves.any { it.capturedPiece == this }
+    }
+
     fun movesOf(piece: ChessPiece): List<Move> {
         return moves.filter { it.chessPiece == piece }
     }
