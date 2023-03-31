@@ -61,13 +61,13 @@ abstract class ChessGame {
 
         // if check, check if mate
         if (move.isCheck) {
-            val winningPlayer = winDetection.isWon()
+            val winningPlayer = winDetection.checkWinner()
 
             if(winningPlayer != null) {
                 finish(Win(winningPlayer))
+                return MoveResult.SUCCESS
             }
 
-            return MoveResult.SUCCESS
         }
 
         // always check for a draw
