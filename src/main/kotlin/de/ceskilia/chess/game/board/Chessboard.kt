@@ -111,32 +111,32 @@ abstract class Chessboard(
     }
 
     override fun toString(): String {
-        val builder = StringBuilder()
+        return buildString {
 
-        for (row in 0 until size) {
-            builder.append("  ")
-                .append("+---".repeat(size) + '+')
-                .append("\n")
-                .append("${row + 1} ")
+            for (row in 0 until size) {
+                append("  ")
+                append("+---".repeat(size) + '+')
+                append("\n")
+                append("${row + 1} ")
 
-            for (column in 0 until size) {
-                builder.append("| ${pieceAt(column, row)?.type?.notation ?: " "} ")
+                for (column in 0 until size) {
+                    append("| ${pieceAt(column, row)?.type?.notation ?: " "} ")
+                }
+
+                append("|")
+                append("\n")
             }
 
-            builder.append("|")
-                .append("\n")
+            append("  ")
+            append("+---".repeat(size) + '+')
+            append("\n")
+            append("  ")
+
+            for (column in 0 until size) {
+                append(" ${Position.coordinateToLetter(column)}  ")
+            }
+
         }
-
-        builder.append("  ")
-            .append("+---".repeat(size) + '+')
-            .append("\n")
-            .append("  ")
-
-        for (column in 0 until size) {
-            builder.append(" ${Position.coordinateToLetter(column)}  ")
-        }
-
-        return builder.toString()
     }
 
     abstract fun directionOf(color: ChessPiece.Color): Int
