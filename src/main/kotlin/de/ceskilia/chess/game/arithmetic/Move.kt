@@ -4,11 +4,13 @@ import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Move(
     val chessPiece: ChessPiece,
+    val capturedPiece: ChessPiece? = null,
     val startPosition: Position,
     val endPosition: Position,
     val isCheck: Boolean,
-    val capturedPiece: ChessPiece? = null
 ) {
+
+    val isCapture: Boolean = capturedPiece != null
 
     companion object {
 
@@ -17,12 +19,10 @@ data class Move(
 
     }
 
-    fun isCapture(): Boolean = capturedPiece != null
-
     override fun toString(): String {
         // (if PAWN: use column/y, if same pieces can make same move insert ???)
         return chessPiece.type.notation.toString() +
-                (if (isCapture()) CAPTURE_NOTATION else "") +
+                (if (isCapture) CAPTURE_NOTATION else "") +
                 endPosition.toString() +
                 (if (isCheck) CHECK_NOTATION else "")
     }

@@ -54,7 +54,7 @@ abstract class Chessboard(
             .filter(Promotable::canPromote)
             .forEach { placePiece(it.promote(), it.position) }
 
-        return Move(piece, startPosition, endPosition, check, endPiece)
+        return Move(piece, endPiece, startPosition, endPosition, check)
     }
 
     open fun move(startPosition: Position, endPosition: Position): Move? {
