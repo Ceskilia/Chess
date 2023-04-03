@@ -48,7 +48,7 @@ class ChessGameTest {
                 Executable { assertSuccess(move(Position.of(3, 7), Position.of(7, 3))) }
             )
 
-            assertTrue(game.history.lastMove()!!.isCheck)
+            assertTrue(history.lastMove()!!.isCheck)
         }
     }
 
