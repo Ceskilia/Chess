@@ -1,6 +1,7 @@
-package de.ceskilia.chess.game.piece
+package de.ceskilia.chess.game.piece.standardtype
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.piece.Checkable
 import de.ceskilia.chess.util.Operation
 import de.ceskilia.chess.util.checkCastleDirection
 

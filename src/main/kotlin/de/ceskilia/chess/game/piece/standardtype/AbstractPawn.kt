@@ -1,7 +1,8 @@
-package de.ceskilia.chess.game.piece
+package de.ceskilia.chess.game.piece.standardtype
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Action
+import de.ceskilia.chess.game.piece.Promotable
 import kotlin.math.abs
 
 interface AbstractPawn : Promotable {
