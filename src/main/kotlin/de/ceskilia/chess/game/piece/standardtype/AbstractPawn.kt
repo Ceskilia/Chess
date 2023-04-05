@@ -26,9 +26,9 @@ interface AbstractPawn : Promotable {
 
         // check for en passant
         val lastPosition = lastMove.endPosition
-        val possibleEnPassant = lastChessPiece is AbstractPawn
-                && history.movesOf(lastChessPiece).size == 1
-                && position.y == lastPosition.y
+        val possibleEnPassant = (lastChessPiece is AbstractPawn)
+                && (history.movesOf(lastChessPiece).size == 1)
+                && (position.y == lastPosition.y)
 
         if (possibleEnPassant) {
 
