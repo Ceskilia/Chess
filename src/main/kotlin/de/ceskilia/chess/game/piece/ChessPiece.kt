@@ -3,13 +3,14 @@ package de.ceskilia.chess.game.piece
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
+import de.ceskilia.chess.game.piece.standardtype.AbstractKing
 
 interface ChessPiece : Movable {
 
     val board: Chessboard
-    var position: Position
+    var position: Position // todo: rearrange
     val color: Color
-    val type: Type
+    val notation: Char
 
     fun Position.isCoveredByOpponent(): Boolean {
         return board.opponentPieces(color).any { it.isCovering(this) }
@@ -27,7 +28,7 @@ interface ChessPiece : Movable {
         result *= 31 * position.x // coordinates need to have different impact [ P(2, 3) would be the same as P(3, 2) ]
         result *= 43 * position.y
         result = 31 * result + color.hashCode()
-        result = 31 * result + type.hashCode()
+        result = 31 * result + notation.hashCode()
 
         return result
     }
@@ -50,10 +51,12 @@ interface ChessPiece : Movable {
             .firstOrNull { it.isPinning(this) }
     }
 
-    fun calculateBlockingMoves(checkingPiece: Blockable, king: ChessPiece? = null): Set<Position> {
+    fun calculateBlockingMoves(checkingPiece: Blockable, king: AbstractKing? = null): Set<Position> {
         val moves = mutableSetOf<Position>()
         val possibleMoves = calculateMoves()
-        val ownKing = king ?: board.pieces(color).first { it.type == Type.KING }
+        val ownKing = king ?: board.pieces(color)
+            .filterIsInstance<AbstractKing>()
+            .first()
 
         check(isAlly(ownKing)) { "The provided king is not an ally. Expected: $color, Provided: ${ownKing.color}." }
 
@@ -94,19 +97,6 @@ interface ChessPiece : Movable {
 
         BLACK,
         WHITE
-
-    }
-
-    enum class Type(val notation: Char, val value: Int) {
-
-        PAWN('P', 1),
-        KNIGHT('N', 3),
-        BISHOP('B', 3),
-        ROOK('R', 5),
-        QUEEN('Q', 9),
-        KING('K', -1);
-
-        // get image from color
 
     }
 
