@@ -23,7 +23,7 @@ class TextChessGame : ChessGame() {
             println(board)
             println()
             println("Enter new position coordinates:")
-            println(currentTurn.calculateMoves().map { it.key.type.notation + "-" + it.value })
+            println(currentTurn.calculateMoves().map { it.key.notation + "-" + it.value })
 
             val (start, end) = readln().chunked(2).map(Position.Companion::fromNotation)
 

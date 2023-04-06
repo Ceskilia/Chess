@@ -6,8 +6,7 @@ import de.ceskilia.chess.game.piece.ChessPiece
 
 abstract class DefaultChessPiece(
     override val board: Chessboard,
-    override val color: ChessPiece.Color,
-    override val type: ChessPiece.Type
+    override val color: ChessPiece.Color
 ) : ChessPiece {
 
     companion object {

@@ -4,13 +4,17 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
+import de.ceskilia.chess.game.piece.annotation.Valuable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.isEven
 
+@Valuable(3u)
 class Knight(
     board: Chessboard,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, color, ChessPiece.Type.KNIGHT), Creatable {
+) : DefaultChessPiece(board, color), Creatable {
+
+    override val notation: Char = 'N'
 
     override fun calculateCoveringMoves(): Set<Position> {
         val moves = mutableSetOf<Position>()

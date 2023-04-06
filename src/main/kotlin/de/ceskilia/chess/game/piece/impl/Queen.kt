@@ -5,13 +5,17 @@ import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.piece.Blockable
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
+import de.ceskilia.chess.game.piece.annotation.Valuable
 import de.ceskilia.chess.util.Operation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
+@Valuable(9u)
 class Queen(
     board: Chessboard,
     color: ChessPiece.Color
-) : DefaultChessPiece(board, color, ChessPiece.Type.QUEEN), Blockable, Creatable {
+) : DefaultChessPiece(board, color), Blockable, Creatable {
+
+    override val notation: Char = 'Q'
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(

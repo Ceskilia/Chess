@@ -2,7 +2,7 @@ package de.ceskilia.chess.game.windetection
 
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.game.piece.impl.Bishop
 import de.ceskilia.chess.game.piece.impl.Knight
 import de.ceskilia.chess.game.player.Player
@@ -95,7 +95,7 @@ class WinDetection(val game: ChessGame) {
         val lastFiftyMoves = history.lastMoves(50)
 
         // no pawn move and no capture
-        if (lastFiftyMoves.none { it.chessPiece.type == ChessPiece.Type.PAWN }
+        if (lastFiftyMoves.none { it.chessPiece is AbstractPawn }
             && lastFiftyMoves.none(Move::isCapture)) {
             return Draw.Type.FIFTY_MOVES
         }

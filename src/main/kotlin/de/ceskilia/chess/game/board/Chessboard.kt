@@ -5,10 +5,8 @@ package de.ceskilia.chess.game.board
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.Checkable
-import de.ceskilia.chess.game.piece.ChessPiece
-import de.ceskilia.chess.game.piece.Creatable
-import de.ceskilia.chess.game.piece.Promotable
+import de.ceskilia.chess.game.piece.*
+import de.ceskilia.chess.game.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(
@@ -120,7 +118,7 @@ abstract class Chessboard(
                 append("${row + 1} ")
 
                 for (column in 0 until size) {
-                    append("| ${pieceAt(column, row)?.type?.notation ?: " "} ")
+                    append("| ${pieceAt(column, row)?.notation ?: " "} ")
                 }
 
                 append("|")
@@ -139,7 +137,7 @@ abstract class Chessboard(
         }
     }
 
-    abstract fun directionOf(color: ChessPiece.Color): Int
+    abstract fun directionOf(pawn: AbstractPawn): Int
 
     abstract fun setup()
 
