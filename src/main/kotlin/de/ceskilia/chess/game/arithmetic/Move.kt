@@ -1,5 +1,6 @@
 package de.ceskilia.chess.game.arithmetic
 
+import de.ceskilia.chess.game.piece.standardtype.AbstractKing
 import de.ceskilia.chess.game.piece.ChessPiece
 
 data class Move(
@@ -12,6 +13,10 @@ data class Move(
 
     val isCapture: Boolean = capturedPiece != null
 
+    init {
+        check(capturedPiece !is AbstractKing) { "Captured piece cannot be a king! ($this)" }
+    }
+
     companion object {
 
         const val CAPTURE_NOTATION = 'x'
@@ -21,7 +26,7 @@ data class Move(
 
     override fun toString(): String {
         // (if PAWN: use column/y, if same pieces can make same move insert ???)
-        return chessPiece.type.notation.toString() +
+        return chessPiece.notation.toString() +
                 (if (isCapture) CAPTURE_NOTATION else "") +
                 endPosition.toString() +
                 (if (isCheck) CHECK_NOTATION else "")
