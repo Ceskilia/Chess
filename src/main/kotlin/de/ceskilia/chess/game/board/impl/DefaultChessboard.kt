@@ -3,6 +3,7 @@ package de.ceskilia.chess.game.board.impl
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
+import de.ceskilia.chess.game.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.game.piece.ChessPiece
 import de.ceskilia.chess.game.piece.Creatable
 import de.ceskilia.chess.game.piece.impl.*
@@ -11,7 +12,11 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 
     override val registeredCreatables: List<Creatable> = registerCreatables()
 
-    override fun directionOf(color: ChessPiece.Color): Int {
+    override fun directionOf(pawn: AbstractPawn): Int {
+        return directionOf(pawn.color)
+    }
+
+    private fun directionOf(color: ChessPiece.Color): Int {
         return when (color) {
             ChessPiece.Color.WHITE -> -1
             ChessPiece.Color.BLACK -> 1
@@ -28,22 +33,23 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
     override fun setup() {
 
         for (color in ChessPiece.Color.values()) {
-            val rank = lastRankOf(color)
-            placePieces(
-                King(this, color) to Position.of(4, rank),
-                Queen(this, color) to Position.of(3, rank),
-                Knight(this, color) to Position.of(1, rank),
-                Knight(this, color) to Position.of(6, rank),
-                Bishop(this, color) to Position.of(2, rank),
-                Bishop(this, color) to Position.of(5, rank),
-                Rook(this, color) to Position.of(0, rank),
-                Rook(this, color) to Position.of(7, rank)
-            )
-        }
+            val lastRank = lastRankOf(color)
 
-        for (x in 0 until size) {
-            placePiece(Pawn(this, ChessPiece.Color.BLACK), x, 1)
-            placePiece(Pawn(this, ChessPiece.Color.WHITE), x, 6)
+            placePieces(
+                King(this, color) to Position.of(4, lastRank),
+                Queen(this, color) to Position.of(3, lastRank),
+                Knight(this, color) to Position.of(1, lastRank),
+                Knight(this, color) to Position.of(6, lastRank),
+                Bishop(this, color) to Position.of(2, lastRank),
+                Bishop(this, color) to Position.of(5, lastRank),
+                Rook(this, color) to Position.of(0, lastRank),
+                Rook(this, color) to Position.of(7, lastRank)
+            )
+
+            for (x in 0 until size) {
+                placePiece(Pawn(this, color), x, lastRank + directionOf(color))
+            }
+
         }
 
         syncPieces()
