@@ -1,8 +1,46 @@
 package de.ceskilia.chess.util
 
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.Blockable
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.game.board.Action
+import de.ceskilia.chess.game.piece.*
+import de.ceskilia.chess.game.piece.standardtype.AbstractKing
+import de.ceskilia.chess.game.piece.annotation.Interchangeable
+
+fun AbstractKing.checkCastleDirection(xOperation: Operation): Set<Position> {
+    val line = calculateCoveringArithmeticMoves(xOperation)
+        .mapNotNull { board.pieceAt(it) }
+        .filter { it.color == this.color }
+        .filter { it.javaClass.isAnnotationPresent(Interchangeable::class.java) }
+
+    if (line.size != 1) {
+        return emptySet()
+    }
+
+    val interchangeable = line.first()
+
+    if (interchangeable.hasMoved()) {
+        return emptySet()
+    }
+
+    val direction = xOperation.operand
+    val newInterchangeablePosition = this.position.copyAdding(x = direction)
+    val endPosition = this.position.copyAdding(x = 2 * direction)
+    val blocked = newInterchangeablePosition.isCoveredByOpponent() || endPosition.isCoveredByOpponent()
+
+    if (blocked) {
+        return emptySet()
+    }
+
+    val rookMove = interchangeable.position.whenOccupied(result = Action.Result.CANCEL) {
+        board.moveUnchecked(interchangeable, newInterchangeablePosition)
+        board.moveUnchecked(this, endPosition)
+    }
+    val twoSteps = endPosition.whenOccupied {
+        board.moveUnchecked(interchangeable, newInterchangeablePosition)
+    }
+
+    return setOf(rookMove, twoSteps)
+}
 
 fun ChessPiece.calculateExtendedMovesPinned(): Set<Position> {
     val moves = calculateMovesUnpinned()
@@ -28,7 +66,7 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
             return@calculateMoves true
         }
 
-        if (piece.type == ChessPiece.Type.KING) {
+        if (piece is AbstractKing) {
             moves.add(piece.position)
         }
 
@@ -52,7 +90,7 @@ fun ChessPiece.calculateCoveringArithmeticMoves(
             return@calculateMoves true
         }
 
-        piece.type != ChessPiece.Type.KING
+        piece !is AbstractKing
     }
 }
 
