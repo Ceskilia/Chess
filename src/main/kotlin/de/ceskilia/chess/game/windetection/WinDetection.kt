@@ -2,9 +2,9 @@ package de.ceskilia.chess.game.windetection
 
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
-import de.ceskilia.chess.game.piece.standardtype.AbstractPawn
-import de.ceskilia.chess.game.piece.impl.Bishop
-import de.ceskilia.chess.game.piece.impl.Knight
+import de.ceskilia.chess.piece.standardtype.AbstractPawn
+import de.ceskilia.chess.piece.impl.Bishop
+import de.ceskilia.chess.piece.impl.Knight
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
 

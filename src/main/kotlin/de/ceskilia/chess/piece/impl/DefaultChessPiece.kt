@@ -1,8 +1,8 @@
-package de.ceskilia.chess.game.piece.impl
+package de.ceskilia.chess.piece.impl
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.piece.ChessPiece
 
 abstract class DefaultChessPiece(
     override val board: Chessboard,

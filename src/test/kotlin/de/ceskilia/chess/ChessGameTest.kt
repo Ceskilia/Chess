@@ -2,7 +2,7 @@ package de.ceskilia.chess
 
 import de.ceskilia.chess.game.impl.TextChessGame
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.game.result.MoveResult
 import de.ceskilia.chess.game.result.Win
 import org.junit.jupiter.api.Assertions.assertAll

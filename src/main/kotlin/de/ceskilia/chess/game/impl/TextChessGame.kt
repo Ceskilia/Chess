@@ -3,7 +3,7 @@ package de.ceskilia.chess.game.impl
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.impl.DefaultChessboard
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.MoveResult
 

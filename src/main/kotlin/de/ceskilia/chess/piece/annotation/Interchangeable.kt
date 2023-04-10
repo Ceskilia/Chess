@@ -1,4 +1,4 @@
-package de.ceskilia.chess.game.piece.annotation
+package de.ceskilia.chess.piece.annotation
 
 @Target(AnnotationTarget.CLASS)
 annotation class Interchangeable

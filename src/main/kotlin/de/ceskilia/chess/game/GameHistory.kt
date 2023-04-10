@@ -3,7 +3,7 @@
 package de.ceskilia.chess.game
 
 import de.ceskilia.chess.game.arithmetic.Move
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.piece.ChessPiece
 import kotlin.math.ceil
 
 class GameHistory {

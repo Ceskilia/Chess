@@ -1,7 +1,7 @@
 package de.ceskilia.chess.game.arithmetic
 
-import de.ceskilia.chess.game.piece.standardtype.AbstractKing
-import de.ceskilia.chess.game.piece.ChessPiece
+import de.ceskilia.chess.piece.standardtype.AbstractKing
+import de.ceskilia.chess.piece.ChessPiece
 
 data class Move(
     val chessPiece: ChessPiece,

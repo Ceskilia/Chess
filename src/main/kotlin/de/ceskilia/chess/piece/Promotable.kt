@@ -1,4 +1,4 @@
-package de.ceskilia.chess.game.piece
+package de.ceskilia.chess.piece
 
 interface Promotable : ChessPiece {
 
