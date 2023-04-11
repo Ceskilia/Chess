@@ -46,7 +46,8 @@ data class Player(
     }
 
     fun isChecking(player: Player): Boolean {
-        return pieces().any { it.canMoveTo(player.ownKing().position) }
+        val king = player.ownKing()
+        return pieces().any { it.canMoveTo(king.position) }
     }
 
     fun isCheckmated(): Boolean {
