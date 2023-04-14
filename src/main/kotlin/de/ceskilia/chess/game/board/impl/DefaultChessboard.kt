@@ -3,11 +3,10 @@ package de.ceskilia.chess.game.board.impl
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
-import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.Creatable
-import de.ceskilia.chess.game.piece.impl.*
 import de.ceskilia.chess.piece.impl.*
+import de.ceskilia.chess.piece.standardtype.AbstractPawn
 
 class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 
