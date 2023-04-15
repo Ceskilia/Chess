@@ -8,9 +8,9 @@ import de.ceskilia.chess.piece.standardtype.AbstractKing
 interface ChessPiece : Movable {
 
     val board: Chessboard
-    var position: Position // todo: rearrange
     val color: Color
     val notation: Char
+    var position: Position
 
     fun Position.isCoveredByOpponent(): Boolean {
         return board.opponentPieces(color).any { it.isCovering(this) }
