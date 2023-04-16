@@ -1,9 +1,6 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.piece.ChessPiece
-import java.util.*
 
 class InternalTable(size: Int) : PieceDataHandler {
 
