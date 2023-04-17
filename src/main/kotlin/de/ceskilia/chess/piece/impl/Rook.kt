@@ -2,12 +2,11 @@ package de.ceskilia.chess.piece.impl
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
-import de.ceskilia.chess.game.piece.*
-import de.ceskilia.chess.piece.annotation.Interchangeable
-import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.piece.Blockable
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.Creatable
+import de.ceskilia.chess.piece.annotation.Interchangeable
+import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.util.Operation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
