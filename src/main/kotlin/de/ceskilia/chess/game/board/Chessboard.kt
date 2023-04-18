@@ -5,12 +5,11 @@ package de.ceskilia.chess.game.board
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.piece.*
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
-import de.ceskilia.chess.piece.Checkable
+import de.ceskilia.chess.piece.variations.Checkable
 import de.ceskilia.chess.piece.ChessPiece
-import de.ceskilia.chess.piece.Creatable
-import de.ceskilia.chess.piece.Promotable
+import de.ceskilia.chess.piece.variations.Creatable
+import de.ceskilia.chess.piece.variations.Promotable
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(

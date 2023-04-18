@@ -3,7 +3,7 @@ package de.ceskilia.chess.piece.impl
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.ChessPiece
-import de.ceskilia.chess.piece.Creatable
+import de.ceskilia.chess.piece.variations.Creatable
 import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.isEven

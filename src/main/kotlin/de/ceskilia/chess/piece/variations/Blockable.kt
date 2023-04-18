@@ -1,6 +1,7 @@
-package de.ceskilia.chess.piece
+package de.ceskilia.chess.piece.variations
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.util.addPinMoves
 import de.ceskilia.chess.util.calculateExtendedMovesPinned

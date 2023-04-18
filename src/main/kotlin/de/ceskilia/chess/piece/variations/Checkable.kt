@@ -1,4 +1,6 @@
-package de.ceskilia.chess.piece
+package de.ceskilia.chess.piece.variations
+
+import de.ceskilia.chess.piece.ChessPiece
 
 interface Checkable : ChessPiece {
 
