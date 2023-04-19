@@ -4,7 +4,7 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.standardtype.AbstractKing
-import de.ceskilia.chess.piece.variations.Blockable
+import de.ceskilia.chess.piece.variation.Blockable
 
 interface ChessPiece : Movable {
 

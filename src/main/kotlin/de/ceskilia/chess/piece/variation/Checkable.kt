@@ -1,4 +1,4 @@
-package de.ceskilia.chess.piece.variations
+package de.ceskilia.chess.piece.variation
 
 import de.ceskilia.chess.piece.ChessPiece
 

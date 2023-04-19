@@ -5,7 +5,7 @@ package de.ceskilia.chess.game.player
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.piece.variations.Blockable
+import de.ceskilia.chess.piece.variation.Blockable
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 
