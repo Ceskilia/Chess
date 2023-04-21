@@ -5,9 +5,9 @@ package de.ceskilia.chess.game.board
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.piece.variation.Checkable
-import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.piece.variation.Promotable
 import de.ceskilia.chess.util.notNegative

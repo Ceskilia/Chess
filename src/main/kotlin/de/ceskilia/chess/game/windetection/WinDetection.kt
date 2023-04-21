@@ -2,11 +2,11 @@ package de.ceskilia.chess.game.windetection
 
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
-import de.ceskilia.chess.piece.standardtype.AbstractPawn
-import de.ceskilia.chess.piece.impl.Bishop
-import de.ceskilia.chess.piece.impl.Knight
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
+import de.ceskilia.chess.piece.impl.Bishop
+import de.ceskilia.chess.piece.impl.Knight
+import de.ceskilia.chess.piece.standardtype.AbstractPawn
 
 class WinDetection(val game: ChessGame) {
 
@@ -14,7 +14,7 @@ class WinDetection(val game: ChessGame) {
 
         game.players.forEach {
             it.opponents().forEach { opponent ->
-                if(opponent.isCheckmating(it)) {
+                if (opponent.isCheckmating(it)) {
                     return opponent
                 }
             }

@@ -2,10 +2,10 @@ package de.ceskilia.chess.util
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Action
-import de.ceskilia.chess.piece.standardtype.AbstractKing
-import de.ceskilia.chess.piece.variation.Blockable
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.annotation.Interchangeable
+import de.ceskilia.chess.piece.standardtype.AbstractKing
+import de.ceskilia.chess.piece.variation.Blockable
 
 fun AbstractKing.checkCastleDirection(xOperation: Operation): Set<Position> {
     val line = calculateCoveringArithmeticMoves(xOperation)

@@ -26,7 +26,7 @@ abstract class ChessGame {
     protected val winDetection by lazy { WinDetection(this) }
 
     fun finish(result: GameResult<*>) {
-        if(this.result != null)
+        if (this.result != null)
             return
         this.result = result
     }
@@ -63,7 +63,7 @@ abstract class ChessGame {
         if (move.isCheck) {
             val winningPlayer = winDetection.checkWinner()
 
-            if(winningPlayer != null) {
+            if (winningPlayer != null) {
                 finish(Win(winningPlayer))
                 return MoveResult.SUCCESS
             }
@@ -73,7 +73,7 @@ abstract class ChessGame {
         // always check for a draw
         val drawType = winDetection.checkDraw()
 
-        if(drawType != null) {
+        if (drawType != null) {
             finish(Draw(drawType))
         }
 

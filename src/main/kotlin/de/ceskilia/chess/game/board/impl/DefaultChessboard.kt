@@ -4,9 +4,9 @@ import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.ChessPiece
-import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.piece.impl.*
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
+import de.ceskilia.chess.piece.variation.Creatable
 
 class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 

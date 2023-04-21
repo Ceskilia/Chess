@@ -3,9 +3,9 @@ package de.ceskilia.chess.game.impl
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.impl.DefaultChessboard
-import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.MoveResult
+import de.ceskilia.chess.piece.ChessPiece
 
 class TextChessGame : ChessGame() {
 
@@ -27,7 +27,7 @@ class TextChessGame : ChessGame() {
 
             val (start, end) = readln().chunked(2).map(Position.Companion::fromNotation)
 
-            when(move(start, end)) {
+            when (move(start, end)) {
                 MoveResult.INVALID_POSITION -> println("No Piece")
                 MoveResult.WRONG_COLOR -> println("Wrong color")
                 MoveResult.INVALID_MOVE -> println("Cant move there")
