@@ -76,8 +76,9 @@ class WinDetection(val game: ChessGame) {
         }
 
         // threefold repetition
-        val tableStatesOccurrences = game.history.encodedTableStates.map { state ->
-            game.history.encodedTableStates.count { it == state }
+        val encodedTableStates = history.encodedTableStates
+        val tableStatesOccurrences = encodedTableStates.map { state ->
+            encodedTableStates.count { it == state }
         }.distinct()
 
         // when there are 3 or more positions that are the same -> its three folded
