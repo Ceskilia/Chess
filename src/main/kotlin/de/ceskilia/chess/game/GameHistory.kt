@@ -11,12 +11,12 @@ class GameHistory {
     val moves: List<Move> = mutableListOf()
     val encodedTableStates: List<Long> = mutableListOf()
 
-    fun capturedPieces(): List<ChessPiece> {
-        return moves.filter(Move::isCapture).map { it.capturedPiece!! }
-    }
-
     fun ChessPiece.isCaptured(): Boolean {
         return moves.any { it.capturedPiece == this }
+    }
+
+    fun capturedPieces(): List<ChessPiece> {
+        return moves.filter(Move::isCapture).map { it.capturedPiece!! }
     }
 
     fun movesOf(piece: ChessPiece): List<Move> {
