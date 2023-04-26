@@ -26,21 +26,21 @@ fun AbstractKing.checkCastleDirection(xOperation: Operation): Set<Position> {
     val direction = xOperation.operand
     val newInterchangeablePosition = this.position.copyAdding(x = direction)
     val endPosition = this.position.copyAdding(x = 2 * direction)
-    val blocked = newInterchangeablePosition.isCoveredByOpponent() || endPosition.isCoveredByOpponent()
+    val isBlocked = newInterchangeablePosition.isCoveredByOpponent() || endPosition.isCoveredByOpponent()
 
-    if (blocked) {
+    if (isBlocked) {
         return emptySet()
     }
 
-    val rookMove = interchangeable.position.whenOccupied(result = Action.Result.CANCEL) {
+    val interchangeableMove = interchangeable.position.whenOccupied(result = Action.Result.CANCEL) {
         board.moveUnchecked(interchangeable, newInterchangeablePosition)
         board.moveUnchecked(this, endPosition)
     }
-    val twoSteps = endPosition.whenOccupied {
+    val kingMove = endPosition.whenOccupied {
         board.moveUnchecked(interchangeable, newInterchangeablePosition)
     }
 
-    return setOf(rookMove, twoSteps)
+    return setOf(interchangeableMove, kingMove)
 }
 
 fun ChessPiece.calculateExtendedMovesPinned(): Set<Position> {
