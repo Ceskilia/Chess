@@ -2,7 +2,7 @@ package de.ceskilia.chess.piece.standardtype
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.piece.variation.Checkable
-import de.ceskilia.chess.util.Operation
+import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.checkCastleDirection
 
 interface AbstractKing : Checkable {
@@ -26,7 +26,7 @@ interface AbstractKing : Checkable {
             return emptySet()
         }
 
-        return checkCastleDirection(Operation.INCREMENT) + checkCastleDirection(Operation.DECREMENT)
+        return checkCastleDirection(CoordinateOperation.INCREMENT) + checkCastleDirection(CoordinateOperation.DECREMENT)
     }
 
 }

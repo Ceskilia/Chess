@@ -7,7 +7,7 @@ import de.ceskilia.chess.piece.annotation.Interchangeable
 import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.piece.variation.Blockable
 import de.ceskilia.chess.piece.variation.Creatable
-import de.ceskilia.chess.util.Operation
+import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
 @Valuable(5u)
@@ -21,10 +21,10 @@ class Rook(
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
-            calculateCoveringArithmeticMoves(xOperation = Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(xOperation = Operation.INCREMENT),
-            calculateCoveringArithmeticMoves(yOperation = Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(yOperation = Operation.INCREMENT)
+            calculateCoveringArithmeticMoves(xOperation = CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(xOperation = CoordinateOperation.INCREMENT),
+            calculateCoveringArithmeticMoves(yOperation = CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(yOperation = CoordinateOperation.INCREMENT)
         )
     }
 

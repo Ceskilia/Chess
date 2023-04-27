@@ -6,7 +6,7 @@ import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.piece.variation.Blockable
 import de.ceskilia.chess.piece.variation.Creatable
-import de.ceskilia.chess.util.Operation
+import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
 @Valuable(9u)
@@ -19,14 +19,14 @@ class Queen(
 
     override fun calculateLines(): List<Set<Position>> {
         return listOf(
-            calculateCoveringArithmeticMoves(Operation.DECREMENT, Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(Operation.DECREMENT, Operation.INCREMENT),
-            calculateCoveringArithmeticMoves(Operation.INCREMENT, Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(Operation.INCREMENT, Operation.INCREMENT),
-            calculateCoveringArithmeticMoves(xOperation = Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(xOperation = Operation.INCREMENT),
-            calculateCoveringArithmeticMoves(yOperation = Operation.DECREMENT),
-            calculateCoveringArithmeticMoves(yOperation = Operation.INCREMENT)
+            calculateCoveringArithmeticMoves(CoordinateOperation.DECREMENT, CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(CoordinateOperation.DECREMENT, CoordinateOperation.INCREMENT),
+            calculateCoveringArithmeticMoves(CoordinateOperation.INCREMENT, CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(CoordinateOperation.INCREMENT, CoordinateOperation.INCREMENT),
+            calculateCoveringArithmeticMoves(xOperation = CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(xOperation = CoordinateOperation.INCREMENT),
+            calculateCoveringArithmeticMoves(yOperation = CoordinateOperation.DECREMENT),
+            calculateCoveringArithmeticMoves(yOperation = CoordinateOperation.INCREMENT)
         )
     }
 

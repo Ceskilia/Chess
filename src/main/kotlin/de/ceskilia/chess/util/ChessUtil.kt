@@ -7,7 +7,7 @@ import de.ceskilia.chess.piece.annotation.Interchangeable
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.variation.Blockable
 
-fun AbstractKing.checkCastleDirection(xOperation: Operation): Set<Position> {
+fun AbstractKing.checkCastleDirection(xOperation: CoordinateOperation): Set<Position> {
     val line = calculateCoveringArithmeticMoves(xOperation)
         .mapNotNull { board.pieceAt(it) }
         .filter { it.color == this.color }
@@ -60,8 +60,8 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
     return calculateMoves(
         startMoves = startMoves,
         startPosition = lastPosition,
-        xOperation = Operation.fromOperand(lastPosition.x - position.x),
-        yOperation = Operation.fromOperand(lastPosition.y - position.y)
+        xOperation = CoordinateOperation.fromOperand(lastPosition.x - position.x),
+        yOperation = CoordinateOperation.fromOperand(lastPosition.y - position.y)
     ) { piece, moves ->
         if (isAlly(piece)) {
             return@calculateMoves true
@@ -76,8 +76,8 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
 }
 
 fun ChessPiece.calculateCoveringArithmeticMoves(
-    xOperation: Operation? = null,
-    yOperation: Operation? = null
+    xOperation: CoordinateOperation? = null,
+    yOperation: CoordinateOperation? = null
 ): Set<Position> {
     return calculateMoves(
         startMoves = mutableSetOf(),
@@ -98,8 +98,8 @@ fun ChessPiece.calculateCoveringArithmeticMoves(
 private fun ChessPiece.calculateMoves(
     startMoves: MutableSet<Position>,
     startPosition: Position,
-    xOperation: Operation? = null,
-    yOperation: Operation? = null,
+    xOperation: CoordinateOperation? = null,
+    yOperation: CoordinateOperation? = null,
     condition: (ChessPiece, MutableSet<Position>) -> Boolean
 ): Set<Position> {
     var x = startPosition.x
@@ -129,23 +129,4 @@ private fun ChessPiece.calculateMoves(
     }
 
     return startMoves
-}
-
-enum class Operation(val operand: Int) {
-
-    INCREMENT(1),
-    DECREMENT(-1);
-
-    companion object {
-
-        fun fromOperand(delta: Int): Operation? {
-            return when {
-                delta > 0 -> INCREMENT
-                delta < 0 -> DECREMENT
-                else -> null
-            }
-        }
-
-    }
-
 }
