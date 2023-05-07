@@ -76,8 +76,8 @@ fun Blockable.addPinMoves(line: Set<Position>): Set<Position> {
 }
 
 fun ChessPiece.calculateCoveringArithmeticMoves(
-    xOperation: CoordinateOperation? = null,
-    yOperation: CoordinateOperation? = null
+    xOperation: CoordinateOperation = CoordinateOperation.CONSTANT,
+    yOperation: CoordinateOperation = CoordinateOperation.CONSTANT
 ): Set<Position> {
     return calculateMoves(
         startMoves = mutableSetOf(),
@@ -98,22 +98,16 @@ fun ChessPiece.calculateCoveringArithmeticMoves(
 private fun ChessPiece.calculateMoves(
     startMoves: MutableSet<Position>,
     startPosition: Position,
-    xOperation: CoordinateOperation? = null,
-    yOperation: CoordinateOperation? = null,
+    xOperation: CoordinateOperation = CoordinateOperation.CONSTANT,
+    yOperation: CoordinateOperation = CoordinateOperation.CONSTANT,
     condition: (ChessPiece, MutableSet<Position>) -> Boolean
 ): Set<Position> {
     var x = startPosition.x
     var y = startPosition.y
 
     while (true) {
-
-        if (xOperation != null) {
-            x += xOperation.operand
-        }
-
-        if (yOperation != null) {
-            y += yOperation.operand
-        }
+        x += xOperation.operand
+        y += yOperation.operand
 
         if (!board.inBounds(x, y)) {
             break
