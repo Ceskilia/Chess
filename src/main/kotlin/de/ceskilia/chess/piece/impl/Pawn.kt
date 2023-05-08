@@ -9,7 +9,7 @@ import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateExtendedMovesPinned
 
-@Valuable(1u)
+@Valuable(1)
 class Pawn(
     board: Chessboard,
     color: ChessPiece.Color

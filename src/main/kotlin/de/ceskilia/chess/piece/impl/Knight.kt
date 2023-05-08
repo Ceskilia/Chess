@@ -8,7 +8,7 @@ import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.isEven
 
-@Valuable(3u)
+@Valuable(3)
 class Knight(
     board: Chessboard,
     color: ChessPiece.Color

@@ -10,7 +10,7 @@ import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
-@Valuable(5u)
+@Valuable(5)
 @Interchangeable
 class Rook(
     board: Chessboard,

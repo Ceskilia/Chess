@@ -9,7 +9,7 @@ import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.calculateCoveringArithmeticMoves
 
-@Valuable(9u)
+@Valuable(9)
 class Queen(
     board: Chessboard,
     color: ChessPiece.Color
