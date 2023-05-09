@@ -6,6 +6,7 @@ class Draw(override val value: Type) : GameResult<Draw.Type> {
 
         STALEMATE,
         INSUFFICIENT_MATERIAL,
+        INSUFFICIENT_MATERIAL_TIMEOUT,
         THREEFOLD_REPETITION,
         FIFTY_MOVES
 
