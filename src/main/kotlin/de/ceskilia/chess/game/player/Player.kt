@@ -9,11 +9,14 @@ import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.variation.Blockable
 
-data class Player(
+class Player(
     val game: ChessGame,
     val name: String,
-    val pieceColor: ChessPiece.Color
+    val pieceColor: ChessPiece.Color,
+    startTime: Int
 ) {
+
+    val timer: Timer = Timer(startTime)
 
     fun pieces(): List<ChessPiece> {
         return game.board.pieces(pieceColor)
@@ -113,6 +116,28 @@ data class Player(
 
 
         return pieces().associateWith(ChessPiece::calculateMoves)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Player
+
+        if (game != other.game) return false
+        if (name != other.name) return false
+        if (pieceColor != other.pieceColor) return false
+        if (timer != other.timer) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = game.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + pieceColor.hashCode()
+        result = 31 * result + timer.hashCode()
+        return result
     }
 
 }
