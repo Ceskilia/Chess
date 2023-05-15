@@ -1,107 +1,41 @@
 package de.ceskilia.chess.game.windetection
 
 import de.ceskilia.chess.game.ChessGame
-import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
-import de.ceskilia.chess.piece.impl.Bishop
-import de.ceskilia.chess.piece.impl.Knight
-import de.ceskilia.chess.piece.standardtype.AbstractPawn
+import de.ceskilia.chess.game.result.Win
 
-class WinDetection(val game: ChessGame) {
+interface WinDetection {
 
-    fun checkWinner(): Player? {
+    val game: ChessGame
 
-        game.players.forEach {
-            it.opponents().forEach { opponent ->
-                if (opponent.isCheckmating(it)) {
-                    return opponent
-                }
-            }
+    fun checkCheckmate(): List<Player>
+
+    fun checkDraw(): Draw.Type?
+
+    fun checkTimeOf(player: Player) {
+
+        if(player.timer.hasTime()) {
+            return
         }
 
-        return null
-    }
+        with(game) {
 
-    fun checkDraw(): Draw.Type? {
-        val pieces = game.board.pieces()
+            if(activePlayers.size == 2 && activePlayers.contains(player)) {
 
-        // stalemate
-        if (game.currentTurn.isStalemated()) {
-            return Draw.Type.STALEMATE
-        }
+                val other = activePlayers.first { it != player }
 
-        // insufficient material
-        // king vs king
-        // king and bishop vs king
-        // king and knight vs king
-        // king and bishop vs king and bishop (bishop on the same square color)
-        when (pieces.size) {
-            2 -> return Draw.Type.INSUFFICIENT_MATERIAL // 2 kings
-            3 -> run {
-                // 2 kings and 1 other piece
-                if (pieces.none { it is Bishop || it is Knight }) {
-                    return@run
+                if (other.hasPieces()) {
+                    removePlayer(player, Win.Reason.TIME)
+                    return
                 }
 
-                return Draw.Type.INSUFFICIENT_MATERIAL
+                finish(Draw(Draw.Type.INSUFFICIENT_MATERIAL_TIMEOUT))
+                return
             }
 
-            4 -> run {
-
-                // filter only bishops
-                val bishops = pieces.filterIsInstance<Bishop>()
-
-                // the last remaining pieces must be bishops
-                if (bishops.size != 2) {
-                    return@run
-                }
-
-                val (first, second) = bishops
-
-                // the bishops need to have a different color and the square color must be the same
-                if (first.color == second.color || first.position.color() != second.position.color()) {
-                    return@run
-                }
-
-                return Draw.Type.INSUFFICIENT_MATERIAL
-            }
+            removePlayer(player, Win.Reason.TIME)
         }
-
-        val history = game.history
-
-        // there need to be at least 10 elements for threefold repetition/50 moves draw
-        if (history.moves.size < 10) {
-            return null
-        }
-
-        // threefold repetition
-        val encodedTableStates = history.encodedTableStates
-        val tableStatesOccurrences = encodedTableStates.map { state ->
-            encodedTableStates.count { it == state }
-        }.distinct()
-
-        // when there are 3 or more positions that are the same -> its three folded
-        if (tableStatesOccurrences.any { it >= 3 }) {
-            return Draw.Type.THREEFOLD_REPETITION
-        }
-
-        // there need to be at least 50 elements for 50 moves draw
-        if (history.moves.size < 50) {
-            return null
-        }
-
-        // 50 moves
-        // take last 50 elements
-        val lastFiftyMoves = history.lastMoves(50)
-
-        // no pawn move and no capture
-        if (lastFiftyMoves.none { it.chessPiece is AbstractPawn }
-            && lastFiftyMoves.none(Move::isCapture)) {
-            return Draw.Type.FIFTY_MOVES
-        }
-
-        return null
     }
 
 }
