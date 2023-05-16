@@ -1,9 +1,10 @@
 package de.ceskilia.chess.game.result
 
-class Draw(override val value: Type) : GameResult<Draw.Type> {
+class Draw(val type: Type) : GameResult {
 
     enum class Type {
 
+        AGREEMENT,
         STALEMATE,
         INSUFFICIENT_MATERIAL,
         INSUFFICIENT_MATERIAL_TIMEOUT,
