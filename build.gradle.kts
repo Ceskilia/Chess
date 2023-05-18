@@ -1,9 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("jvm") version "1.8.20"
     id("org.jetbrains.compose") version "1.4.0"
-    application
 }
 
 group = "de.ceskilia"
@@ -22,14 +21,21 @@ dependencies {
     implementation(compose.desktop.currentOs)
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-application {
-    mainClass.set("MainKt")
+compose.desktop {
+    application {
+        mainClass = "LauncherKt"
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "Chess"
+            packageVersion = "1.0.0"
+        }
+    }
 }
