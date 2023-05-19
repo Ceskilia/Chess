@@ -64,7 +64,7 @@ class ChessGameTest {
             )
             assertTrue(isFinished())
             assertTrue(result is Win)
-            assertTrue((result as Win).value.pieceColor == ChessPiece.Color.BLACK)
+            assertTrue((result as Win).player.pieceColor == ChessPiece.Color.BLACK)
         }
     }
 
@@ -83,7 +83,7 @@ class ChessGameTest {
             )
             assertTrue(isFinished())
             assertTrue(result is Win)
-            assertTrue((result as Win).value.pieceColor == ChessPiece.Color.WHITE)
+            assertTrue((result as Win).player.pieceColor == ChessPiece.Color.WHITE)
         }
     }
 
@@ -104,7 +104,7 @@ class ChessGameTest {
             )
             assertTrue(isFinished())
             assertTrue(result is Win)
-            assertTrue((result as Win).value.pieceColor == ChessPiece.Color.WHITE)
+            assertTrue((result as Win).player.pieceColor == ChessPiece.Color.WHITE)
         }
     }
 
@@ -127,7 +127,7 @@ class ChessGameTest {
             )
             assertTrue(isFinished())
             assertTrue(result is Win)
-            assertTrue((result as Win).value.pieceColor == ChessPiece.Color.WHITE)
+            assertTrue((result as Win).player.pieceColor == ChessPiece.Color.WHITE)
         }
     }
     private fun assertSuccess(result: MoveResult, messsage: String? = null) {
