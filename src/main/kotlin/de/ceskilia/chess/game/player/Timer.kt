@@ -1,47 +1,66 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "CanBeParameter")
 
 package de.ceskilia.chess.game.player
 
 import de.ceskilia.chess.util.notNegative
 import kotlin.concurrent.fixedRateTimer
 
-class Timer(val initialTime: Int, val initialPreparationTime: Int = DEFAULT_PREPARATION_TIME) {
-
-    // TODO: OPTIMISATION - CODEFLOW AND || NAMING ||
+class Timer private constructor(
+    val initialTime: Int,
+    val initialPreparationTime: Int,
+    val action: (Timer) -> Unit
+) {
 
     companion object {
 
         const val DEFAULT_PREPARATION_TIME = 30
 
-        private val TIMERS: List<Timer> = mutableListOf()
+        private val SCHEDULED_TIMERS = mutableListOf<Timer>()
 
         init {
-            fixedRateTimer(period = 60 * 1000) {
-                TIMERS.forEach {
+            fixedRateTimer(period = 1000, daemon = true) {
+                SCHEDULED_TIMERS.removeIf { !it.hasTime() }
+                SCHEDULED_TIMERS.filter(Timer::isRunning)
+                    .forEach {
+                        with(it) {
 
-                    if (it.isPreparation) it.preparationTime--
-                    else it.time--
+                            if (isPreparation) preparationTime--
+                            else time--
 
-                }
+                            if (preparationTime == 0) {
+                                isPreparation = false
+                            }
+
+                            if (!hasTime()) {
+                                pause()
+                            }
+
+                            action(it)
+                        }
+                    }
             }
         }
 
-        fun of(initialTime: Int): Timer {
-            return Timer(initialTime)
+        fun of(
+            initialTime: Int,
+            initialPreparationTime: Int = DEFAULT_PREPARATION_TIME,
+            action: (Timer) -> Unit
+        ): Timer {
+            notNegative(initialTime) { "Initial time may be not negative: value=$initialTime" }
+
+            val timer = Timer(initialTime, initialPreparationTime, action)
+            SCHEDULED_TIMERS.add(timer)
+            return timer
         }
 
     }
 
-    init {
-        notNegative(initialTime) { "Initial time may be not negative: value=$initialTime" }
-    }
-
-    var hasStarted: Boolean = false
+    var isPreparation: Boolean = true
         private set
     var isPaused: Boolean = true
         private set
-    var isPreparation: Boolean = false
-        private set
+    val isRunning: Boolean
+        get() = !isPaused
 
     var time: Int = initialTime
         private set
@@ -49,16 +68,11 @@ class Timer(val initialTime: Int, val initialPreparationTime: Int = DEFAULT_PREP
         private set
 
     fun start() {
-        if (!isPaused) {
+        if (!isPaused || !hasTime()) {
             return
         }
 
         isPaused = false
-
-        if (!hasStarted) {
-            isPreparation = true
-            return
-        }
     }
 
     fun pause() {
@@ -68,12 +82,14 @@ class Timer(val initialTime: Int, val initialPreparationTime: Int = DEFAULT_PREP
 
         isPaused = true
 
-        if (!hasStarted) {
-            hasStarted = true
+        if (isPreparation) {
             isPreparation = false
-            return
         }
 
+    }
+
+    fun hasTime(): Boolean {
+        return time != 0
     }
 
 }
