@@ -14,19 +14,34 @@ import de.ceskilia.chess.game.windetection.WinDetection
 
 abstract class ChessGame {
 
+    abstract val winDetection: WinDetection
     abstract val board: Chessboard
     abstract val players: List<Player>
     abstract var currentTurn: Player
         protected set
 
-    val history = GameHistory()
-    var result: GameResult<*>? = null
+    val history: GameHistory = GameHistory()
+    var result: GameResult? = null
         private set
 
-    protected val winDetection by lazy { WinDetection(this) }
+    val activePlayers: List<Player> by lazy { players.toMutableList() }
 
-    fun finish(result: GameResult<*>) {
-        if (this.result != null)
+    fun removePlayer(player: Player, reason: Win.Reason) {
+        if (isFinished()) {
+            return
+        }
+
+        (activePlayers as MutableList).remove(player)
+
+        if (activePlayers.size != 1) {
+            return
+        }
+
+        finish(Win(activePlayers.first(), reason))
+    }
+
+    fun finish(result: GameResult) {
+        if (isFinished())
             return
         this.result = result
     }
@@ -34,9 +49,9 @@ abstract class ChessGame {
     fun isFinished(): Boolean = result != null
 
     fun shuffleTurn() {
-        val currentIndex = players.indexOf(currentTurn)
-        this.currentTurn = players[
-            if (currentIndex == players.lastIndex) 0
+        val currentIndex = activePlayers.indexOf(currentTurn)
+        this.currentTurn = activePlayers[
+            if (currentIndex == activePlayers.lastIndex) 0
             else currentIndex + 1
         ]
     }
@@ -55,16 +70,20 @@ abstract class ChessGame {
         }
 
         val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
+
         (history.moves as MutableList).add(move)
         (history.encodedTableStates as MutableList).add(board.encodeCurrentState())
+
+        currentTurn.timer.pause()
         shuffleTurn()
+        currentTurn.timer.start()
 
         // if check, check if mate
         if (move.isCheck) {
-            val winningPlayer = winDetection.checkWinner()
+            val matedPlayers = winDetection.checkCheckmate()
 
-            if (winningPlayer != null) {
-                finish(Win(winningPlayer))
+            if (matedPlayers.isNotEmpty()) {
+                matedPlayers.forEach { removePlayer(it, Win.Reason.CHECKMATE) }
                 return MoveResult.SUCCESS
             }
 
