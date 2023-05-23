@@ -5,6 +5,7 @@ package de.ceskilia.chess.game.player
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.result.Win
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.variation.Blockable
@@ -16,10 +17,23 @@ class Player(
     startTime: Int
 ) {
 
-    val timer: Timer = Timer(startTime)
+    val isActive: Boolean
+        get() = game.activePlayers.contains(this)
+
+    val timer: Timer = Timer.of(startTime) {
+        game.winDetection.checkTimeOf(this)
+    }
+
+    fun resign() {
+        game.removePlayer(this, Win.Reason.RESIGNATION)
+    }
 
     fun pieces(): List<ChessPiece> {
         return game.board.pieces(pieceColor)
+    }
+
+    fun hasPieces(): Boolean {
+        return pieces().isNotEmpty()
     }
 
     fun opponents(): List<Player> {
