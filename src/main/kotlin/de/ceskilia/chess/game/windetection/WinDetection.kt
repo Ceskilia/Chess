@@ -15,23 +15,23 @@ interface WinDetection {
 
     fun checkTimeOf(player: Player) {
 
-        if(player.timer.hasTime()) {
+        if (player.timer.hasTime()) {
             return
         }
 
         with(game) {
 
-            if(activePlayers.size == 2 && activePlayers.contains(player)) {
+            if (activePlayers.size == 2 && activePlayers.contains(player)) {
 
                 val other = activePlayers.first { it != player }
 
-                if (other.hasPieces()) {
-                    removePlayer(player, Win.Reason.TIME)
+                // this check is just enough, because we are checking for sufficient material every move
+                // for consistency, this might needs to be implemented properly (e.x.: hasSufficientMaterial)
+                if (!other.hasPieces()) {
+                    finish(Draw(Draw.Type.INSUFFICIENT_MATERIAL_TIMEOUT))
                     return
                 }
 
-                finish(Draw(Draw.Type.INSUFFICIENT_MATERIAL_TIMEOUT))
-                return
             }
 
             removePlayer(player, Win.Reason.TIME)
