@@ -5,10 +5,12 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.impl.DefaultChessboard
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.MoveResult
+import de.ceskilia.chess.game.windetection.impl.DefaultWinDetection
 import de.ceskilia.chess.piece.ChessPiece
 
 class TextChessGame : ChessGame() {
 
+    override val winDetection = DefaultWinDetection(this)
     override val board = DefaultChessboard(this)
     override val players = requestPlayers()
     override var currentTurn = players.first()
@@ -17,7 +19,10 @@ class TextChessGame : ChessGame() {
         board.setup()
     }
 
+    // maybe start with short delay -> think this flow through
     override fun start() {
+        currentTurn.timer.start()
+
         while (!isFinished()) {
 
             println(board)
@@ -45,8 +50,8 @@ class TextChessGame : ChessGame() {
     private fun requestPlayers(): List<Player> {
         // maybe do some requesting of names etc.
         return listOf(
-            Player(this, "", ChessPiece.Color.WHITE),
-            Player(this, "", ChessPiece.Color.BLACK)
+            Player(this, "", ChessPiece.Color.WHITE, 10),
+            Player(this, "", ChessPiece.Color.BLACK, 300)
         )
     }
 
