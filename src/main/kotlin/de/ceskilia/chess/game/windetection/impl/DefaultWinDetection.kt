@@ -26,7 +26,8 @@ class DefaultWinDetection(override val game: ChessGame) : WinDetection {
 
         return players
     }
-    
+
+    // todo encapsulate the implementation into single methods
     override fun checkDraw(): Draw.Type? {
         val pieces = game.board.pieces()
 
