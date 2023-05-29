@@ -81,9 +81,9 @@ abstract class ChessGame {
         // if check, check if mate
         if (move.isCheck) {
             val matedPlayers = winDetection.checkCheckmate()
+            matedPlayers.forEach { removePlayer(it, Win.Reason.CHECKMATE) }
 
-            if (matedPlayers.isNotEmpty()) {
-                matedPlayers.forEach { removePlayer(it, Win.Reason.CHECKMATE) }
+            if (isFinished()) {
                 return MoveResult.SUCCESS
             }
 
