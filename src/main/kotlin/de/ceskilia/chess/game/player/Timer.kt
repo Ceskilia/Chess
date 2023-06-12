@@ -19,25 +19,24 @@ class Timer private constructor(
 
         init {
             fixedRateTimer(period = 1000, daemon = true) {
-                SCHEDULED_TIMERS.removeIf { !it.hasTime() }
-                SCHEDULED_TIMERS.filter(Timer::isRunning)
-                    .forEach {
-                        with(it) {
+                SCHEDULED_TIMERS.removeAll(SCHEDULED_TIMERS.filter { !it.hasTime() })
+                SCHEDULED_TIMERS.filter(Timer::isRunning).forEach {
+                    with(it) {
 
-                            if (isPreparation) preparationTime--
-                            else time--
+                        if (isPreparation) preparationTime--
+                        else time--
 
-                            if (preparationTime == 0) {
-                                isPreparation = false
-                            }
-
-                            if (!hasTime()) {
-                                pause()
-                            }
-
-                            action(it)
+                        if (preparationTime == 0) {
+                            isPreparation = false
                         }
+
+                        if (!hasTime()) {
+                            pause()
+                        }
+
+                        action(it)
                     }
+                }
             }
         }
 
