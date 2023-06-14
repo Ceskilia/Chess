@@ -13,6 +13,7 @@ inline fun <T> watchState(value: () -> T): MutableState<T> {
     return watchState(value())
 }
 
+// this implementation design is somewhat evil, but we keep it for now
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> stateOf(property: KProperty0<T>): MutableState<T> {
     val delegate = property.apply { isAccessible = true }.getDelegate()
