@@ -53,7 +53,10 @@ abstract class Chessboard(
         pieces(piece.color)
             .filterIsInstance<Promotable>()
             .filter(Promotable::canPromote)
-            .forEach { placePiece(it.promote(), it.position) }
+            .forEach {
+                val promotable = it.promote()
+                placePiece(promotable, promotable.position)
+            }
 
         return Move(piece, endPiece, startPosition, endPosition, check)
     }
