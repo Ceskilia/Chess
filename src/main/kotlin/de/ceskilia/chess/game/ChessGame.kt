@@ -101,4 +101,12 @@ abstract class ChessGame {
 
     abstract fun start()
 
+    enum class State {
+
+        PENDING,
+        STARTED,
+        FINISHED
+
+    }
+
 }
