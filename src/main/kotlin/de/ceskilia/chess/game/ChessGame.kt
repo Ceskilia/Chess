@@ -21,6 +21,8 @@ abstract class ChessGame {
         protected set
 
     val history: GameHistory = GameHistory()
+    var state: State = State.PENDING
+        protected set
     var result: GameResult? = null
         private set
 
@@ -39,14 +41,6 @@ abstract class ChessGame {
 
         finish(Win(activePlayers.first(), reason))
     }
-
-    fun finish(result: GameResult) {
-        if (isFinished())
-            return
-        this.result = result
-    }
-
-    fun isFinished(): Boolean = result != null
 
     fun shuffleTurn() {
         val currentIndex = activePlayers.indexOf(currentTurn)
@@ -99,12 +93,34 @@ abstract class ChessGame {
         return MoveResult.SUCCESS
     }
 
-    abstract fun start()
+    fun start() {
+        if (isRunning())
+            return
+        this.state = State.RUNNING
+        onStart()
+    }
+
+    fun isRunning(): Boolean = this.state == State.RUNNING
+
+    fun finish(result: GameResult) {
+        if (isFinished())
+            return
+        this.result = result
+        this.state = State.FINISHED
+        onFinish()
+    }
+
+    fun isFinished(): Boolean = this.state == State.FINISHED
+
+    abstract fun onStart()
+
+    abstract fun onFinish()
+
 
     enum class State {
 
         PENDING,
-        STARTED,
+        RUNNING,
         FINISHED
 
     }
