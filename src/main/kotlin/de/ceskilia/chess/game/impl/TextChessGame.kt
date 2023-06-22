@@ -20,7 +20,7 @@ class TextChessGame : ChessGame() {
     }
 
     // maybe start with short delay -> think this flow through
-    override fun start() {
+    override fun onStart() {
         currentTurn.timer.start()
 
         while (!isFinished()) {
@@ -42,7 +42,9 @@ class TextChessGame : ChessGame() {
             }
 
         }
+    }
 
+    override fun onFinish() {
         println(board)
         println(history)
     }
