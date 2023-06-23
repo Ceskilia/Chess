@@ -114,8 +114,7 @@ abstract class ChessGame {
 
     abstract fun onStart()
 
-    abstract fun onFinish()
-
+    open fun onFinish() {}
 
     enum class State {
 
