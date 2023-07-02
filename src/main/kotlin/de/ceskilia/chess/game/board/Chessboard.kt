@@ -10,13 +10,14 @@ import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.piece.variation.Checkable
 import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.piece.variation.Promotable
+import de.ceskilia.chess.state.StateEncoder
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(
     val game: ChessGame,
     val size: Int = DEFAULT_SIZE,
     protected val table: InternalTable = InternalTable(size)
-) : PieceDataHandler by table {
+) : PieceDataHandler by table, StateEncoder {
 
     companion object {
 
@@ -83,10 +84,6 @@ abstract class Chessboard(
         }
     }
 
-    fun encodeCurrentState(): Long {
-        return pieces().sumOf(ChessPiece::encodeState)
-    }
-
     fun queueMoveAction(
         piece: ChessPiece,
         position: Position,
@@ -112,6 +109,10 @@ abstract class Chessboard(
 
         actionMovingTo.action.invoke(endPosition)
         return actionMovingTo.result
+    }
+
+    override fun encodeCurrentState(): Long {
+        return pieces().sumOf(ChessPiece::encodeCurrentState)
     }
 
     override fun toString(): String {
