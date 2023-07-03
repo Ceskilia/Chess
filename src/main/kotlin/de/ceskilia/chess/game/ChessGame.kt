@@ -112,9 +112,9 @@ abstract class ChessGame {
 
     fun isFinished(): Boolean = this.state == State.FINISHED
 
-    abstract fun onStart()
+    protected abstract fun onStart()
 
-    open fun onFinish() {}
+    protected open fun onFinish() {}
 
     enum class State {
 
