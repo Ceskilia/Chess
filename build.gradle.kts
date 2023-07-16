@@ -18,6 +18,9 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
+    implementation( "io.github.oshai:kotlin-logging-jvm:5.0.0-beta-04")
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+
     implementation(kotlin("reflect"))
     implementation(compose.desktop.currentOs)
 }
