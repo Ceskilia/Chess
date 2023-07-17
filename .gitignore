@@ -2,6 +2,9 @@
 *.xml
 !logback.xml
 
+# logs
+/logs
+
 #idea
 /.idea
 
