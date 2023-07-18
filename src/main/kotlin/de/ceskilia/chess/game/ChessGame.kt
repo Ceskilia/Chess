@@ -112,7 +112,7 @@ abstract class ChessGame {
 
     fun isFinished(): Boolean = this.state == State.FINISHED
 
-    protected abstract fun onStart()
+    protected open fun onStart() {}
 
     protected open fun onFinish() {}
 

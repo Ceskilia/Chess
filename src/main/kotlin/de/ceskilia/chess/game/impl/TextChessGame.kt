@@ -22,9 +22,16 @@ class TextChessGame : ChessGame() {
     // maybe start with short delay -> think this flow through
     override fun onStart() {
         currentTurn.timer.start()
+        gameLoop()
+    }
 
+    override fun onFinish() {
+        println(board)
+        println(history)
+    }
+
+    private fun gameLoop() {
         while (!isFinished()) {
-
             println(board)
             println()
             println("Enter new position coordinates:")
@@ -40,13 +47,7 @@ class TextChessGame : ChessGame() {
                     // play sound
                 }
             }
-
         }
-    }
-
-    override fun onFinish() {
-        println(board)
-        println(history)
     }
 
     private fun requestPlayers(): List<Player> {
