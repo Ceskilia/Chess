@@ -20,11 +20,11 @@ interface Movable {
 
     fun calculateMovesUnpinned(): Set<Position>
 
-    // the term "covering" refers to the fact, that some pieces (pawns) can
-    // make moves, that cannot capture a piece, so we need to differentiate between those to make it possible
-    // to check for possible moves of pieces with type KING
+    // the term "covering" refers to the fact, that some movables (pawns) can make moves, that cannot capture another
+    // movable, so there needs to be a differentiation between those to make it possible to check for possible moves
+    // of some movables (kings)
     // SO
-    // it includes all the theoretical possible "covering" moves the piece can make
+    // it includes all the theoretical possible "covering" moves the movable can make
     fun isCovering(position: Position): Boolean {
         return calculateCoveringMoves().contains(position)
     }
