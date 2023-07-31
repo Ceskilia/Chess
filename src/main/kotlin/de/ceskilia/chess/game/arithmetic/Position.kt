@@ -48,7 +48,7 @@ class Position private constructor(val x: Int, val y: Int) {
     fun formattedY(): Int = y + 1
 
     fun color(): Color {
-        // the difference between x and y is always even
+        // the difference between x and y is always even for Color.WHITE
         return if ((x - y).isEven()) Color.WHITE else Color.BLACK
     }
 
