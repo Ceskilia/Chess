@@ -58,9 +58,11 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
     }
 
     private fun validate() {
-        val kings = pieces().filterIsInstance<AbstractKing>()
+        val kings = pieces()
+            .filterIsInstance<AbstractKing>()
+            .distinctBy(ChessPiece::color)
 
-        check(kings.size == 2) { "There must be exactly 2 kings on the board." }
+        check(kings.size == 2) { "There must be exactly 1 king for each color on the board." }
     }
 
     private fun registerCreatables(): List<Creatable> {
