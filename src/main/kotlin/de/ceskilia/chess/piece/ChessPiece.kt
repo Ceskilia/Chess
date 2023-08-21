@@ -15,7 +15,8 @@ interface ChessPiece : Movable, StateEncoder {
     var position: Position
 
     fun Position.isCoveredByOpponent(): Boolean {
-        return board.opponentPieces(color).any { it.isCovering(this) }
+        return board.opponentPieces(color)
+            .any { it.isCovering(this) }
     }
 
     fun Position.whenOccupied(result: Action.Result = Action.Result.DEFAULT, action: (Position) -> Unit): Position {
