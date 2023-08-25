@@ -22,12 +22,9 @@ interface WinDetection {
         with(game) {
 
             if (activePlayers.size == 2 && activePlayers.contains(player)) {
+                val other = player.opponents().first()
 
-                val other = activePlayers.first { it != player }
-
-                // this check is just enough, because we are checking for sufficient material every move
-                // for consistency, this might needs to be implemented properly (e.x.: hasSufficientMaterial)
-                if (!other.hasPieces()) {
+                if (!other.hasSufficientMaterial()) {
                     finish(Draw(Draw.Type.INSUFFICIENT_MATERIAL_TIMEOUT))
                     return
                 }

@@ -10,7 +10,7 @@ import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.variation.Blockable
 
-class Player(
+open class Player(
     val game: ChessGame,
     val name: String,
     val pieceColor: ChessPiece.Color,
@@ -20,9 +20,10 @@ class Player(
     val isActive: Boolean
         get() = game.activePlayers.contains(this)
 
-    val timer: Timer = Timer.of(startTime) {
-        game.winDetection.checkTimeOf(this)
-    }
+    val timer: Timer = Timer.of(
+        initialTime = startTime,
+        action = { game.winDetection.checkTimeOf(this) }
+    )
 
     fun resign() {
         game.removePlayer(this, Win.Reason.RESIGNATION)
@@ -32,8 +33,8 @@ class Player(
         return game.board.pieces(pieceColor)
     }
 
-    fun hasPieces(): Boolean {
-        return pieces().isNotEmpty()
+    open fun hasSufficientMaterial(): Boolean {
+        return pieces().size > 1;
     }
 
     fun opponents(): List<Player> {
