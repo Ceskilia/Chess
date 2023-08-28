@@ -55,17 +55,17 @@ class Pawn(
     }
 
     override fun promote(): Creatable {
-        val pieces = board.registeredCreatables
+        val creatables = board.registeredCreatables
             .filter { it.color == this.color }
 
         while (true) {
-            println("Please select a piece: ${pieces.map { it::class.simpleName }}")
+            println("Please select a piece: ${creatables.map { it::class.simpleName }}")
 
             val input = readln().trim()
-            val piece = pieces.firstOrNull { it::class.simpleName == input }
+            val creatable = board.createPieceAt(this.position, this.color, input)
 
-            if (piece != null) {
-                return piece.createCopyAt(position)
+            if (creatable != null) {
+                return creatable
             }
 
             println("This is not a valid piece!")
