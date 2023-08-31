@@ -19,7 +19,7 @@ class Timer private constructor(
 
         init {
             fixedRateTimer(period = 1000, daemon = true) {
-                SCHEDULED_TIMERS.removeAll(SCHEDULED_TIMERS.filter { !it.hasTime() })
+                SCHEDULED_TIMERS.removeAll(SCHEDULED_TIMERS.filter { !it.hasTime() }.toSet())
                 SCHEDULED_TIMERS.filter(Timer::isRunning).forEach {
                     with(it) {
 
