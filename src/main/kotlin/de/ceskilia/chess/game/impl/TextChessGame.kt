@@ -53,7 +53,7 @@ class TextChessGame : ChessGame() {
     private fun requestPlayers(): List<Player> {
         // maybe do some requesting of names etc.
         return listOf(
-            Player(this, "", ChessPiece.Color.WHITE, 10),
+            Player(this, "", ChessPiece.Color.WHITE, 300),
             Player(this, "", ChessPiece.Color.BLACK, 300)
         )
     }
