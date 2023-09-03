@@ -30,8 +30,8 @@ class Queen(
         )
     }
 
-    override fun createCopyAt(position: Position): Creatable {
-        return Queen(this.board, this.color).withPosition(position)
+    override fun createCopy(): Creatable {
+        return Queen(this.board, this.color)
     }
 
 }

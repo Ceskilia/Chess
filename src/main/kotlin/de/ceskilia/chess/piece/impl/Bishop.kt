@@ -26,8 +26,8 @@ class Bishop(
         )
     }
 
-    override fun createCopyAt(position: Position): Creatable {
-        return Bishop(this.board, this.color).withPosition(position)
+    override fun createCopy(): Creatable {
+        return Bishop(this.board, this.color)
     }
 
 }

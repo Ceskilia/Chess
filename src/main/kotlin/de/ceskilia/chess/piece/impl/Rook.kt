@@ -28,8 +28,8 @@ class Rook(
         )
     }
 
-    override fun createCopyAt(position: Position): Creatable {
-        return Rook(this.board, this.color).withPosition(position)
+    override fun createCopy(): Creatable {
+        return Rook(this.board, this.color)
     }
 
 }

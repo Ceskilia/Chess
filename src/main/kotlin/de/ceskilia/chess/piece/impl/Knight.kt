@@ -28,8 +28,8 @@ class Knight(
         return moves
     }
 
-    override fun createCopyAt(position: Position): Creatable {
-        return Knight(this.board, this.color).withPosition(position)
+    override fun createCopy(): Creatable {
+        return Knight(this.board, this.color)
     }
 
 }
