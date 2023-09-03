@@ -2,6 +2,8 @@ package de.ceskilia.chess.game.arithmetic
 
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
+import de.ceskilia.chess.piece.standardtype.AbstractPawn
+import de.ceskilia.chess.util.appendIf
 
 data class Move(
     val chessPiece: ChessPiece,
@@ -25,11 +27,20 @@ data class Move(
     }
 
     override fun toString(): String {
-        // (if PAWN: use column/y, if same pieces can make same move insert ???)
-        return chessPiece.notation.toString() +
-                (if (isCapture) CAPTURE_NOTATION else "") +
-                endPosition.toString() +
-                (if (isCheck) CHECK_NOTATION else "")
+        val result = StringBuilder()
+
+        val isPawn = chessPiece is AbstractPawn
+        val movedStraightForward = chessPiece.position.x == startPosition.x
+
+        if (!isPawn || !movedStraightForward) {
+            result.append(chessPiece.notation.toString())
+        }
+
+        return result
+            .appendIf(CAPTURE_NOTATION, this::isCapture)
+            .append(endPosition.toString())
+            .appendIf(CHECK_NOTATION, this::isCheck)
+            .toString()
     }
 
     override fun equals(other: Any?): Boolean {
