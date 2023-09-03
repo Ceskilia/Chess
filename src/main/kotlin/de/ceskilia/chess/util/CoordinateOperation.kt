@@ -1,6 +1,6 @@
 package de.ceskilia.chess.util
 
-enum class CoordinateOperation(val operand: Int) {
+enum class CoordinateOperation(val direction: Int) {
 
     INCREMENT(1),
     DECREMENT(-1),
@@ -8,10 +8,10 @@ enum class CoordinateOperation(val operand: Int) {
 
     companion object {
 
-        fun fromOperand(delta: Int): CoordinateOperation {
+        fun fromDirection(direction: Int): CoordinateOperation {
             return when {
-                delta > 0 -> INCREMENT
-                delta < 0 -> DECREMENT
+                direction > 0 -> INCREMENT
+                direction < 0 -> DECREMENT
                 else -> CONSTANT
             }
         }
