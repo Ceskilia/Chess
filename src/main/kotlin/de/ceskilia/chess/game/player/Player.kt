@@ -5,6 +5,7 @@ package de.ceskilia.chess.game.player
 import de.ceskilia.chess.game.ChessGame
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.game.result.Win
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.standardtype.AbstractKing
@@ -34,7 +35,7 @@ open class Player(
     }
 
     open fun hasSufficientMaterial(): Boolean {
-        return pieces().size > 1;
+        return pieces().size > 1
     }
 
     fun opponents(): List<Player> {
@@ -74,6 +75,10 @@ open class Player(
 
     fun isCheckmating(player: Player): Boolean {
         return isChecking(player) && !player.hasMoves()
+    }
+
+    fun canCastle(side: Chessboard.Side): Boolean {
+        return ownKing().checkCastle(side).isNotEmpty()
     }
 
     fun move(piece: ChessPiece, endPosition: Position): Move? {
