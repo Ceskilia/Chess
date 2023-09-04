@@ -1,13 +1,11 @@
 package de.ceskilia.chess.game.windetection.impl
 
 import de.ceskilia.chess.game.ChessGame
-import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.game.player.Player
 import de.ceskilia.chess.game.result.Draw
 import de.ceskilia.chess.game.windetection.WinDetection
 import de.ceskilia.chess.piece.impl.Bishop
 import de.ceskilia.chess.piece.impl.Knight
-import de.ceskilia.chess.piece.standardtype.AbstractPawn
 
 class DefaultWinDetection(override val game: ChessGame) : WinDetection {
 
@@ -27,7 +25,6 @@ class DefaultWinDetection(override val game: ChessGame) : WinDetection {
         return players
     }
 
-    // todo encapsulate the implementation into single methods
     override fun checkDraw(): Draw.Type? {
         val pieces = game.board.pieces()
 
@@ -73,40 +70,13 @@ class DefaultWinDetection(override val game: ChessGame) : WinDetection {
             }
         }
 
-        val history = game.history
-
-        // there need to be at least 10 elements for threefold repetition/50 moves draw
-        if (history.moves.size < 10) {
-            return null
+        return with(game.history) {
+            when {
+                hasThreefoldRepetition() -> Draw.Type.THREEFOLD_REPETITION
+                hasFiftyInsignificantMoves() -> Draw.Type.FIFTY_MOVES
+                else -> null
+            }
         }
-
-        // threefold repetition
-        val encodedTableStates = history.encodedTableStates
-        val tableStatesOccurrences = encodedTableStates.map { state ->
-            encodedTableStates.count { it == state }
-        }.distinct()
-
-        // when there are 3 or more positions that are the same -> its three folded
-        if (tableStatesOccurrences.any { it >= 3 }) {
-            return Draw.Type.THREEFOLD_REPETITION
-        }
-
-        // there need to be at least 50 elements for 50 moves draw
-        if (history.moves.size < 50) {
-            return null
-        }
-
-        // 50 moves
-        // take last 50 elements
-        val lastFiftyMoves = history.lastMoves(50)
-
-        // no pawn move and no capture
-        if (lastFiftyMoves.none { it.chessPiece is AbstractPawn }
-            && lastFiftyMoves.none(Move::isCapture)) {
-            return Draw.Type.FIFTY_MOVES
-        }
-
-        return null
     }
 
 }

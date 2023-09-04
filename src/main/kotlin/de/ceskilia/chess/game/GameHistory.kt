@@ -4,12 +4,13 @@ package de.ceskilia.chess.game
 
 import de.ceskilia.chess.game.arithmetic.Move
 import de.ceskilia.chess.piece.ChessPiece
+import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import kotlin.math.ceil
 
 class GameHistory {
 
     val moves: List<Move> = mutableListOf()
-    val encodedTableStates: List<Long> = mutableListOf()
+    val encodedTableStates: List<String> = mutableListOf()
 
     fun ChessPiece.isCaptured(): Boolean {
         return moves.any { it.capturedPiece == this }
@@ -23,8 +24,32 @@ class GameHistory {
         return moves.filter { it.chessPiece == piece }
     }
 
-    fun currentMove(): Int {
+    fun currentMoveCount(): Int {
         return ceil(moves.size / 2.0).toInt()
+    }
+
+    fun nextMoveCount(): Int {
+        return (moves.size / 2) + 1
+    }
+
+    fun hasThreefoldRepetition(): Boolean {
+        if (moves.size < 8) {
+            return false
+        }
+
+        return encodedTableStates.map { state -> encodedTableStates.count { it == state } }
+            .distinct()
+            .any { it >= 3 }
+    }
+
+    // these moves are consecutive
+    fun hasFiftyInsignificantMoves(): Boolean {
+        if (moves.size < 50) {
+            return false
+        }
+
+        val lastFiftyMoves = lastMoves(50)
+        return lastFiftyMoves.none { it.chessPiece is AbstractPawn } && lastFiftyMoves.none(Move::isCapture)
     }
 
     fun hasLastMove(): Boolean = moves.isNotEmpty()
