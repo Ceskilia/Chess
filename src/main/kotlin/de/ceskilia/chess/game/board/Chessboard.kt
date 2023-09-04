@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package de.ceskilia.chess.game.board
 
 import de.ceskilia.chess.game.ChessGame
@@ -10,14 +8,12 @@ import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.piece.variation.Checkable
 import de.ceskilia.chess.piece.variation.Creatable
 import de.ceskilia.chess.piece.variation.Promotable
-import de.ceskilia.chess.state.StateEncoder
 import de.ceskilia.chess.util.notNegative
 
 abstract class Chessboard(
     val game: ChessGame,
     val size: Int = DEFAULT_SIZE,
-    protected val table: InternalTable = InternalTable(size)
-) : PieceDataHandler by table, StateEncoder {
+) : PieceDataHandler by InternalTable(size) {
 
     companion object {
 
@@ -31,7 +27,7 @@ abstract class Chessboard(
 
     abstract val registeredCreatables: List<Creatable>
 
-    private val queuedMoveActions = mutableMapOf<ChessPiece, MutableSet<Action>>()
+    internal val moveActionHandler = MoveActionHandler()
 
     open fun move(piece: ChessPiece, endPosition: Position): Move? {
 
@@ -40,14 +36,14 @@ abstract class Chessboard(
         }
 
         val startPosition = piece.position
-        val (cancel, capturedPiece) = evaluateQueuedAction(piece, endPosition)
+        val (cancel, capturedPiece) = moveActionHandler.evaluateQueuedAction(piece, endPosition)
         val endPiece = capturedPiece ?: pieceAt(endPosition)
 
         if (!cancel) {
             moveUnchecked(piece, endPosition) // this or promote so PAWNS don't get to last rank
         }
 
-        val check = opponentPieces(piece.color)
+        val isCheck = opponentPieces(piece.color)
             .filterIsInstance<Checkable>()
             .any(Checkable::isChecked)
 
@@ -55,11 +51,19 @@ abstract class Chessboard(
             .filterIsInstance<Promotable>()
             .filter(Promotable::canPromote)
             .forEach {
-                val promotable = it.promote()
-                placePiece(promotable, promotable.position)
+                val promotionContext = it.promote()
+
+                removePiece(it)
+                placePiece(promotionContext.creatable, promotionContext.position)
             }
 
-        return Move(piece, endPiece, startPosition, endPosition, check)
+        return Move(
+            chessPiece = piece,
+            capturedPiece = endPiece,
+            startPosition = startPosition,
+            endPosition = endPosition,
+            isCheck = isCheck
+        )
     }
 
     open fun move(startPosition: Position, endPosition: Position): Move? {
@@ -67,52 +71,22 @@ abstract class Chessboard(
         return if (piece != null) move(piece, endPosition) else null
     }
 
-    fun syncPieces() {
-        // sync: board is right
-        for (y in table.pieces.indices) {
-            for (x in table.pieces[y].indices) {
-                val piece = pieceAt(x, y) ?: continue
-                val position = piece.position
-
-                // check if it is synced already
-                if (position.x == x && position.y == y) {
-                    continue
-                }
-
-                piece.position = Position.of(x, y)
-            }
-        }
+    fun promotePiece(color: ChessPiece.Color, typeName: String): Creatable? {
+        return registeredCreatables
+            .filter { it::class.java.simpleName == typeName }
+            .firstOrNull { it.color == color }
+            ?.createCopy()
     }
 
-    fun queueMoveAction(
-        piece: ChessPiece,
-        position: Position,
-        result: Action.Result,
-        action: (Position) -> Unit
-    ) {
-        queuedMoveActions.compute(piece) { _, value ->
-            val actions = value ?: mutableSetOf()
-            if (actions.none { it.position == position })
-                actions.add(Action(position, result, action))
-            return@compute actions
-        }
-    }
+    fun promotePiece(color: ChessPiece.Color, type: Class<Creatable>): Creatable {
+        val creatable = registeredCreatables
+            .filter { it::class.java == type }
+            .firstOrNull { it.color == color }
+            ?: throw IllegalArgumentException(
+                "The provided creatable with color=$color and type=${type::class.java.name} is not registered."
+            )
 
-    private fun evaluateQueuedAction(piece: ChessPiece, endPosition: Position): Action.Result {
-        val actionMovingTo = queuedMoveActions[piece]
-            ?.firstOrNull { it.position == endPosition }
-        queuedMoveActions.remove(piece)
-
-        if (actionMovingTo == null) {
-            return Action.Result.DEFAULT
-        }
-
-        actionMovingTo.action.invoke(endPosition)
-        return actionMovingTo.result
-    }
-
-    override fun encodeCurrentState(): Long {
-        return pieces().sumOf(ChessPiece::encodeCurrentState)
+        return creatable.createCopy()
     }
 
     override fun toString(): String {
@@ -147,5 +121,12 @@ abstract class Chessboard(
     abstract fun directionOf(pawn: AbstractPawn): Int
 
     abstract fun setup()
+
+    enum class Side(val direction: Int) {
+
+        KING_SIDE(1),
+        QUEEN_SIDE(-1)
+
+    }
 
 }
