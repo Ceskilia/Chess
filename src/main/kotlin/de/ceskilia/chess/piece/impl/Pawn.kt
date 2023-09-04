@@ -5,7 +5,7 @@ import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.annotation.Valuable
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
-import de.ceskilia.chess.piece.variation.Creatable
+import de.ceskilia.chess.piece.variation.Promotable
 import de.ceskilia.chess.util.addNonNull
 import de.ceskilia.chess.util.calculateExtendedMovesPinned
 
@@ -54,18 +54,21 @@ class Pawn(
         return moves
     }
 
-    override fun promote(): Creatable {
+    override fun promote(): Promotable.Context {
         val creatables = board.registeredCreatables
             .filter { it.color == this.color }
 
         while (true) {
             println("Please select a piece: ${creatables.map { it::class.simpleName }}")
 
-            val input = readln().trim()
-            val creatable = board.createPieceAt(this.position, this.color, input)
+            val creatableTypeName = readln().trim()
+            val creatable = board.promotePiece(
+                color = this.color,
+                typeName = creatableTypeName
+            )
 
             if (creatable != null) {
-                return creatable
+                return Promotable.Context(creatable, this.position)
             }
 
             println("This is not a valid piece!")
