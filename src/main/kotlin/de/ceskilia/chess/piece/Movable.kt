@@ -4,6 +4,8 @@ import de.ceskilia.chess.game.arithmetic.Position
 
 interface Movable {
 
+    fun onMove() {}
+
     fun moveTo(position: Position)
 
     fun canMoveTo(position: Position): Boolean {
