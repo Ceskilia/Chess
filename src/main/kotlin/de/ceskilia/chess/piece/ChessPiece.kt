@@ -5,22 +5,30 @@ import de.ceskilia.chess.game.board.Action
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.variation.Blockable
-import de.ceskilia.chess.state.StateEncoder
 
-interface ChessPiece : Movable, StateEncoder {
+interface ChessPiece : Movable {
 
     val board: Chessboard
     val color: Color
     val notation: Char
-    var position: Position
+    val position: Position
+        get() = board.positionOf(this)
 
     fun Position.isCoveredByOpponent(): Boolean {
         return board.opponentPieces(color)
             .any { it.isCovering(this) }
     }
 
-    fun Position.whenOccupied(result: Action.Result = Action.Result.DEFAULT, action: (Position) -> Unit): Position {
-        board.queueMoveAction(this@ChessPiece, this, result, action)
+    fun Position.whenOccupying(
+        result: Action.Result = Action.Result.DEFAULT,
+        action: (Position) -> Unit
+    ): Position {
+        board.moveActionHandler.queueMoveAction(
+            piece = this@ChessPiece,
+            position = this,
+            result = result,
+            action = action
+        )
         return this
     }
 
@@ -82,19 +90,6 @@ interface ChessPiece : Movable, StateEncoder {
         return calculateCoveringMoves()
             .filter { !board.isAllyAt(it, this) }
             .toSet()
-    }
-
-    // find other solution: this hash codes are not made for uniqueness
-    override fun encodeCurrentState(): Long {
-        var result = board.hashCode().toLong()
-
-        // coordinates need to have different impact [ P(2, 3) would be the same as P(3, 2) ]
-        result *= 31 * position.x
-        result *= 43 * position.y
-        result = 31 * result + color.hashCode()
-        result = 31 * result + notation.hashCode()
-
-        return result
     }
 
     enum class Color {
