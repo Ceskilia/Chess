@@ -72,10 +72,11 @@ abstract class Chessboard(
     }
 
     fun promotePiece(color: ChessPiece.Color, typeName: String): Creatable? {
-        return registeredCreatables
+        val creatable = registeredCreatables
             .filter { it::class.java.simpleName == typeName }
             .firstOrNull { it.color == color }
-            ?.createCopy()
+            ?: return null
+        return validateCopy(creatable)
     }
 
     fun promotePiece(color: ChessPiece.Color, type: Class<Creatable>): Creatable {
@@ -85,8 +86,15 @@ abstract class Chessboard(
             ?: throw IllegalArgumentException(
                 "The provided creatable with color=$color and type=${type::class.java.name} is not registered."
             )
+        return validateCopy(creatable)
+    }
 
-        return creatable.createCopy()
+    private fun validateCopy(creatable: Creatable): Creatable {
+        val copy = creatable.createCopy()
+        check(copy::class == creatable::class) {
+            "The provided creatable does not create a copy of its own type."
+        }
+        return copy
     }
 
     override fun toString(): String {
