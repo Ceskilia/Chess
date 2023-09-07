@@ -40,7 +40,7 @@ interface AbstractPawn : Promotable {
             }
 
             return position.copyAdding(xDifference, direction)
-                .whenOccupied(result = Action.Result(capturedPiece = lastChessPiece)) {
+                .whenOccupying(result = Action.Result(capturedPiece = lastChessPiece)) {
                     board.removePieceAt(lastPosition)
                 }
         }
