@@ -1,8 +1,8 @@
 package de.ceskilia.chess.piece.standardtype
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.variation.Checkable
-import de.ceskilia.chess.util.CoordinateOperation
 import de.ceskilia.chess.util.checkCastleDirection
 
 interface AbstractKing : Checkable {
@@ -17,16 +17,16 @@ interface AbstractKing : Checkable {
             isAlly || isCovered
         }
 
-        return moves.plus(checkCastle())
+        val castleMoves = Chessboard.Side.values()
+            .map(this::checkCastle)
+            .flatten()
+        return moves.plus(castleMoves)
     }
 
-    fun checkCastle(): Set<Position> {
-
-        if (hasMoved() || isChecked()) {
+    fun checkCastle(side: Chessboard.Side): Set<Position> {
+        if (hasMoved() || isChecked())
             return emptySet()
-        }
-
-        return checkCastleDirection(CoordinateOperation.INCREMENT) + checkCastleDirection(CoordinateOperation.DECREMENT)
+        return checkCastleDirection(side)
     }
 
 }
