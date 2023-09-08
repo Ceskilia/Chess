@@ -19,8 +19,11 @@ interface PieceDataWriter {
 
     fun moveUnchecked(piece: ChessPiece, position: Position) {
         removePieceAt(piece.position)
-        piece.position = position
         placePiece(piece, position)
+    }
+
+    fun removePiece(piece: ChessPiece) {
+        removePieceAt(piece.position)
     }
 
     fun removePieceAt(position: Position) {
