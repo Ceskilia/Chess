@@ -1,7 +1,7 @@
 package de.ceskilia.chess.piece.standardtype
 
 import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.board.Action
+import de.ceskilia.chess.game.board.internal.Action
 import de.ceskilia.chess.piece.variation.Promotable
 import kotlin.math.abs
 
