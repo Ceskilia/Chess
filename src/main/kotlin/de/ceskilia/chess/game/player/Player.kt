@@ -26,16 +26,8 @@ open class Player(
         action = { game.winDetection.checkTimeOf(this) }
     )
 
-    fun resign() {
-        game.removePlayer(this, Win.Reason.RESIGNATION)
-    }
-
     fun pieces(): List<ChessPiece> {
         return game.board.pieces(pieceColor)
-    }
-
-    open fun hasSufficientMaterial(): Boolean {
-        return pieces().size > 1
     }
 
     fun opponents(): List<Player> {
@@ -44,6 +36,10 @@ open class Player(
 
     fun opponentPieces(): List<ChessPiece> {
         return game.board.opponentPieces(pieceColor)
+    }
+
+    fun valueOfPieces(): Int {
+        return game.board.valueOf(this.pieceColor)
     }
 
     fun ownKing(): AbstractKing {
@@ -79,6 +75,10 @@ open class Player(
 
     fun canCastle(side: Chessboard.Side): Boolean {
         return ownKing().checkCastle(side).isNotEmpty()
+    }
+
+    open fun hasSufficientMaterial(): Boolean {
+        return pieces().size > 1
     }
 
     fun move(piece: ChessPiece, endPosition: Position): Move? {
@@ -136,6 +136,10 @@ open class Player(
 
 
         return pieces().associateWith(ChessPiece::calculateMoves)
+    }
+
+    fun resign() {
+        game.removePlayer(this, Win.Reason.RESIGNATION)
     }
 
     override fun equals(other: Any?): Boolean {

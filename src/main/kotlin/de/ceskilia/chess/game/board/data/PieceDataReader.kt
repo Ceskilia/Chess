@@ -2,6 +2,7 @@ package de.ceskilia.chess.game.board.data
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.piece.ChessPiece
+import de.ceskilia.chess.piece.annotation.Valuable
 
 interface PieceDataReader {
 
@@ -10,6 +11,12 @@ interface PieceDataReader {
     fun opponentPieces(color: ChessPiece.Color): List<ChessPiece>
 
     fun positionOf(piece: ChessPiece): Position
+
+    fun valueOf(color: ChessPiece.Color): Int {
+        return pieces(color)
+            .filter { it.javaClass.isAnnotationPresent(Valuable::class.java) }
+            .sumOf { it.javaClass.getAnnotation(Valuable::class.java).value }
+    }
 
     fun pieceAt(x: Int, y: Int): ChessPiece?
 
