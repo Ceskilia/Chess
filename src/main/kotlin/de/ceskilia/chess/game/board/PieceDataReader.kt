@@ -9,6 +9,8 @@ interface PieceDataReader {
 
     fun opponentPieces(color: ChessPiece.Color): List<ChessPiece>
 
+    fun positionOf(piece: ChessPiece): Position
+
     fun pieceAt(x: Int, y: Int): ChessPiece?
 
     fun pieceAt(position: Position): ChessPiece? {
