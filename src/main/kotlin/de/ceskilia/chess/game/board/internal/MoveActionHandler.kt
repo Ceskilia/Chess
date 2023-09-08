@@ -1,4 +1,4 @@
-package de.ceskilia.chess.game.board
+package de.ceskilia.chess.game.board.internal
 
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.piece.ChessPiece

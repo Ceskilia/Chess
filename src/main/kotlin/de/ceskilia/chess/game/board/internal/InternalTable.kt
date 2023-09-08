@@ -1,6 +1,7 @@
-package de.ceskilia.chess.game.board
+package de.ceskilia.chess.game.board.internal
 
 import de.ceskilia.chess.game.arithmetic.Position
+import de.ceskilia.chess.game.board.data.PieceDataHandler
 import de.ceskilia.chess.piece.ChessPiece
 
 class InternalTable(size: Int) : PieceDataHandler {
