@@ -9,28 +9,16 @@ abstract class DefaultChessPiece(
     override val color: ChessPiece.Color
 ) : ChessPiece {
 
-    companion object {
-
-        val DEFAULT_POSITION = Position.of(0, 0)
-
-    }
-
-    final override var position = DEFAULT_POSITION
-        set(value) {
-            if (!this::startPosition.isInitialized)
-                this.startPosition = value
-            field = value
-        }
-
     private lateinit var startPosition: Position
+
+    override fun onMove() {
+        if (::startPosition.isInitialized)
+            return
+        this.startPosition = this.position
+    }
 
     override fun hasMoved(): Boolean {
         return this::startPosition.isInitialized && startPosition != position
-    }
-
-    fun <T : DefaultChessPiece> T.withPosition(position: Position): T {
-        this.position = position
-        return this
     }
 
 }
