@@ -3,6 +3,7 @@ package de.ceskilia.chess.game.board.internal
 import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.data.PieceDataHandler
 import de.ceskilia.chess.piece.ChessPiece
+import de.ceskilia.chess.piece.variation.Checkable
 
 class InternalTable(size: Int) : PieceDataHandler {
 
@@ -69,6 +70,18 @@ class InternalTable(size: Int) : PieceDataHandler {
                 "Piece ${it.key} can only be placed on one position, currently ${it.value}."
             )
         }
+
+        pieces.filterIsInstance<Checkable>().forEach { checkable ->
+            val opponentPieces = opponentPieces(checkable.color)
+
+            opponentPieces.filterIsInstance<Checkable>().forEach {
+                check(!checkable.canMoveTo(it.position)) {
+                    "Checkable pieces may not be able to move to other checkable pieces: " +
+                            "[${checkable.position} -> ${it.position}]"
+                }
+            }
+        }
+
     }
 
     override fun equals(other: Any?): Boolean {
