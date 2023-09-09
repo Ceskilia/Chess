@@ -5,7 +5,6 @@ import de.ceskilia.chess.game.arithmetic.Position
 import de.ceskilia.chess.game.board.Chessboard
 import de.ceskilia.chess.piece.ChessPiece
 import de.ceskilia.chess.piece.impl.*
-import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
 import de.ceskilia.chess.piece.variation.Creatable
 
@@ -17,22 +16,7 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
         return directionOf(pawn.color)
     }
 
-    private fun directionOf(color: ChessPiece.Color): Int {
-        return when (color) {
-            ChessPiece.Color.WHITE -> -1
-            ChessPiece.Color.BLACK -> 1
-        }
-    }
-
-    private fun lastRankOf(color: ChessPiece.Color): Int {
-        return when (color) {
-            ChessPiece.Color.WHITE -> 7
-            ChessPiece.Color.BLACK -> 0
-        }
-    }
-
     override fun setup() {
-
         for (color in ChessPiece.Color.values()) {
             val lastRank = lastRankOf(color)
 
@@ -52,17 +36,20 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
             }
 
         }
-
-        validate()
-        syncPieces()
     }
 
-    private fun validate() {
-        val kings = pieces()
-            .filterIsInstance<AbstractKing>()
-            .distinctBy(ChessPiece::color)
+    private fun directionOf(color: ChessPiece.Color): Int {
+        return when (color) {
+            ChessPiece.Color.WHITE -> -1
+            ChessPiece.Color.BLACK -> 1
+        }
+    }
 
-        check(kings.size == 2) { "There must be exactly 1 king for each color on the board." }
+    private fun lastRankOf(color: ChessPiece.Color): Int {
+        return when (color) {
+            ChessPiece.Color.WHITE -> 7
+            ChessPiece.Color.BLACK -> 0
+        }
     }
 
     private fun registerCreatables(): List<Creatable> {
