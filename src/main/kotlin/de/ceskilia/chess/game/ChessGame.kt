@@ -11,6 +11,10 @@ import de.ceskilia.chess.game.result.GameResult
 import de.ceskilia.chess.game.result.MoveResult
 import de.ceskilia.chess.game.result.Win
 import de.ceskilia.chess.game.windetection.WinDetection
+import de.ceskilia.chess.piece.ChessPiece
+import de.ceskilia.chess.piece.variation.Checkable
+import de.ceskilia.chess.util.calculateFEN
+import de.ceskilia.chess.util.calculateUniqueFEN
 
 abstract class ChessGame {
 
@@ -66,11 +70,12 @@ abstract class ChessGame {
         val move = currentTurn.move(piece, endPosition) ?: return MoveResult.INVALID_MOVE
 
         (history.moves as MutableList).add(move)
-        (history.encodedTableStates as MutableList).add(board.encodeCurrentState())
 
         currentTurn.timer.pause()
         shuffleTurn()
         currentTurn.timer.start()
+
+        saveCurrentBoardState()
 
         // if check, check if mate
         if (move.isCheck) {
@@ -97,6 +102,9 @@ abstract class ChessGame {
         if (isRunning())
             return
         this.state = State.RUNNING
+
+        saveCurrentBoardState()
+        validate()
         onStart()
     }
 
@@ -112,9 +120,25 @@ abstract class ChessGame {
 
     fun isFinished(): Boolean = this.state == State.FINISHED
 
+    open fun calculateCurrentFEN(): String {
+        return calculateFEN(this)
+    }
+
     protected open fun onStart() {}
 
     protected open fun onFinish() {}
+
+    private fun saveCurrentBoardState() {
+        (history.encodedTableStates as MutableList).add(calculateUniqueFEN(this))
+    }
+
+    private fun validate() {
+        val checkable = board.pieces()
+            .filterIsInstance<Checkable>()
+            .distinctBy(ChessPiece::color)
+
+        check(checkable.size == activePlayers.size) { "There must be exactly 1 king for each player on the board." }
+    }
 
     enum class State {
 
