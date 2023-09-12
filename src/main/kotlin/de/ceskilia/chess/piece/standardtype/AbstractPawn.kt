@@ -1,51 +1,30 @@
 package de.ceskilia.chess.piece.standardtype
 
-import de.ceskilia.chess.game.arithmetic.Position
-import de.ceskilia.chess.game.board.internal.Action
 import de.ceskilia.chess.piece.variation.Promotable
-import kotlin.math.abs
 
+/**
+ * This interface is used to represent [Promotable]s that can be promoted when they reach the last rank of an opponent.
+ *
+ * It also defines an abstract common type for chess pieces that have a default behaviour of pawns.
+ */
 interface AbstractPawn : Promotable {
 
+    /**
+     * The y-direction of this pawn based on its color.
+     */
     val direction: Int
         get() = board.directionOf(this)
 
+    /**
+     * Returns true if this pawn is able to get promoted.
+     *
+     * Pawns can get promoted when they are at the last rank of an opponent.
+     *
+     * @return true if the pawn can be promoted
+     * @see promote
+     */
     override fun canPromote(): Boolean {
         return !board.inBounds(position.y + direction)
-    }
-
-    fun checkEnPassant(): Position? {
-        val history = board.game.history
-        val lastMove = history.lastMove() ?: return null
-        val lastChessPiece = lastMove.chessPiece
-
-        // if the last move somehow was done by the same color -> don't check for en passant
-        if (lastChessPiece.color == color) {
-            return null
-        }
-
-        // check for en passant
-        val lastPosition = lastMove.endPosition
-        val possibleEnPassant = (lastChessPiece is AbstractPawn)
-                && (history.movesOf(lastChessPiece).size == 1)
-                && (position.y == lastPosition.y)
-
-        if (possibleEnPassant) {
-
-            val xDifference = lastPosition.x - position.x
-
-            // the pawns need to stand next to each other
-            if (abs(xDifference) != 1) {
-                return null
-            }
-
-            return position.copyAdding(xDifference, direction)
-                .whenOccupying(result = Action.Result(capturedPiece = lastChessPiece)) {
-                    board.removePieceAt(lastPosition)
-                }
-        }
-
-        return null
     }
 
 }
