@@ -1,8 +1,8 @@
 package de.ceskilia.chess.game.arithmetic
 
 import de.ceskilia.chess.piece.ChessPiece
-import de.ceskilia.chess.piece.standardtype.AbstractKing
 import de.ceskilia.chess.piece.standardtype.AbstractPawn
+import de.ceskilia.chess.piece.variation.Checkable
 import de.ceskilia.chess.util.appendIf
 
 data class Move(
@@ -16,7 +16,7 @@ data class Move(
     val isCapture: Boolean = capturedPiece != null
 
     init {
-        check(capturedPiece !is AbstractKing) { "Captured piece cannot be a king! ($this)" }
+        check(capturedPiece !is Checkable) { "Captured piece cannot be a checkable! ($this)" }
     }
 
     companion object {
