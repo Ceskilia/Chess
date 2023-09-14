@@ -3,6 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     kotlin("jvm") version "1.8.20"
     id("org.jetbrains.compose") version "1.4.0"
+    id("maven-publish")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "de.ceskilia"
@@ -23,6 +25,14 @@ dependencies {
 
     implementation(kotlin("reflect"))
     implementation(compose.desktop.currentOs)
+}
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+        }
+    }
 }
 
 kotlin {
