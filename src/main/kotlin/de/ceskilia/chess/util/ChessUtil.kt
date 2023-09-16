@@ -211,7 +211,7 @@ private fun calculatePositionFEN(game: ChessGame): String {
                 )
             }
 
-            fen.appendIf(counter) { counter > 0 }
+            fen.appendIf(counter) { it > 0 }
         }
 
         return fen.toString()
