@@ -13,7 +13,7 @@ class GameHistory {
     val encodedTableStates: List<String> = mutableListOf()
 
     fun ChessPiece.isCaptured(): Boolean {
-        return moves.any { it.capturedPiece == this }
+        return moves.any { it.capturedPiece === this }
     }
 
     fun capturedPieces(): List<ChessPiece> {
