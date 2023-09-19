@@ -2,8 +2,8 @@ package de.ceskilia.chess.util
 
 import java.lang.StringBuilder
 
-fun <T> StringBuilder.appendIf(value: T?, condition: (T) -> Boolean): StringBuilder {
-    if(value != null && condition(value))
+fun StringBuilder.appendIf(value: Any?, condition: () -> Boolean): StringBuilder {
+    if(value != null && condition())
         append(value)
     return this
 }
