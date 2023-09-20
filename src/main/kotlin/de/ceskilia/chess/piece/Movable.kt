@@ -42,7 +42,7 @@ interface Movable {
     fun hasMoved(): Boolean
 
     /**
-     * Return true if this movable has any available moves.
+     * Returns true if this movable has any available moves.
      *
      * @return true if the movable has any moves
      * @see calculateMoves
