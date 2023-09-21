@@ -30,9 +30,9 @@ data class Move(
         val result = StringBuilder()
 
         val isPawn = chessPiece is AbstractPawn
-        val movedStraightForward = chessPiece.position.x == startPosition.x
+        val movedStraightForward = endPosition.x == startPosition.x
 
-        if (!isPawn || !movedStraightForward) {
+        if (!(isPawn && movedStraightForward)) {
             result.append(chessPiece.notation.toString())
         }
 
