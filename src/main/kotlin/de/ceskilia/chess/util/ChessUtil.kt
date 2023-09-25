@@ -243,15 +243,17 @@ private fun castleRights(game: ChessGame): String {
 private fun enPassantRight(game: ChessGame): String {
     val board = game.board
     val lastMove = game.history.lastMove() ?: return "-"
+    val lastStartPosition = lastMove.startPosition
+    val lastEndPosition = lastMove.endPosition
     val lastChessPiece = lastMove.chessPiece
 
     if (lastChessPiece is AbstractPawn) {
-        val yDifference = abs(lastMove.startPosition.y - lastMove.endPosition.y)
+        val yDifference = abs(lastStartPosition.y - lastEndPosition.y)
 
         if (yDifference == 2) {
             val direction = board.directionOf(lastChessPiece)
 
-            return lastMove.startPosition.copyAdding(y = direction)
+            return lastStartPosition.copyAdding(y = direction)
                 .toString()
         }
 
