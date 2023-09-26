@@ -17,7 +17,8 @@ class GameHistory {
     }
 
     fun capturedPieces(): List<ChessPiece> {
-        return moves.filter(Move::isCapture).map { it.capturedPiece!! }
+        return moves.filter(Move::isCapture)
+            .map { it.capturedPiece!! }
     }
 
     fun movesOf(piece: ChessPiece): List<Move> {
