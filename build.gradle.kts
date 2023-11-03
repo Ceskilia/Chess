@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.8.20"
@@ -25,6 +26,7 @@ dependencies {
 
     implementation(kotlin("reflect"))
     implementation(compose.desktop.currentOs)
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 publishing {
@@ -52,4 +54,15 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+val compileKotlin: KotlinCompile by tasks
+
+compileKotlin.kotlinOptions {
+    jvmTarget = "11"
+}
+
+val compileTestKotlin: KotlinCompile by tasks
+
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "11"
 }
