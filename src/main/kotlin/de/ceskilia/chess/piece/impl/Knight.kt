@@ -21,6 +21,7 @@ class Knight(
 
         for (x in (-2..2).filter { it != 0 }) {
             val y = if (x.isEven()) 1 else 2
+
             moves.addNonNull(position.tryCopyAdding(x, -y, board::inBounds))
             moves.addNonNull(position.tryCopyAdding(x, y, board::inBounds))
         }

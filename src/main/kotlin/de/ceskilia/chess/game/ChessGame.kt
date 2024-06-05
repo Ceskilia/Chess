@@ -115,6 +115,7 @@ abstract class ChessGame {
             return
         this.result = result
         this.state = State.FINISHED
+
         onFinish()
     }
 

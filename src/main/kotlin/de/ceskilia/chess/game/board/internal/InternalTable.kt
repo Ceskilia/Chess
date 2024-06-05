@@ -7,12 +7,8 @@ import de.ceskilia.chess.piece.variation.Checkable
 
 class InternalTable(size: Int) : PieceDataHandler {
 
-    val pieces: List<MutableList<ChessPiece?>>
-
-    init {
-        this.pieces = List(size) {
-            MutableList(size) { null }
-        }
+    val pieces: List<MutableList<ChessPiece?>> = List(size) {
+        MutableList(size) { null }
     }
 
     override fun placePiece(chessPiece: ChessPiece?, x: Int, y: Int) {
@@ -90,9 +86,7 @@ class InternalTable(size: Int) : PieceDataHandler {
 
         other as InternalTable
 
-        if (pieces != other.pieces) return false
-
-        return true
+        return pieces == other.pieces
     }
 
     override fun hashCode(): Int {
