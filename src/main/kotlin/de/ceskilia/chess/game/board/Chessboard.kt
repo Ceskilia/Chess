@@ -100,35 +100,6 @@ abstract class Chessboard(
         return copy
     }
 
-    override fun toString(): String {
-        return buildString {
-
-            for (row in 0 until size) {
-                append("  ")
-                append("+---".repeat(size) + '+')
-                append("\n")
-                append("${row + 1} ")
-
-                for (column in 0 until size) {
-                    append("| ${pieceAt(column, row)?.notation ?: " "} ")
-                }
-
-                append("|")
-                append("\n")
-            }
-
-            append("  ")
-            append("+---".repeat(size) + '+')
-            append("\n")
-            append("  ")
-
-            for (column in 0 until size) {
-                append(" ${Position.coordinateToLetter(column)}  ")
-            }
-
-        }
-    }
-
     abstract fun directionOf(pawn: AbstractPawn): Int
 
     abstract fun setup()

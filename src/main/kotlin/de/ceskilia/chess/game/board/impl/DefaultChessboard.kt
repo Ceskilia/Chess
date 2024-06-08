@@ -52,6 +52,15 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
         }
     }
 
+    private fun consoleColorOf(piece: ChessPiece?): String {
+        return when (piece?.color) {
+            ChessPiece.Color.BLACK -> "\u001B[30m"
+            ChessPiece.Color.WHITE -> "\u001B[97m"
+            null -> ""
+        }
+
+    }
+
     private fun registerCreatables(): List<Creatable> {
         val creatables = mutableListOf<Creatable>()
 
@@ -63,6 +72,38 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
         }
 
         return creatables
+    }
+
+    override fun toString(): String {
+        return buildString {
+
+            for (row in 0 until size) {
+                append("  ")
+                append("+---".repeat(size) + '+')
+                append("\n")
+                append("${row + 1} ")
+
+                for (column in 0 until size) {
+                    val piece = pieceAt(column, row)
+                    val color = consoleColorOf(piece)
+
+                    append("| $color${piece?.notation ?: " "} \u001b[0m")
+                }
+
+                append("|")
+                append("\n")
+            }
+
+            append("  ")
+            append("+---".repeat(size) + '+')
+            append("\n")
+            append("  ")
+
+            for (column in 0 until size) {
+                append(" ${Position.coordinateToLetter(column)}  ")
+            }
+
+        }
     }
 
 }
