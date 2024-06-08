@@ -13,32 +13,9 @@ class Timer private constructor(
 
     companion object {
 
+        // todo: maybe shutdown pool?
+
         const val DEFAULT_PREPARATION_TIME = 30
-
-        private val SCHEDULED_TIMERS = mutableListOf<Timer>()
-
-        init {
-            fixedRateTimer(period = 1000, daemon = true) {
-                SCHEDULED_TIMERS.removeAll(SCHEDULED_TIMERS.filter { !it.hasTime() }.toSet())
-                SCHEDULED_TIMERS.filter(Timer::isRunning).forEach {
-                    with(it) {
-
-                        if (isPreparation) preparationTime--
-                        else time--
-
-                        if (preparationTime == 0) {
-                            isPreparation = false
-                        }
-
-                        if (!hasTime()) {
-                            pause()
-                        }
-
-                        action(it)
-                    }
-                }
-            }
-        }
 
         fun of(
             initialTime: Int,
@@ -47,9 +24,7 @@ class Timer private constructor(
         ): Timer {
             notNegative(initialTime) { "Initial time may be not negative: value=$initialTime" }
 
-            val timer = Timer(initialTime, initialPreparationTime, action)
-            SCHEDULED_TIMERS.add(timer)
-            return timer
+            return Timer(initialTime, initialPreparationTime, action)
         }
 
     }
@@ -66,9 +41,44 @@ class Timer private constructor(
     var preparationTime: Int = initialPreparationTime
         private set
 
+    private var isScheduling: Boolean = false
+
+    fun initScheduling() {
+        if (isScheduling) {
+            return
+        }
+
+        isScheduling = true
+        fixedRateTimer(period = 1000, daemon = true) {
+
+            if (isPaused) {
+                return@fixedRateTimer
+            }
+
+            if (isPreparation) preparationTime--
+            else time--
+
+            if (preparationTime == 0) {
+                isPreparation = false
+            }
+
+            if (!hasTime()) {
+                pause()
+                cancel()
+                isScheduling = false
+            }
+
+            action(this@Timer)
+        }
+    }
+
     fun start() {
         if (!isPaused || !hasTime()) {
             return
+        }
+
+        if (!isScheduling) {
+            initScheduling()
         }
 
         isPaused = false
