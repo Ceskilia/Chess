@@ -1,17 +1,17 @@
 <configuration>
 
+    <timestamp key="timestamp" datePattern="yyyy-MM-dd"/> <!-- _HH-mm-ss -->
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} | [%thread] %-5level| %class{0} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!--- folder: every session: create log with name template <DATE.log> -->
+    <!-- folder: every session: create log with name template <TIMESTAMP.log> -->
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${application.home:-.}/logs/%d{yyyy-MM-dd}.log</fileNamePattern>
-        </rollingPolicy>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${application.home:-.}/logs/${timestamp}.log</file>
         <encoder>
             <charset>UTF-8</charset>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level | %class{0} - %msg%n</pattern>
