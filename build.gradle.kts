@@ -1,15 +1,18 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.20"
-    id("org.jetbrains.compose") version "1.4.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.23"
     id("maven-publish")
+    id("application")
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "de.ceskilia"
-version = "1.0-SNAPSHOT"
+version = "1.0"
+
+application {
+    mainClass.set("de.ceskilia.chess.LauncherKt")
+}
 
 repositories {
     mavenCentral()
@@ -21,11 +24,12 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
     implementation("io.github.oshai:kotlin-logging-jvm:5.0.0-beta-04")
-    implementation("ch.qos.logback:logback-classic:1.4.7")
+    implementation("ch.qos.logback:logback-classic:1.4.12")
 
     implementation(kotlin("reflect"))
-    implementation(compose.desktop.currentOs)
     implementation(kotlin("stdlib-jdk8"))
 }
 
@@ -38,31 +42,13 @@ publishing {
 }
 
 kotlin {
-    jvmToolchain(11)
+    target.compilations.all {
+        kotlinOptions {
+            jvmTarget = "21"
+        }
+    }
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-compose.desktop {
-    application {
-        mainClass = "LauncherKt"
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "Chess"
-            packageVersion = "1.0.0"
-        }
-    }
-}
-val compileKotlin: KotlinCompile by tasks
-
-compileKotlin.kotlinOptions {
-    jvmTarget = "11"
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "11"
 }

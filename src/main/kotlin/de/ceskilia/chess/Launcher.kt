@@ -1,7 +1,8 @@
 package de.ceskilia.chess
 
-import de.ceskilia.chess.game.ChessGame
+import de.ceskilia.chess.game.impl.TextChessGame
 
 fun main() {
-    ChessGame().start()
+    val game = TextChessGame()
+    game.start()
 }
