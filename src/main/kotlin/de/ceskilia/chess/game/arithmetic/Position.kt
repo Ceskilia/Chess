@@ -105,6 +105,14 @@ class Position private constructor(val x: Int, val y: Int) {
         return formattedX() + formattedY().toString()
     }
 
+    operator fun component1(): Int {
+        return x
+    }
+
+    operator fun component2(): Int {
+        return y
+    }
+
     enum class Color {
 
         BLACK,
