@@ -23,7 +23,7 @@ interface AbstractKing : Checkable {
 
     override fun calculateMovesUnpinned(): Set<Position> {
         val moves = super.calculateMovesUnpinned()
-        val castleMoves = Chessboard.Side.values()
+        val castleMoves = Chessboard.Side.entries
             .map(this::checkCastle)
             .flatten()
         return moves.plus(castleMoves)

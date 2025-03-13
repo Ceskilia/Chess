@@ -17,7 +17,7 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
     }
 
     override fun setup() {
-        for (color in ChessPiece.Color.values()) {
+        for (color in ChessPiece.Color.entries) {
             val lastRank = lastRankOf(color)
 
             placePieces(
@@ -54,7 +54,7 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
 
     private fun consoleColorOf(piece: ChessPiece?): String {
         return when (piece?.color) {
-            ChessPiece.Color.BLACK -> "\u001B[30m"
+            ChessPiece.Color.BLACK -> "\u001B[30m" // TODO: maybe abstract ConsoleColor
             ChessPiece.Color.WHITE -> "\u001B[97m"
             null -> ""
         }
@@ -64,7 +64,7 @@ class DefaultChessboard(game: ChessGame) : Chessboard(game) {
     private fun registerCreatables(): List<Creatable> {
         val creatables = mutableListOf<Creatable>()
 
-        for (color in ChessPiece.Color.values()) {
+        for (color in ChessPiece.Color.entries) {
             creatables.add(Queen(this, color))
             creatables.add(Rook(this, color))
             creatables.add(Knight(this, color))
