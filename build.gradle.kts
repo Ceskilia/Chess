@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.23"
+    id("org.jetbrains.kotlin.jvm") version "2.1.10"
     id("maven-publish")
     id("application")
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -28,6 +26,8 @@ dependencies {
 
     implementation("io.github.oshai:kotlin-logging-jvm:5.0.0-beta-04")
     implementation("ch.qos.logback:logback-classic:1.4.12")
+
+    implementation("org.jline:jline-terminal-jansi:3.30.17")
 
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib-jdk8"))
