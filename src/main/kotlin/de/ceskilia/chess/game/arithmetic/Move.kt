@@ -15,6 +15,8 @@ data class Move(
 
     val isCapture: Boolean = capturedPiece != null
 
+    private val text: String = buildText()
+
     init {
         check(capturedPiece !is Checkable) { "Captured piece cannot be a checkable! ($this)" }
     }
@@ -27,12 +29,20 @@ data class Move(
     }
 
     override fun toString(): String {
+       return text
+    }
+
+    private fun buildText(): String {
         val result = StringBuilder()
 
         val isPawn = chessPiece is AbstractPawn
         val movedStraightForward = endPosition.x == startPosition.x
 
-        if (!(isPawn && movedStraightForward)) {
+        if (isPawn) {
+            if (!movedStraightForward) {
+                result.append(startPosition.formattedX())
+            }
+        } else {
             result.append(chessPiece.notation.toString())
         }
 
