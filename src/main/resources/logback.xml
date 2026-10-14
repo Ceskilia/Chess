@@ -8,8 +8,6 @@
         </encoder>
     </appender>
 
-    <!-- folder: every session: create log with name template <TIMESTAMP.log> -->
-
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${application.home:-.}/logs/${timestamp}.log</file>
         <encoder>
